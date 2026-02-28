@@ -14,12 +14,12 @@ services:
     ports:
       - 5434:5432
     volumes:
-      - /mydocker/apache/config/db:/var/lib/postgresql/data
-      - /mydocker/apache/config/guacamole/init:/docker-entrypoint-initdb.d
+      - ${DOCKER_DATA}/apache/config/db:/var/lib/postgresql/data
+      - ${DOCKER_DATA}/apache/config/guacamole/init:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_DB: ${POSTGRESQL_DB}
       POSTGRES_USER: ${POSTGRESQL_USER}
-      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+      POSTGRES_PASSWORD: ${GUACAMOLE_PSQL_PASS}
     restart: unless-stopped
 
   guacamole:
@@ -37,7 +37,7 @@ services:
       POSTGRES_HOSTNAME: postgres
       POSTGRES_DATABASE: ${POSTGRESQL_DB}
       POSTGRES_USER: ${POSTGRESQL_USER}
-      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+      POSTGRES_PASSWORD: ${GUACAMOLE_PSQL_PASS}
       #GUACAMOLE_AUTH_PROVIDER: "openid"
       #OPENID_AUTHORIZATION_ENDPOINT: ${OPENID_AUTHORIZATION_ENDPOINT} 
       #OPENID_JWKS_ENDPOINT: ${OPENID_JWKS_ENDPOINT}
@@ -50,7 +50,7 @@ services:
       #OPENID_SCOPE: "openid profile email"
       #OPENID_USERNAME_CLAIM_TYPE: "preferred_username"
     volumes:
-      - /mydocker/apache/config/guac:/guac-home
+      - ${DOCKER_DATA}/apache/config/guac:/guac-home
     restart: unless-stopped
 
 networks:
