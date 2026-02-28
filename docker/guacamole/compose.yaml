@@ -1,0 +1,58 @@
+services:
+  guacd:
+    image: guacamole/guacd:1.5.5
+    container_name: guacd
+    networks:
+      - myNetwork
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15
+    container_name: guac-db
+    networks:
+      - myNetwork
+    ports:
+      - 5434:5432
+    volumes:
+      - /mydocker/apache/config/db:/var/lib/postgresql/data
+      - /mydocker/apache/config/guacamole/init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+    restart: unless-stopped
+
+  guacamole:
+    image: guacamole/guacamole:1.5.5
+    container_name: guacamole
+    depends_on:
+      - guacd
+      - postgres
+    networks:
+      - myNetwork
+    ports:
+      - 8282:8080
+    environment:
+      GUACD_HOSTNAME: guacd
+      POSTGRES_HOSTNAME: postgres
+      POSTGRES_DATABASE: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+      #GUACAMOLE_AUTH_PROVIDER: "openid"
+      #OPENID_AUTHORIZATION_ENDPOINT: ${OPENID_AUTHORIZATION_ENDPOINT} 
+      #OPENID_JWKS_ENDPOINT: ${OPENID_JWKS_ENDPOINT}
+      #OPENID_TOKEN_ENDPOINT: ${OPENID_TOKEN_ENDPOINT}
+      #OPENID_ISSUER: ${OPENID_ISSUER}
+      #OPENID_USERINFO_ENDPOINT: ${OPENID_USERINFO_ENDPOINT}
+      #OPENID_CLIENT_ID: ${OPENID_CLIENT_ID}
+      #OPENID_CLIENT_SECRET: ${OPENID_CLIENT_SECRET}
+      #OPENID_REDIRECT_URI: ${OPENID_REDIRECT_URI}
+      #OPENID_SCOPE: "openid profile email"
+      #OPENID_USERNAME_CLAIM_TYPE: "preferred_username"
+    volumes:
+      - /mydocker/apache/config/guac:/guac-home
+    restart: unless-stopped
+
+networks:
+  myNetwork:
+    external: true
