@@ -1,0 +1,24 @@
+services:
+  it-tools:
+    image: corentinth/it-tools:2024.10.22-7ca5933
+    container_name: it-tools-original
+    hostname: ittools
+    networks:
+      - myNetwork
+    ports:
+      - 8182:80
+    restart: unless-stopped
+
+  it-tools-main:
+    image: sharevb/it-tools:2026.1.4
+    container_name: it-tools-maintained
+    hostname: ittools-main
+    networks:
+      - myNetwork
+    ports:
+      - 8183:8080
+    restart: unless-stopped
+
+networks:
+  myNetwork:
+    external: true
