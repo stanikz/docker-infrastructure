@@ -1,0 +1,39 @@
+services:
+  server:
+    image: codeberg.org/forgejo/forgejo:14.0.2
+    container_name: forgejo
+    hostname: forgejo
+    restart: unless-stopped
+    ports:
+      - "3222:3000"
+      - "222:22"
+    networks:
+      - forgejo
+    env_file:
+      - .env
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_DATA}/forgejo/app:/data
+      - /etc/localtime:/etc/localtime:ro 
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17
+    container_name: forgejo_db
+    hostname: forgejo-postgres17
+    restart: unless-stopped
+    networks:
+      - forgejo
+    environment:
+      - POSTGRES_USER=${FORGEJO__database__USER}
+      - POSTGRES_PASSWORD=${FORGEJO__database__PASSWD}
+      - POSTGRES_DB=${FORGEJO__database__NAME}
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    
+networks:
+  forgejo:
+    name: forgejo-network
+    external: false
