@@ -20,7 +20,7 @@ services:
       - myNetwork
     
   networking-toolbox:
-    image: lissy93/networking-toolbox:v1.6.0
+    image: lissy93/networking-toolbox:1.6.0
     container_name: networking-toolbox
     hostname: net-toolbox
     restart: unless-stopped
