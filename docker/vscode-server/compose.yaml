@@ -1,0 +1,28 @@
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server:4.108.2-ls314
+    container_name: code-server
+    hostname: code-server
+    restart: unless-stopped
+    ports:
+      - 8444:8443
+    networks: 
+      - myNetwork
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      #All below environment variables are optional
+      PASSWORD: 
+      SUDO_PASSWORD: 
+      HASHED_PASSWORD: ${VSCODE_PASSWORD} 
+      SUDO_PASSWORD_HASH: ${VSCODE_PASSWORD} 
+      PROXY_DOMAIN: ${VSCODE_DOMAIN} 
+      DEFAULT_WORKSPACE: /config/workspace
+      PWA_APPNAME: code-server
+    volumes:
+      - ${DOCKER_DATA}/vscode-server/config:/config
+
+networks:
+  myNetwork:
+    external: true
