@@ -1,0 +1,16 @@
+services:
+  databasus:
+    container_name: db-backups
+    hostname: databasus
+    image: databasus/databasus:v2.20.3
+    networks:
+      - myNetwork
+    ports:
+      - "4005:4005"
+    volumes:
+      - /mnt/docker/db-backups:/databasus-data
+    restart: unless-stopped
+
+networks:
+  myNetwork:
+    external: true
