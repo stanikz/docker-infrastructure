@@ -1,0 +1,28 @@
+services:
+ unifi-controller:
+   container_name: unifi
+   hostname: unifi-controller
+   image: jacobalberty/unifi:v10.0.162
+   restart: unless-stopped
+   ports:
+     - 3478:3478/udp
+     - 10001:10001/udp
+     - 6789:6789/tcp
+     - 8080:8080/tcp
+     - 8880:8880/tcp
+     - 8443:8443/tcp
+     - 8843:8843/tcp
+   networks:
+      - myNetwork
+   environment:
+     TZ: ${TZ}
+   volumes:
+     - ${DOCKER_DATA}/unifi/data/lib:/var/lib/unifi
+     - ${DOCKER_DATA}/unifi/data/log:/var/log/unifi
+     - ${DOCKER_DATA}/unifi/data/run:/var/run/unifi
+
+networks:
+  myNetwork:
+    external: true
+
+    
