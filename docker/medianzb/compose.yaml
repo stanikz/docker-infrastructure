@@ -1,0 +1,39 @@
+services:
+  nzbhydra2:
+    image: lscr.io/linuxserver/nzbhydra2:7.19.2
+    container_name: nzbhydra
+    hostname: nzbhydra
+    restart: unless-stopped
+    ports:
+      - 5076:5076
+    networks:
+      - myNetwork
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/nzbhydra/data:/config
+      - /mnt/media/download:/downloads    
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:4.5.3
+    container_name: sabnzbd
+    hostname: sabnzbd
+    restart: unless-stopped
+    ports:
+      - 8060:8080
+    networks:
+      - myNetwork
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/sabnzbd/config:/config
+      - /mnt/media/download:/downloads
+      - /mnt/media/download/incomplete:/incomplete-downloads
+
+networks:
+  myNetwork:
+    external: true

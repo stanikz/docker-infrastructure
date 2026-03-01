@@ -2,36 +2,36 @@ services:
   guacd:
     image: guacamole/guacd:1.5.5
     container_name: guacd
+    restart: unless-stopped
     networks:
       - myNetwork
-    restart: unless-stopped
-
+    
   postgres:
     image: postgres:15
     container_name: guac-db
-    networks:
-      - myNetwork
+    restart: unless-stopped
     ports:
       - 5434:5432
-    volumes:
-      - ${DOCKER_DATA}/apache/config/db:/var/lib/postgresql/data
-      - ${DOCKER_DATA}/apache/config/guacamole/init:/docker-entrypoint-initdb.d
+    networks:
+      - myNetwork
     environment:
       POSTGRES_DB: ${POSTGRESQL_DB}
       POSTGRES_USER: ${POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${GUACAMOLE_PSQL_PASS}
-    restart: unless-stopped
+    volumes:
+      - ${DOCKER_DATA}/apache/config/db:/var/lib/postgresql/data
+      - ${DOCKER_DATA}/apache/config/guacamole/init:/docker-entrypoint-initdb.d
+    
+    
 
   guacamole:
     image: guacamole/guacamole:1.5.5
     container_name: guacamole
-    depends_on:
-      - guacd
-      - postgres
-    networks:
-      - myNetwork
+    restart: unless-stopped
     ports:
       - 8282:8080
+    networks:
+      - myNetwork
     environment:
       GUACD_HOSTNAME: guacd
       POSTGRES_HOSTNAME: postgres
@@ -51,7 +51,9 @@ services:
       #OPENID_USERNAME_CLAIM_TYPE: "preferred_username"
     volumes:
       - ${DOCKER_DATA}/apache/config/guac:/guac-home
-    restart: unless-stopped
+    depends_on:
+      - guacd
+      - postgres
 
 networks:
   myNetwork:
