@@ -1,14 +1,14 @@
 services:
   bentopdf:
     image: bentopdfteam/bentopdf:v2.3.3
-    hostname: bentopdf
     container_name: bentopdf
+    hostname: bentopdf
     restart: unless-stopped
-    networks:
-      - myNetwork
     ports:
       - '8087:8080'
-
+    networks:
+      - myNetwork
+    
 networks:
   myNetwork:
     external: true
