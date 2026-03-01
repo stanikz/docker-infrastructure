@@ -12,48 +12,51 @@ services:
     # 🚨 Pin to a specific version. Updates can be breaking.
     # https://github.com/FerretDB/documentdb/pkgs/container/postgres-documentdb
     image: ghcr.io/ferretdb/postgres-documentdb:17-0.107.0-ferretdb-2.7.0
+    restart: unless-stopped
+    container_namme: komodo-postgres-db
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
-    restart: unless-stopped
     # ports:
     #   - 5432:5432
-    volumes:
-      - ./postgres:/var/lib/postgresql/data
+    networks:
+      - komodo-network
     environment:
       POSTGRES_USER: ${KOMODO_DB_USERNAME}
       POSTGRES_PASSWORD: ${KOMODO_DB_PASSWORD}
       POSTGRES_DB: ${KOMODO_DB}
-    networks:
-      - komodo-network
-
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
 
   ferretdb:
     # 🚨 Pin to a specific version. Updates can be breaking.
     # https://github.com/FerretDB/FerretDB/pkgs/container/ferretdb
     image: ghcr.io/ferretdb/ferretdb:2.7.0
+    container_name: komodo-ferret-db
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
     restart: unless-stopped
-    depends_on:
-      - postgres
     # ports:
     #   - 27017:27017
-    volumes:
-      - ./ferretdb-state:/state
-    environment:
-      FERRETDB_POSTGRESQL_URL: postgres://${KOMODO_DB_USERNAME}:${KOMODO_DB_PASSWORD}@postgres:5432/${KOMODO_DB}
     networks:
       - komodo-network
-  
+    environment:
+      FERRETDB_POSTGRESQL_URL: postgres://${KOMODO_DB_USERNAME}:${KOMODO_DB_PASSWORD}@postgres:5432/${KOMODO_DB}
+    volumes:
+      - ./ferretdb-state:/state
+    depends_on:
+      - postgres
+    
   core:
     image: ghcr.io/moghtech/komodo-core:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+    container_name: komodo-core
     restart: unless-stopped
-    depends_on:
-      - ferretdb
     ports:
       - 9120:9120
+    networks:
+      - komodo-network
+      - myNetwork
     env_file: .env
     environment:
       KOMODO_DATABASE_ADDRESS: ferretdb:27017
@@ -70,10 +73,8 @@ services:
     ## "https://host.docker.internal:8120"
     # extra_hosts:
     #   - host.docker.internal:host-gateway
-    networks:
-      - komodo-network
-      - myNetwork
-      - forgejo-network
+    depends_on:
+      - ferretdb
 
   ## Deploy Periphery container using this block,
   ## or deploy the Periphery binary with systemd using 
@@ -82,8 +83,14 @@ services:
     image: ghcr.io/moghtech/komodo-periphery:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+    container_name: komodo-agent
     restart: unless-stopped
+    networks:
+      - komodo-network
+      - myNetwork
     env_file: .env
+    environment:
+      - DOCKER_DATA=/mydocker
     volumes:
       ## Mount external docker socket
       - /var/run/docker.sock:/var/run/docker.sock
@@ -94,18 +101,12 @@ services:
       ## or docker will get confused. See https://github.com/moghtech/komodo/discussions/180.
       ## Default: /etc/komodo.
       - ${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}:${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}
-    networks:
-      - komodo-network
-      - myNetwork
-      - forgejo-network
 
 networks:
   komodo-network:
     name: komodo-network
     external: false
   myNetwork:
-    external: true
-  forgejo-network:
     external: true
 
 #volumes:
