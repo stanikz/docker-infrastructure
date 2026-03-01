@@ -2,7 +2,7 @@
 # 🦎 KOMODO COMPOSE - PERIPHERY 🦎 #
 ####################################
 
-## This compose file will deploy:
+## This compose file is just for storing the komodo periphery deploy:
 ##   1. Komodo Periphery
 
 services:

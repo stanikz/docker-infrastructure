@@ -1,0 +1,60 @@
+services:
+  bookstack:
+    image: linuxserver/bookstack:25.12.3 #v25.12.1-ls239 #v25.11.6-ls235
+    container_name: bookstack
+    restart: unless-stopped
+    ports:
+      - 6875:80
+    network_mode: myNetwork 
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      PHP_DATE_TIMEZONE: ${TZ}
+      APP_URL: ${APP_URL}
+      APP_KEY: ${APP_KEY}
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_PORT: 3306
+      AUTH_METHOD: oidc
+      AUTH_AUTO_INITIATE: true
+      OIDC_DUMP_USER_DETAILS: false
+      OIDC_NAME: "SSO"
+      OIDC_DISPLAY_NAME_CLAIMS: name
+      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+      OIDC_ISSUER: ${OIDC_ISSUER}
+      OIDC_END_SESSION_ENDPOINT: true
+      OIDC_ISSUER_DISCOVER: true
+      OIDC_USER_TO_GROUPS: true
+      OIDC_GROUPS_CLAIM: groups
+      OIDC_ADDITIONAL_SCOPES: groups
+      OIDC_REMOVE_FROM_GROUPS: true
+    volumes:
+      - ${DOCKER_DATA}/bookstack/data:/config
+    depends_on:
+      bookstack_db:
+        condition: service_healthy
+        
+  bookstack_db:
+    image: ghcr.io/linuxserver/mariadb:11.4.8-r0-ls204 #lscr.io/linuxserver/mariadb:11.4.8 #11.4.8-r0-ls201 #11.4.8-r0-ls197
+    container_name: bookstack_db
+    restart: unless-stopped
+    network_mode: myNetwork
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+    volumes:
+      - ${DOCKER_DATA}/bookstack/db:/config
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${PASS}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
