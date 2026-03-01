@@ -1,6 +1,6 @@
 services:
   hbbs:
-    image: rustdesk/rustdesk-server:1.1.14
+    image: rustdesk/rustdesk-server:1.1.15
     container_name: rustdesk-hbbs
     restart: unless-stopped
     ports:
@@ -17,7 +17,7 @@ services:
       - hbbr
     
   hbbr:
-    image: rustdesk/rustdesk-server:1.1.14
+    image: rustdesk/rustdesk-server:1.1.15
     container_name: rustdesk-hbbr
     restart: unless-stopped
     ports:
