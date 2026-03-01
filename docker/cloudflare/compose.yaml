@@ -1,0 +1,14 @@
+services:
+  cloudflare-ddns:
+    network_mode: 'host'
+    container_name: cloudflare
+    hostname: cloudflare
+    image: oznu/cloudflare-ddns:latest
+    environment:
+      API_KEY: ${encryption}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      PROXIED: ${PROXIED}
+      SUBDOMAIN: ${SUBDOMAIN}
+      ZONE: ${ZONE}
+    restart: always
