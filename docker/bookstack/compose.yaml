@@ -2,6 +2,7 @@ services:
   bookstack:
     image: linuxserver/bookstack:25.12.3 #v25.12.1-ls239 #v25.11.6-ls235
     container_name: bookstack
+    hostname: bookstack-app
     restart: unless-stopped
     ports:
       - 6875:80
@@ -40,6 +41,7 @@ services:
   bookstack_db:
     image: ghcr.io/linuxserver/mariadb:11.4.8-r0-ls204 #lscr.io/linuxserver/mariadb:11.4.8 #11.4.8-r0-ls201 #11.4.8-r0-ls197
     container_name: bookstack_db
+    hostname: bookstack-mariadb
     restart: unless-stopped
     network_mode: myNetwork
     environment:
@@ -53,7 +55,7 @@ services:
     volumes:
       - ${DOCKER_DATA}/bookstack/db:/config
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${PASS}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASS}"]
       interval: 10s
       timeout: 5s
       retries: 5
