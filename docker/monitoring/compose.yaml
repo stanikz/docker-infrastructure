@@ -1,0 +1,55 @@
+services:
+  beszel:
+    image: henrygd/beszel:0.18.3
+    container_name: beszel-hub
+    hostname: beszel-hub
+    restart: unless-stopped
+    ports:
+      - 8090:8090
+    networks:
+      - ${MONITORING_NETWORK:-default}
+    volumes:
+      - ${DOCKER_DATA}/beszel/data:/beszel_data
+      - ${DOCKER_DATA}/beszel/socket:/beszel_socket
+    environment:
+      USER_CREATION: "true"
+      LOG_LEVEL: "debug"
+      OIDC_ISSUER: ${OIDC_ISSUER}
+      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+      OIDC_SCOPES: "openid profile email"
+      DISABLE_PASSWORD_AUTH: true
+  
+  dozzle:
+    image: amir20/dozzle:v10.0.1
+    container_name: dozzle
+    hostname: dozzle-hub
+    restart: unless-stopped
+    ports:
+      - 9999:8080
+    networks:
+      - ${MONITORING_NETWORK:-default}
+    environment:
+      DOZZLE_REMOTE_AGENT: ${DOZZLE_REMOTE_AGENT}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      
+  uptime-kuma:
+    image: louislam/uptime-kuma:2.1.0
+    container_name: kuma
+    hostname: kuma
+    restart: always
+    ports:
+      - 3001:3001
+    networks:
+      - ${MONITORING_NETWORK:-default}
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/uptime-kuma/data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  default:
+    name: ${MONITORING_NETWORK:-monitoring-net}
+    external: ${NETWORK_IS_EXTERNAL:-false}
