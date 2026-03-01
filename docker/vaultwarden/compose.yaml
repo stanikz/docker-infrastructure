@@ -1,0 +1,20 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:1.35.4
+    container_name: vaultwarden
+    hostname: vaultwarden
+    restart: unless-stopped
+    ports:
+      - 6550:80
+      - 3012:3012
+    networks:
+      - myNetwork
+    environment:
+      WEBSOCKET_ENABLED: true
+      SIGNUPS_ALLOWED: false
+    volumes:
+      - ${DOCKER_DATA}/vaultwarden/vw-data:/data
+          
+networks:
+  myNetwork:
+    external: true
