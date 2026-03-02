@@ -7,7 +7,7 @@ services:
     ports:
       - 4321:3000
     networks:
-      - myNetwork    
+      - proxy-network    
     environment:
       MEILI_ADDR: http://meilisearch:7700
       BROWSER_WEB_URL: http://chrome:9222
@@ -35,7 +35,7 @@ services:
     hostname: karakeep-chrome
     restart: unless-stopped
     networks:
-      - myNetwork
+      - proxy-network
     command:
       - --no-sandbox
       - --disable-gpu
@@ -50,7 +50,7 @@ services:
     hostname: karakeep-milisearch
     restart: unless-stopped
     networks:
-      - myNetwork
+      - proxy-network
     environment:
       MEILI_NO_ANALYTICS: "true"
     volumes:
@@ -61,5 +61,6 @@ services:
     #  meilisearch --import-dump /meili_data/dumps/20260114-134531436.dump
     
 networks:
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true

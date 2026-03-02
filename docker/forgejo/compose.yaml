@@ -8,7 +8,8 @@ services:
       - "3222:3000"
       - "222:22"
     networks:
-      - forgejo
+      - internal-net
+      - proxy-network
     env_file:
       - .env
     environment:
@@ -25,7 +26,8 @@ services:
     hostname: forgejo-postgres17
     restart: unless-stopped
     networks:
-      - forgejo
+      - internal-net
+      - db-network
     environment:
       - POSTGRES_USER=${FORGEJO__database__USER}
       - POSTGRES_PASSWORD=${FORGEJO__database__PASSWD}
@@ -34,6 +36,11 @@ services:
       - ./db:/var/lib/postgresql/data
     
 networks:
-  forgejo:
-    name: forgejo-network
-    external: false
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  internal-net:
+    driver: bridge
+  db-network:
+    name: db-net
+    external: true

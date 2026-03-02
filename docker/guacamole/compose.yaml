@@ -4,7 +4,7 @@ services:
     container_name: guacd
     restart: unless-stopped
     networks:
-      - myNetwork
+      - internal-net
     
   postgres:
     image: postgres:15
@@ -13,7 +13,8 @@ services:
     ports:
       - 5434:5432
     networks:
-      - myNetwork
+      - internal-net
+      - db-network
     environment:
       POSTGRES_DB: ${POSTGRESQL_DB}
       POSTGRES_USER: ${POSTGRESQL_USER}
@@ -29,7 +30,8 @@ services:
     ports:
       - 8282:8080
     networks:
-      - myNetwork
+      - internal-net
+      - proxy-network
     environment:
       GUACD_HOSTNAME: guacd
       POSTGRES_HOSTNAME: postgres
@@ -54,5 +56,11 @@ services:
       - postgres
 
 networks:
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  internal-net:
+    driver: bridge
+  db-network:
+    name: db-net
     external: true

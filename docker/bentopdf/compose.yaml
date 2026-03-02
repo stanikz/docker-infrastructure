@@ -7,8 +7,9 @@ services:
     ports:
       - '8087:8080'
     networks:
-      - myNetwork
+      - proxy-network
     
 networks:
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true

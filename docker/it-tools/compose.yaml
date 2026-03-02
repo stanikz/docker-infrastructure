@@ -7,7 +7,7 @@ services:
     ports:
       - 8182:80
     networks:
-      - myNetwork
+      - proxy-network
 
   it-tools-main:
     image: sharevb/it-tools:2026.1.4
@@ -17,7 +17,7 @@ services:
     ports:
       - 8183:8080
     networks:
-      - myNetwork
+      - proxy-network
     
   networking-toolbox:
     image: lissy93/networking-toolbox:1.6.0
@@ -25,9 +25,9 @@ services:
     hostname: net-toolbox
     restart: unless-stopped
     ports:
-      - 3002:3000
+      - 8184:3000
     networks:
-      - myNetwork
+      - proxy-network
     environment:
       NODE_ENV: production
       PORT: 3000
@@ -41,13 +41,14 @@ services:
 
   chartdb:
      image: ghcr.io/chartdb/chartdb:1.19.0
-     container_name: chartdb
-     hostname: chartdb
+     container_name: chartdb-server
+     hostname: chartdb-server
      restart: unless-stopped
      ports:
-       - 8088:80
+       - 8185:80
      networks:
-       - myNetwork
+       - proxy-network
+       - internal-net
      environment:
        PUID: ${PUID}
        PGID: ${PGID}
@@ -60,7 +61,8 @@ services:
     container_name: chartdb_postgres
     restart: unless-stopped
     networks:
-      - myNetwork
+      - db-network
+      - internal-net
     environment:
        # Make sure these values match the DATABASE_URL in the chartdb service
       POSTGRES_DB: ${POSTGRES_DB}
@@ -73,5 +75,11 @@ volumes:
   chartsdb_data:
 
 networks:
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  internal-net:
+    driver: bridge
+  db-network:
+    name: db-net
     external: true

@@ -12,14 +12,15 @@ services:
     # 🚨 Pin to a specific version. Updates can be breaking.
     # https://github.com/FerretDB/documentdb/pkgs/container/postgres-documentdb
     image: ghcr.io/ferretdb/postgres-documentdb:17-0.107.0-ferretdb-2.7.0
+    container_name: komodo-postgres-db
     restart: unless-stopped
-    container_namme: komodo-postgres-db
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
     # ports:
     #   - 5432:5432
     networks:
-      - komodo-network
+      - db-network
+      - internal-net
     environment:
       POSTGRES_USER: ${KOMODO_DB_USERNAME}
       POSTGRES_PASSWORD: ${KOMODO_DB_PASSWORD}
@@ -38,7 +39,8 @@ services:
     # ports:
     #   - 27017:27017
     networks:
-      - komodo-network
+      - proxy-network
+      - internal-net
     environment:
       FERRETDB_POSTGRESQL_URL: postgres://${KOMODO_DB_USERNAME}:${KOMODO_DB_PASSWORD}@postgres:5432/${KOMODO_DB}
     volumes:
@@ -55,8 +57,8 @@ services:
     ports:
       - 9120:9120
     networks:
-      - komodo-network
-      - myNetwork
+      - proxy-network
+      - internal-net
     env_file: .env
     environment:
       KOMODO_DATABASE_ADDRESS: ferretdb:27017
@@ -86,8 +88,8 @@ services:
     container_name: komodo-agent
     restart: unless-stopped
     networks:
-      - komodo-network
-      - myNetwork
+      - proxy-network
+      - internal-net
     env_file: .env
     environment:
       - DOCKER_DATA=/mydocker
@@ -103,14 +105,11 @@ services:
       - ${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}:${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}
 
 networks:
-  komodo-network:
-    name: komodo-network
-    external: false
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true
-
-#volumes:
-#  # Postgres
-#  postgres-data:
-#  # FerretDB
-#  ferretdb-state:
+  internal-net:
+    driver: bridge
+  db-network:
+    name: db-net
+    external: true

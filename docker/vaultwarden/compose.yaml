@@ -8,7 +8,7 @@ services:
       - 6550:80
       - 3012:3012
     networks:
-      - myNetwork
+      - proxy-network
     environment:
       WEBSOCKET_ENABLED: true
       SIGNUPS_ALLOWED: false
@@ -16,5 +16,6 @@ services:
       - ${DOCKER_DATA}/vaultwarden/vw-data:/data
           
 networks:
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true

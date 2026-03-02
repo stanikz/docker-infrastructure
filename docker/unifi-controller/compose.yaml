@@ -13,7 +13,7 @@ services:
      - 8443:8443/tcp
      - 8843:8843/tcp
    networks:
-      - myNetwork
+      - proxy-network
    environment:
      TZ: ${TZ}
    volumes:
@@ -22,7 +22,8 @@ services:
      - ${DOCKER_DATA}/unifi/data/run:/var/run/unifi
 
 networks:
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true
 
     
