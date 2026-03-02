@@ -1,0 +1,38 @@
+services:
+  beszel-agent:
+    image: henrygd/beszel-agent:0.18.3
+    container_name: beszel-agent
+    hostname: beszel-agent
+    restart: always
+    network_mode: host
+    environment:
+      LISTEN: 45876
+      KEY: ${KEY}
+      TOKEN: ${TOKEN}
+      HUB_URL: ${HUB_URL}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # monitor other disks / partitions by mounting a folder in /extra-filesystems
+      # - /mnt/disk/.beszel:/extra-filesystems/sda1:ro
+
+  dozzle-agent:
+    image: amir20/dozzle:v10.0.1
+    container_name: dozzle-agent
+    hostname: dozzle-agent
+    restart: always
+    ports:
+      - 7007:7007
+    networks:
+      - monitoring-net
+    command: agent
+    environment:
+      DOZZLE_HOSTNAME: ${DOZZLE_HOSTNAME}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      
+networks:
+  monitoring-net:
+    external: false
+    name: monitoring-net
+
+
