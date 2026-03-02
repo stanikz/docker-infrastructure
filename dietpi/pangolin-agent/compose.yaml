@@ -14,6 +14,5 @@ services:
 
 networks:
   pangolin-network:
-    driver: bridge
     name: pangolin-network
-    external: false
+    external: true
