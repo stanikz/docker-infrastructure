@@ -51,9 +51,9 @@ services:
     hostname: npm
     restart: unless-stopped
     ports:
-      - 81:8181
-      - 80:8080
-      - 443:4443
+      - "81:8181"
+      - "80:8080"
+      - "443:4443"
     networks:
       proxy-network:
         ipv4_address: 172.22.0.8
