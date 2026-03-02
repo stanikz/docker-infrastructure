@@ -33,7 +33,7 @@ services:
       - POSTGRES_PASSWORD=${FORGEJO__database__PASSWD}
       - POSTGRES_DB=${FORGEJO__database__NAME}
     volumes:
-      - ./db:/var/lib/postgresql/data
+      - ${DOCKER_DATA}/forgejo/db:/var/lib/postgresql/data
     
 networks:
   proxy-network:
