@@ -7,7 +7,7 @@ services:
     ports:
       - 8090:8090
     networks:
-      - ${MONITORING_NETWORK:-default}
+      - default
     volumes:
       - ${DOCKER_DATA}/beszel/data:/beszel_data
       - ${DOCKER_DATA}/beszel/socket:/beszel_socket
@@ -28,12 +28,12 @@ services:
     ports:
       - 9999:8080
     networks:
-      - ${MONITORING_NETWORK:-default}
+      - default
     environment:
       DOZZLE_REMOTE_AGENT: ${DOZZLE_REMOTE_AGENT}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      
+
   uptime-kuma:
     image: louislam/uptime-kuma:2.1.0
     container_name: kuma
@@ -42,7 +42,7 @@ services:
     ports:
       - 3001:3001
     networks:
-      - ${MONITORING_NETWORK:-default}
+      - default
     environment:
       TZ: ${TZ}
     volumes:
