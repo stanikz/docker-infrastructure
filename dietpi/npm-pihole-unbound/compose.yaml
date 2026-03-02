@@ -22,9 +22,9 @@ services:
     cap_add:
       - NET_ADMIN
     volumes:
-      - ${DOCKER_DATA}/npm-pihole-unbound/pihole/etc/pihole:/etc/pihole/
-      - ${DOCKER_DATA}/npm-pihole-unbound/pihole/etc/dnsmasq.d:/etc/dnsmasq.d/
-      - ${DOCKER_DATA}/npm-pihole-unbound/pihole/etc/resolv.conf:/etc/resolv.conf
+      - "${DOCKER_DATA}/npm-pihole-unbound/pihole/etc/pihole:/etc/pihole"
+      - "${DOCKER_DATA}/npm-pihole-unbound/pihole/etc/dnsmasq.d:/etc/dnsmasq.d/"
+      - "${DOCKER_DATA}/npm-pihole-unbound/pihole/etc/resolv.conf:/etc/resolv.conf"
     depends_on:
       - unbound
 
@@ -58,7 +58,7 @@ services:
       proxy-network:
         ipv4_address: 172.22.0.8
     volumes:
-      - ${DOCKER_DATA}/npm-pihole-unbound/npm/config:/config:rw
+      - "${DOCKER_DATA}/npm-pihole-unbound/npm/config:/config:rw"
 
 networks:
   proxy-network:
