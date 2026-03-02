@@ -5,7 +5,7 @@ services:
     hostname: pangolin-agent
     restart: unless-stopped
     networks:
-      - proxy-network
+      - pangolin-network
     env_file: .env
     environment:
       PANGOLIN_ENDPOINT: ${PANGOLIN_ENDPOINT}
@@ -13,7 +13,7 @@ services:
       NEWT_SECRET: ${NEWT_SECRET}
 
 networks:
-  proxy-network:
-    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
-    external: true
-
+  pangolin-network:
+    driver: bridge
+    name: pangolin-network
+    external: false
