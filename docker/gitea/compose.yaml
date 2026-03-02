@@ -1,19 +1,4 @@
-services:
-  db:
-    image: postgres:17
-    container_name: gitea-db
-    hostname: gitea-postgres17
-    restart: always
-    networks:
-      - gitea-net
-    environment:
-      POSTGRES_DB: ${GITEA_DB_NAME}
-      POSTGRES_USER: ${GITEA_DB_USER}
-      POSTGRES_PASSWORD: ${GITEA_DB_PASS}
-      TZ: ${TZ}
-    volumes:
-      - ${DOCKER_DATA}/gitea/postgres:/var/lib/postgresql/data
-        
+services:       
   server:
     image: gitea/gitea:1.25.3
     container_name: gitea
@@ -23,7 +8,8 @@ services:
       - "3000:3000"
       - "2222:22"
     networks:
-      - gitea-net
+      - internal-net
+      - proxy-network
     environment:
       USER_UID: ${PUID}
       USER_GID: ${GUID}
@@ -40,8 +26,29 @@ services:
       - db
     #security_opt:
     #  - no-new-privileges:true
+  
+  db:
+    image: postgres:17
+    container_name: gitea-db
+    hostname: gitea-postgres17
+    restart: always
+    networks:
+      - internal-net
+      - db-network
+    environment:
+      POSTGRES_DB: ${GITEA_DB_NAME}
+      POSTGRES_USER: ${GITEA_DB_USER}
+      POSTGRES_PASSWORD: ${GITEA_DB_PASS}
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/gitea/postgres:/var/lib/postgresql/data
 
 networks:
-  gitea-net:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  internal-net:
     driver: bridge
-    name: gitea-net
+  db-network:
+    name: db-net
+    external: true

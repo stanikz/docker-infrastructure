@@ -7,7 +7,7 @@ services:
     ports:
       - 5076:5076
     networks:
-      - myNetwork
+      - proxy-network
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
@@ -24,7 +24,7 @@ services:
     ports:
       - 8060:8080
     networks:
-      - myNetwork
+      - proxy-network
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
@@ -35,5 +35,6 @@ services:
       - /mnt/media/download/incomplete:/incomplete-downloads
 
 networks:
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true

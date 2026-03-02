@@ -9,7 +9,7 @@ services:
       - 21116:21116/udp
       - 21118:21118
     networks:
-      - myNetwork
+      - proxy-network
     command: hbbs -r ${ENDPOINT}:21117
     volumes:
       - ${DOCKER_DATA}/rustdesk/data:/root
@@ -24,11 +24,12 @@ services:
       - 21117:21117
       - 21119:21119
     networks:
-      - myNetwork
+      - proxy-network
     command: hbbr
     volumes:
       - ${DOCKER_DATA}/rustdesk/data:/root
 
 networks:
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true

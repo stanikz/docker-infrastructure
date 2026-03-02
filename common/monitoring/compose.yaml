@@ -1,0 +1,108 @@
+services:
+  # --------------------------------------------------------------------------------
+  # 1. BESZEL HUB (Main Dashboard + Kuma) - Runs if profile 'hub' is active
+  # --------------------------------------------------------------------------------
+  beszel-hub:
+    image: henrygd/beszel:0.18.3
+    container_name: beszel
+    restart: unless-stopped
+    networks:
+      - proxy-network
+    ports:
+      - "${BESZEL_PORT:-8090}:8090"
+    environment:
+      USER_CREATION: "true"
+      LOG_LEVEL: "debug"
+      OIDC_ISSUER: ${OIDC_ISSUER}
+      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+      OIDC_SCOPES: "openid profile email"
+      DISABLE_PASSWORD_AUTH: true
+    volumes:
+      - ${DOCKER_DATA}/beszel/data:/beszel_data
+    profiles: ["hub"]
+  
+  uptime-kuma:
+    image: louislam/uptime-kuma:2.1.0
+    container_name: kuma
+    hostname: kuma
+    restart: unless-stopped
+    ports:
+      - 3001:3001
+    networks:
+      - proxy-network
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/uptime-kuma/data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    profiles: ["hub"]
+
+  # --------------------------------------------------------------------------------
+  # 2. BESZEL AGENT - STANDARD (Runs if profile 'agent' is active)
+  # --------------------------------------------------------------------------------
+  beszel-agent:
+    image: henrygd/beszel-agent:0.18.3
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${BESZEL_EXTRA_MOUNT:-/dev/null:/dev/null}
+    environment:
+      PORT: 45876
+      KEY: ${BESZEL_KEY}
+      TOKEN: ${BESZEL_TOKEN}
+      HUB_URL: ${BESZEL_HUB_URL}
+      LOG_LEVEL: "${LOG_LEVEL:-debug}"
+    profiles: ["agent"]
+
+  # --------------------------------------------------------------------------------
+  # 3. BESZEL AGENT - NVIDIA (Runs if profile 'agent-gpu' is active)
+  # --------------------------------------------------------------------------------
+  beszel-agent-gpu:
+    image: henrygd/beszel-agent-nvidia:0.18.3
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${BESZEL_EXTRA_MOUNT:-/dev/null:/dev/null}
+    environment:
+      PORT: 45876
+      KEY: ${BESZEL_KEY}
+      TOKEN: ${BESZEL_TOKEN}
+      HUB_URL: ${BESZEL_HUB_URL}
+      LOG_LEVEL: "${LOG_LEVEL:-debug}"
+      NVIDIA_VISIBLE_DEVICES: all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [utility]
+    profiles: ["agent-gpu"]
+
+  # --------------------------------------------------------------------------------
+  # 4. DOZZLE (Runs if profile 'dozzle' is active)
+  # --------------------------------------------------------------------------------
+  dozzle:
+    image: amir20/dozzle:v10.0.1
+    container_name: ${DOZZLE_CONTAINER_NAME:-dozzle-agent}
+    restart: always
+    ports:
+      - "${DOZZLE_PORT:-9999}:8080"
+    networks:
+      - proxy-network
+    command: ${DOZZLE_COMMAND}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      DOZZLE_REMOTE_AGENT: ${DOZZLE_REMOTE_AGENT}
+    profiles: ["dozzle"]
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true

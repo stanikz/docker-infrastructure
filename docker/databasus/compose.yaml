@@ -7,10 +7,15 @@ services:
     ports:
       - "4005:4005"
     networks:
-      - myNetwork
+      - proxy-network
+      - db-network
     volumes:
       - /mnt/docker/db-backups:/databasus-data
-    
+        
 networks:
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true
+  db-network:
+    name: db-net
+    external: true  

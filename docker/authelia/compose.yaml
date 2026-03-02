@@ -8,7 +8,7 @@ services:
     ports:
       - 9091:9091
     networks:
-      - myNetwork
+      - proxy-network
     environment:
       TZ: ${TZ}
       # These variables AUTOMATICALLY override the missing keys in configuration.yml
@@ -25,5 +25,6 @@ services:
       - ${DOCKER_DATA}/authelia/config:/config #change this to a shared folder on your system. DO NOT use a "volume"
     
 networks:
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true

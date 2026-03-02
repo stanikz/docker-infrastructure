@@ -6,7 +6,8 @@ services:
     restart: unless-stopped
     ports:
       - "4533:4533"
-    network_mode: myNetwork
+    networks:
+      - proxy-network   #network_mode: myNetwork
     environment:
       # Optional: put your config options customization here. Examples:
       ND_SCANSCHEDULE: "@every 1m"
@@ -22,3 +23,8 @@ services:
     volumes:
       - ${DOCKER_DATA}/navidrome/data:/data
       - /mnt/docker-backups/audiobooks:/music:ro
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true

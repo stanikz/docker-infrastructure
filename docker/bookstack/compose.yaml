@@ -6,7 +6,9 @@ services:
     restart: unless-stopped
     ports:
       - 6875:80
-    network_mode: myNetwork 
+    networks:
+      - internal-net #network_mode: myNetwork
+      - proxy-network
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
@@ -39,11 +41,13 @@ services:
         condition: service_healthy
         
   bookstack_db:
-    image: ghcr.io/linuxserver/mariadb:11.4.8-r0-ls204 #lscr.io/linuxserver/mariadb:11.4.8 #11.4.8-r0-ls201 #11.4.8-r0-ls197
+    image: ghcr.io/linuxserver/mariadb:11.4.8-r0-ls204 #11.4.8-r0-ls201 #11.4.8-r0-ls197
     container_name: bookstack_db
     hostname: bookstack-mariadb
     restart: unless-stopped
-    network_mode: myNetwork
+    networks:
+      - internal-net
+      - db-network
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
@@ -60,3 +64,13 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  internal-net:
+    driver: bridge
+  db-network:
+    name: db-net
+    external: true

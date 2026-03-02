@@ -7,7 +7,7 @@ services:
     ports:
       - 8444:8443
     networks: 
-      - myNetwork
+      - proxy-network
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
@@ -24,5 +24,6 @@ services:
       - ${DOCKER_DATA}/vscode-server/config:/config
 
 networks:
-  myNetwork:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true
