@@ -67,7 +67,7 @@ networks:
     ipam:
       config:
         - subnet: 172.22.0.0/16
-    external: false
+    external: true
 
 #networks:
 #  dns_net:
