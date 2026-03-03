@@ -1,0 +1,45 @@
+services:
+  # ---------------------------------------------------------
+  # SERVER PROFILE (Main Instance) COMPOSE_PROFILES=server
+  # Run with: docker compose --profile server up -d
+  # ---------------------------------------------------------
+  portainer:
+    image: portainer/portainer-ee:sts
+    container_name: portainer
+    restart: always
+    profiles: ["server"]  # <--- Only starts if 'server' profile is active
+    ports:
+      - 9443:9443
+      - 8000:8000 # Required for Edge Agents to call home
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - proxy-network
+
+  # ---------------------------------------------------------
+  # AGENT PROFILE (Remote Machines) COMPOSE_PROFILES=agent
+  # Run with: docker compose --profile agent up -d
+  # ---------------------------------------------------------
+  portainer_agent:
+    image: portainer/agent:2.39.0 #2.35.0
+    container_name: portainer_agent
+    hostname: portainer_agent
+    restart: always
+    profiles: ["agent"]   # <--- Only starts if 'agent' profile is active
+    ports:
+      - "9001:9001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - proxy-network
+
+volumes:
+  portainer_data:
+    name: portainer_data
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
