@@ -20,15 +20,17 @@ This is the core directory containing active production deployments. It is segme
 
 As of 2026-03-03, the infrastructure consists of the following server stacks:
 
+```
  stacks
     ├── ai
     ├── dietpi
     ├── docker
     ├── media
     └── stremio
+```
 
-ai – Services that utilizes AI and LLM workloads - e.g.; ollama
-dietpi – Lightweight utility services - pocketid (OIDC) service and nginx proxy manager for internal DNS + adsblock
-docker – General container management 
-media – Media server applications (Plex/Arr stack)
-stremio – streaming services
+- ai – Services that utilizes AI and LLM workloads - e.g.; ollama
+- dietpi – Lightweight utility services - pocketid (OIDC) service and nginx proxy manager for internal DNS + adsblock
+- docker – General container management
+- media – Media server applications (Plex/Arr stack)
+- stremio – streaming services
