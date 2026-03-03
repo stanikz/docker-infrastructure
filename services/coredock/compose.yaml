@@ -1,0 +1,31 @@
+services:
+  coredock:
+    image: ghcr.io/ad-on-is/coredock:v1.22.0
+    container_name: coredock
+    restart: unless-stopped
+    # Expose DNS ports to your LAN
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    # Required capabilities for CoreDNS
+    cap_add:
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+    environment:
+      # Choose the base domain you want for all containers
+      # You will access containers as e.g. http://radarr.docker
+      COREDOCK_DOMAIN: "docker.local"
+
+      # Optionally force CoreDock to prefer container_name over hostname
+      # COMMON FOR MOST USERS → use the container_name as DNS name
+      COREDOCK_USE_CONTAINER_NAME: "true"
+
+    # This allows CoreDock to detect container IPs
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    
+
+networks:
+  default:
+    driver: bridge

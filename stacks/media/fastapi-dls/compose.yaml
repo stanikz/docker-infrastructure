@@ -1,0 +1,20 @@
+services:
+  fastapi-dls:
+    image: collinwebdesigns/fastapi-dls:2.0.3
+    container_name: fastapi-dls
+    hostname: fastapi-dls
+    restart: always
+    ports:
+      - 443:443
+    environment:
+      TZ: ${TZ}
+      DLS_URL: 192.168.10.90
+      DLS_PORT: 443
+      LEASE_EXPIRE_DAYS: 90
+    volumes:
+      - ${DOCKER_DATA}/fastapi-dls/cert:/app/cert
+      - nvidia-license-db:/app/database
+
+volumes:
+  nvidia-license-db:
+    name: "nvidia-license-db"

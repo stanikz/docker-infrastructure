@@ -1,0 +1,26 @@
+services:
+  resilio-sync:
+    image: lscr.io/linuxserver/resilio-sync:2.7.3
+    container_name: resilio-sync
+    hostname: resilio
+    restart: unless-stopped
+    ports:
+      - 9888:8888
+      - 55555:55555
+    networks:
+      - proxy-network
+    environment:
+      PUID: 0
+      PGID: 0
+      UMASK: 022
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/services/resilio/config:/config
+      - ${DOCKER_DATA}/services/resilio/downloads:/downloads
+      - /:/sync
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+    

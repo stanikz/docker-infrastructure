@@ -1,0 +1,54 @@
+services:
+  plex:
+    image: ghcr.io/linuxserver/plex:1.43.0 #1.42.2
+    container_name: plex
+    hostname: plex
+    restart: unless-stopped
+    network_mode: "host"
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      VERSION: ${VERSION}
+      PLEX_CLAIM: ${PLEX_CLAIM}
+      ADVERTISE_IP: 'http://192.168.10.90:32500/'
+      ALLOWED_NETWORKS: '192.168.10.0/24,17.22.0.0/16'
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:32400/web
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              # Explicit capabilities for Transcoding
+              capabilities: [gpu, compute, video, utility]
+    volumes:
+      - ${DOCKER_DATA}/plex:/config
+      - /mnt/media:/mnt/media
+      - type: tmpfs
+        target: /tmp
+        tmpfs:
+          size: 2G
+    
+    
+
+      #- /mydocker/1080/zurg/__all__:/mydocker/1080/zurg/__all__:ro
+      #- /mydocker/1080/symlinks/shows:/tv:ro
+      #- /mydocker/1080/symlinks/movies:/movies:ro
+
+    #ports:
+    #  - "32400:32400"        # Plex Web UI
+      #- "32469:32469"        # DLNA
+      #- "1900:1900/udp"      # DLNA discovery
+      #- "3005:3005"          # GDM network discovery
+      #- "5353:5353/udp"      # Bonjour/Avahi
+      #- "8324:8324"          # Plex Companion
+      #- "32410:32410/udp"    # GDM
+      #- "32412:32412/udp"    # GDM
+      #- "32413:32413/udp"    # GDM
+      #- "32414:32414/udp"    # GDM

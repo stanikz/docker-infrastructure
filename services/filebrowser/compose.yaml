@@ -1,0 +1,24 @@
+services:
+  filebrowser:
+    image: hurlenko/filebrowser:v2.61.0
+    container_name: filebrowser
+    hostname: filebrowser-service
+    restart: unless-stopped
+    ports:
+      - 8007:8080
+    networks:
+      - proxy-network
+    environment:
+      FB_BASEURL: /data
+      TZ: ${TZ}
+    user: "${UID}:${GID}"
+    volumes:
+      - ${DOCKER_DATA}/filebrowser/config:/config
+      #- /mnt/docker-backups/filebrowser_data:/data
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+      
+        

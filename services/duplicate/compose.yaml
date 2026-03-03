@@ -1,0 +1,25 @@
+services:
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:v2.0.7.1-2.0.7.1_beta_2023-05-25-ls193
+    container_name: duplicati
+    hostname: duplicate
+    restart: unless-stopped
+    ports:
+      - 8200:8200
+    networks:
+      - proxy-network
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      CLI_ARGS:  #optional
+    volumes:
+      - ${DOCKER_DATA}/services/duplicati/config:/config
+      #- /mnt/docker-backups/mydockerbackups:/backups # Location for storing backups
+      - /:/source
+    
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+    

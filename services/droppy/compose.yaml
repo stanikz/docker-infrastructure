@@ -1,0 +1,19 @@
+services:
+  droppy:
+    image: ghcr.io/droppyjs/droppy:v1.3.1
+    container_name: droppy
+    hostname: droppy
+    restart: unless-stopped
+    ports:
+      - 8989:8989
+    networks:
+      - proxy-network
+    volumes:
+      - ${DOCKER_DATA}/services/droppy/config:/config
+      - ${DOCKER_DATA}/services/droppy/data:/files
+      
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+    

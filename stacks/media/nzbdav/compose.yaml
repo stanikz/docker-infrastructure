@@ -1,0 +1,56 @@
+services:
+  nzbdav:
+    image: ghcr.io/nzbdav-dev/nzbdav:alpha
+    container_name: nzbdav
+    hostname: nzbdav
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    networks:
+      - proxy-network
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID} 
+    volumes:
+      - ${DOCKER_DATA}/nzbdav/config:/config
+      - /mnt:/mnt:rshared
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  nzbdav-rclone:
+    image: rclone/rclone:latest
+    container_name: nzbdav-rclone
+    restart: unless-stopped
+    networks:
+      - proxy-network
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    volumes:
+      - ${DOCKER_DATA}/nzbdav/rclone.conf:/config/rclone/rclone.conf:ro
+      - ${DOCKER_DATA}/nzbdav/entrypoint.sh:/entrypoint.sh
+      - /mnt/media/nzbdav-rclone/.cache/:/root/.cache/rclone
+      - /mnt/media/nzbdav:/data:rshared #data here comes from the entrypoint.sh where the webdav is mounted inside the container
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    devices:
+      - /dev/fuse:/dev/fuse:rwm
+    depends_on:
+      nzbdav:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
+    stop_grace_period: 30s
+    init: true
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true  

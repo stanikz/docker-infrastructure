@@ -1,0 +1,20 @@
+services:
+  homer:
+    image: b4bz/homer:v25.11.1
+    container_name: homer
+    hostname: homer
+    restart: unless-stopped
+    networks:
+      - proxy-network
+    ports:
+      - 8900:8080
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/homer/config:/www/assets
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
