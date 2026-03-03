@@ -1,0 +1,42 @@
+#--------------------------------------------------------------------------
+#   TODO: This compose file must be fixed according to the repo structure |
+#--------------------------------------------------------------------------
+
+services:
+  backend:
+    image: ghcr.io/p2chill/kometizarr-backend:latest
+    container_name: kometizarr-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - /mnt/media/kometizarr/data/backups:/backups  # Poster backups (PERSISTENT)
+      - ./data/temp:/temp  # Temp processing
+    env_file:
+      - .env
+    environment:
+      TZ: Europe/Stockholm
+      PGID: 1000
+      UID: 1000
+      PLEX_URL: ${PLEX_URL}
+      PLEX_TOKEN: ${PLEX_TOKEN}
+      TMDB_API_KEY: ${TMDB_API_KEY}
+      OMDB_API_KEY: ${OMDB_API_KEY}
+      MDBLIST_API_KEY: ${MDBLIST_API_KEY}
+    restart: unless-stopped
+    networks:
+      - arr-network
+
+  frontend:
+    image: ghcr.io/p2chill/kometizarr-frontend:latest
+    container_name: kometizarr-frontend
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - arr-network
+
+networks:
+  arr-network:
+    external: true

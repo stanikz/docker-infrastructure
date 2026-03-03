@@ -13,7 +13,7 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
     volumes:
-      - ${DOCKER_DATA}/nzbhydra/data:/config
+      - ${DOCKER_DATA}/services/nzbhydra/data:/config
       - /mnt/media/download:/downloads    
 
   sabnzbd:
@@ -30,7 +30,7 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
     volumes:
-      - ${DOCKER_DATA}/sabnzbd/config:/config
+      - ${DOCKER_DATA}/services/sabnzbd/config:/config
       - /mnt/media/download:/downloads
       - /mnt/media/download/incomplete:/incomplete-downloads
 

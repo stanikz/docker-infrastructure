@@ -1,0 +1,24 @@
+services:
+  lazylibrarian:
+    image: lscr.io/linuxserver/lazylibrarian:version-bf1572f0
+    container_name: lazylibrarian
+    hostname: lazylib
+    restart: unless-stopped
+    ports:
+      - 5299:5299
+    networks:
+      - proxy-network
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DOCKER_MODS: 'linuxserver/calibre-web:calibre|linuxserver/mods:lazylibrarian-ffmpeg' #optional
+    volumes:
+      - ${DOCKER_DATA}/services/lazylibrarian/data:/config
+      #- /mnt/audio_downloads/downloads/:/downloads
+      #- /mnt/audio_downloads/data/:/books #optional
+    
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true

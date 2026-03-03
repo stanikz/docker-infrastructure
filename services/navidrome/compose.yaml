@@ -21,7 +21,7 @@ services:
       ND_SPOTIFY_ID: ${SPOTIFY_CLIENT_ID}
       ND_SPOTIFY_SECRET: ${SPOTIFY_CLIENT_SECRET}
     volumes:
-      - ${DOCKER_DATA}/navidrome/data:/data
+      - ${DOCKER_DATA}/services/navidrome/data:/data
       - /mnt/docker-backups/audiobooks:/music:ro
 
 networks:
