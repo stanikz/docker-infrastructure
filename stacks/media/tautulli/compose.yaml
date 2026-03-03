@@ -1,6 +1,6 @@
 services:
   tautulli:
-    image: tautulli/tautulli:v2.16.1
+    image: tautulli/tautulli:v2.16.0
     container_name: tautulli
     hostname: tautulli
     restart: unless-stopped
@@ -12,7 +12,6 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
-      TEST_VAR: 'dummy_value_test'
     volumes:
       - ${DOCKER_DATA}/tautulli/config:/config
 
