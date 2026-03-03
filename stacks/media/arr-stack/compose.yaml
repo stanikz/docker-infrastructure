@@ -78,32 +78,32 @@ services:
       timeout: 3s
       retries: 5
   
-  huntarr:
-    image: ghcr.io/plexguide/huntarr:9.3.0
-    container_name: huntarr
-    hostname: huntarr
-    restart: unless-stopped
-    ports:
-      - 9705:9705
-    volumes:
-      - ${DOCKER_DATA}/arr-stack/huntarr/config:/config
-    environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
-    networks:
-      - internal-net
-      - proxy-network
-    depends_on:
-      radarr:
-        condition: service_healthy
-      sonarr:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9705/api/health"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
+#  huntarr:
+#    image: ghcr.io/plexguide/huntarr:9.3.0
+#    container_name: huntarr
+#    hostname: huntarr
+#    restart: unless-stopped
+#    ports:
+#      - 9705:9705
+#    volumes:
+#      - ${DOCKER_DATA}/arr-stack/huntarr/config:/config
+#    environment:
+#      PUID: ${PUID}
+#      PGID: ${PGID}
+#      TZ: ${TZ}
+#    networks:
+#      - internal-net
+#      - proxy-network
+#    depends_on:
+#      radarr:
+#        condition: service_healthy
+#      sonarr:
+#        condition: service_healthy
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:9705/api/health"]
+#      interval: 10s
+#      timeout: 3s
+#      retries: 5
 
   seerr:
     image: ghcr.io/seerr-team/seerr:v3.0.1 #https://github.com/seerr-team/seerr/releases
