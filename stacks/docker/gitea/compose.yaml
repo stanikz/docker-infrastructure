@@ -12,7 +12,7 @@ services:
       - proxy-network
     environment:
       USER_UID: ${PUID}
-      USER_GID: ${GUID}
+      USER_GID: ${PGID}
       GITEA__database__DB_TYPE: ${DB_TYPE}
       GITEA__database__HOST: ${GITEA_DB_HOST}
       GITEA__database__NAME: ${GITEA_DB_NAME}
