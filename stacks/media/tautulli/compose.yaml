@@ -12,6 +12,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
+      TEST_VAR: 'dummy_value_test'
     volumes:
       - ${DOCKER_DATA}/tautulli/config:/config
 
