@@ -12,7 +12,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
-      VAR: "dummy variable to test webhook functionality"
+      VAR: "dummy variable to test webhook functionality addtionally changes"
     volumes:
       - ${DOCKER_DATA}/tautulli/config:/config
 
