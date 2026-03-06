@@ -1,0 +1,27 @@
+services:
+  aiostreams:
+    image: ghcr.io/viren070/aiostreams:v2.25.0 #v2.24.5 #v2.24.4 #v2.24.1 #v2.23.3 #v2.23.2
+    container_name: aiostreams
+    hostname: aiostreams-stable
+    restart: unless-stopped
+    networks:
+      - proxy-network
+    ports:
+      - 3000:3000
+    environment:
+      TZ: ${TZ}
+    env_file:
+      - .env
+    volumes:
+      - ${DOCKER_DATA}/aiostreams/data:/app/data
+    healthcheck:
+      test: wget -qO- http://localhost:3000/api/v1/status
+      interval: 30s #1m
+      timeout: 10s
+      retries: 3 #5
+      start_period: 10s
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true

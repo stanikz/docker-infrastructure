@@ -1,0 +1,58 @@
+services:
+  nzbdav:
+    image: ghcr.io/nzbdav-dev/nzbdav:0.5.4 #latest
+    container_name: nzbdav
+    env_file:
+      - .env
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID} 
+      - PGID=${PGID}
+    ports:
+      - "3003:3000"   # Web UI accessible on host:3000 (can be reverse proxied later)
+    volumes:
+      - ./config:/config
+      - /mnt:/mnt:rshared
+    restart: unless-stopped
+    networks:
+      - stremio-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  nzbdav-rclone:
+    image: rclone/rclone:latest
+    container_name: nzbdav-rclone
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - stremio-net
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID} 
+      - PGID=${PGID}
+    volumes:
+      - ./rclone.conf:/config/rclone/rclone.conf:ro
+      - ./entrypoint.sh:/entrypoint.sh
+      - /mnt/.cache:/mnt/.cache:/root/.cache/rclone  
+      - /mnt/nzbdav/data/:/data:rshared #data here comes from the entrypoint.sh where the webdav is mounted inside the container
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    devices:
+      - /dev/fuse:/dev/fuse:rwm
+    depends_on:
+      nzbdav:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
+    stop_grace_period: 30s
+    init: true
+
+networks:
+  stremio-net:
+    external: true

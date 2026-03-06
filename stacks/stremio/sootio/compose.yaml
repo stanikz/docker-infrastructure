@@ -1,0 +1,22 @@
+services:
+  app:
+    image: ghcr.io/sooti/stremio-addon-debrid-search:v1.8.5
+    container_name: sootio
+    hostname: sootio
+    restart: unless-stopped
+    ports:
+      - ${PORT:-6907}:${PORT:-6907}
+    networks:
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ${DOCKER_DATA}/sootio/data:/app/data
+    cpus: 0.5
+    
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
