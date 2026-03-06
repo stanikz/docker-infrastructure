@@ -1,0 +1,32 @@
+services:
+  usenetstreamer:
+    image: ghcr.io/sanket9225/usenetstreamer:1.7.3
+    container_name: usenetstreamer
+    hostname: usenetstreamer
+    restart: unless-stopped
+    ports:
+      - 7777:7000
+    networks:
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ}
+      INDEXER_MANAGER: ${INDEXER_MANAGER}
+      INDEXER_MANAGER_URL: ${INDEXER_MANAGER_URL}
+      INDEXER_MANAGER_API_KEY: ${INDEXER_MANAGER_API_KEY}
+      NZBDAV_URL: ${NZBDAV_URL}
+      NZBDAV_API_KEY: ${NZBDAV_API_KEY}
+      NZBDAV_WEBDAV_URL: ${NZBDAV_WEBDAV_URL}
+      NZBDAV_WEBDAV_USER: ${NZBDAV_WEBDAV_USER}
+      NZBDAV_WEBDAV_PASS: ${NZBDAV_WEBDAV_PASS}
+      ADDON_BASE_URL: ${ADDON_BASE_URL}
+    volumes:
+      - ${DOCKER_DATA}/usenetstreamer/data:/data/config
+    
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+

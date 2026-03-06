@@ -1,0 +1,24 @@
+services:
+  mediaflow-proxy:
+    container_name: mediaflow-proxy
+    hostname: mediaflow-proxy
+    image: mhdzumair/mediaflow-proxy:v2.4.4
+    restart: unless-stopped
+    ports:
+      - 8888:8888
+    networks:
+      - proxy-network
+    env_file:
+      - .env
+    logging:
+      options:
+        max-size: 1g
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+    
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true

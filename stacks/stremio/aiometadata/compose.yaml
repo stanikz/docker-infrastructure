@@ -1,0 +1,52 @@
+services:
+  aiometadata:
+    image: ghcr.io/cedya77/aiometadata:latest #1.2.1 #beta hade precis innan latest tagen
+    container_name: aiometadata
+    hostname: aiometadata
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - 3232:3232
+    networks:
+      - proxy-network
+    environment:
+      TZ: ${MY_TIME_ZONE}
+      PORT: ${PORT}
+      REDIS_URL: ${REDIS_URL}
+      META_TTL: 604800
+      CATALOG_TTL: 86400s
+      NO_CACHE: false
+      DEBUG: true
+      ADMIN_KEY: ${AIOMETADATA_ADMIN_KEY}
+    volumes:
+      - ${DOCKER_DATA}/aiometadata/data:/app/addon/data
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3232/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    depends_on:
+      aiometadata_redis:
+        condition: service_healthy
+
+  aiometadata_redis:
+    image: redis:8.6.1
+    container_name: aiometadata_redis
+    restart: unless-stopped
+    networks:
+      - proxy-network
+    volumes:
+      - ${DOCKER_DATA}/aiometadata/redis-cache:/data
+    command: redis-server --appendonly yes --save 60 1
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:  
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true

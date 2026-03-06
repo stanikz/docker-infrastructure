@@ -1,0 +1,60 @@
+services:
+  stremthru:
+    image: ghcr.io/muniftanjim/stremthru:0.97.1
+    container_name: stremthru
+    hostname: stremthru
+    restart: unless-stopped
+    ports:
+      - 8060:8080
+    networks:
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/stremthru/app:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+
+  postgres:
+    image: postgres:16.6-alpine
+    container_name: stremthru-db-postgres-16
+    hostname: stremthru-postgres-16
+    ports:
+      - 5432:5432
+    networks:
+      - db-net
+      - internal-net
+    environment:
+      TZ: ${TZ}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_DATA}/stremthru/db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "0.6"
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  internal-net:
+    driver: bridge
+  db-network:
+    name: db-net
+    external: true

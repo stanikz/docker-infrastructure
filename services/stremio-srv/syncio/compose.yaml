@@ -1,0 +1,28 @@
+services:
+  syncio:
+    image: ghcr.io/iamneur0/syncio:private
+    container_name: syncio
+    hostname: syncio
+    restart: unless-stopped
+    ports:
+      - 3004:3000
+      - 4000:4000
+    networks:
+      - proxy-network
+    user: 1000:1000
+    env_file:
+      - .env
+    environment:
+      JWT_SECRET: ${JWT_SECRET} #'temp-jwt-secret-key'
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY} #'temp-encryption-key-32-chars-long'
+      SYNCIO_PRIVATE_USERNAME: ${SYNCIO_PRIVATE_USERNAME}
+      SYNCIO_PRIVATE_PASSWORD: ${SYNCIO_PRIVATE_PASSWORD}
+      DEBUG: 'false'
+      NEXT_PUBLIC_DEBUG: 'false'
+    volumes:
+      - ${DOCKER_DATA}/services/syncio/data:/app/data
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true

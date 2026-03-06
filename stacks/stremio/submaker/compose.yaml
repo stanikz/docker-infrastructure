@@ -1,0 +1,38 @@
+# Local development setup without Redis (uses filesystem storage)
+# Use pre-built image from Docker Hub (recommended)
+    # image: xtremexq/submaker:latest
+    # Or build locally
+    # build: .
+services:
+  submaker:
+    image: xtremexq/submaker:1.4.66 #1.4.62 #1.4.59 #1.4.51 #1.4.40 #1.4.36
+    container_name: submaker
+    hostname: submaker
+    restart: unless-stopped
+    ports:
+      - "${PORT:-7001}:7001"
+    networks:
+      - proxy-network
+    user: "1000:1000"
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ}
+      # Override specific variables for local development
+      # Storage configuration - Use filesystem (default)
+      STORAGE_TYPE: filesystem
+
+      # Encryption key file path (persisted in bind mount)
+      ENCRYPTION_KEY_FILE: /app/keys/.encryption-key
+    volumes:
+      # Persist cache and data directories
+      - ${DOCKER_DATA}/submaker/data:/app/data
+      - ${DOCKER_DATA}/submaker/.cache:/app/.cache
+      - ${DOCKER_DATA}/submaker/logs:/app/logs
+      - ${DOCKER_DATA}/submaker/keys:/app/keys
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  
