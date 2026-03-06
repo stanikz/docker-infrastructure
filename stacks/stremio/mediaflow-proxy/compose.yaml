@@ -9,7 +9,7 @@ services:
     networks:
       - proxy-network
     env_file:
-      - .env
+      - ${DOCKER_DATA}/mediaflow-proxy/.env
     logging:
       options:
         max-size: 1g

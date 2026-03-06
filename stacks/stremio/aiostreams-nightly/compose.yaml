@@ -1,25 +1,28 @@
+x-aiostreams-base: &aiostreams-base
+  restart: unless-stopped
+  networks:
+    - proxy-network
+  environment:
+    TZ: ${TZ}
+  env_file:
+    - ${DOCKER_DATA}/aiostreams-nightly/.env
+  healthcheck:
+    test: wget -qO- http://localhost:3000/api/v1/status
+    interval: 30s
+    timeout: 10s
+    retries: 3
+    start_period: 10s
+
 services:
   aiostreams:
-    image: ghcr.io/viren070/aiostreams:2026.03.06.0021-nightly #2026.01.22.1930-nightly #2025.11.06.0155-nightly #(<-- this build contains first nzbdav implemntation)
-    container_name: aio-nightly
+    <<: *aiostreams-base
+    image: ghcr.io/viren070/aiostreams:2026.03.06.0021-nightly
+    container_name: aiostreams-nightly
     hostname: aiostreams-nightly
-    restart: unless-stopped
-    networks:
-      - proxy-network
     ports:
       - 3001:3000
-    environment:
-      TZ: ${TZ}
-    env_file:
-      - .env
     volumes:
       - ${DOCKER_DATA}/aiostreams-nightly/data:/app/data
-    healthcheck:
-      test: wget -qO- http://localhost:3000/api/v1/status
-      interval: 30s #1m
-      timeout: 10s
-      retries: 3 #5
-      start_period: 10s
 
 networks:
   proxy-network:

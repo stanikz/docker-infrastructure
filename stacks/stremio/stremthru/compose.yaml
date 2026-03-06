@@ -9,7 +9,7 @@ services:
     networks:
       - proxy-network
     env_file:
-      - .env
+      - ${DOCKER_DATA}/stremthru/.env
     environment:
       TZ: ${TZ}
     volumes:
@@ -21,6 +21,8 @@ services:
       resources:
         limits:
           cpus: "1.0"
+        reservations:
+          cpus: "0.2"
 
   postgres:
     image: postgres:16.6-alpine
@@ -29,8 +31,8 @@ services:
     ports:
       - 5432:5432
     networks:
-      - db-net
       - internal-net
+      - db-net
     environment:
       TZ: ${TZ}
       POSTGRES_DB: ${POSTGRES_DB}
@@ -48,6 +50,8 @@ services:
       resources:
         limits:
           cpus: "0.6"
+        reservations:
+          cpus: "0.2"
 
 networks:
   proxy-network:

@@ -1,0 +1,22 @@
+services:
+  aiopicks:
+    build:
+      context: https://github.com/qooode/aiopicks
+    image: aiopicks:latest
+    container_name: aiopicks
+    hostname: aiopicks
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    networks:
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      - ENVIRONMENT=production
+    
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  

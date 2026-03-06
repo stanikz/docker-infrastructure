@@ -9,12 +9,17 @@ services:
     networks:
       - proxy-network
     env_file:
-      - .env
+      - ${DOCKER_DATA}/sootio/.env
     environment:
       - NODE_ENV=production
     volumes:
       - ${DOCKER_DATA}/sootio/data:/app/data
-    cpus: 0.5
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+        reservations:
+          cpus: "0.1"
     
 networks:
   proxy-network:

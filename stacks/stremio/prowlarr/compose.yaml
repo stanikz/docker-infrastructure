@@ -1,28 +1,61 @@
-services:  
+# --------------------------------------------------------------------------------
+# EXTENSION FIELDS & ANCHORS (Templates)
+# --------------------------------------------------------------------------------
+
+# 1. Environment Variables Template
+x-env-prowlarr: &env-prowlarr
+  PUID: ${PUID}
+  PGID: ${PGID}
+  TZ: ${TZ}
+
+# 2. Base Prowlarr Service Template
+x-prowlarr-base: &prowlarr-base
+  image: ghcr.io/hotio/prowlarr:release-2.3.0.5236
+  restart: unless-stopped
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+  networks:
+    - proxy-network
+
+# 3. Common Volumes Template
+x-prowlarr-volumes: &prowlarr-volumes-config
+  - ${DOCKER_DATA}/prowlarr/config:/config
+  - ${DOCKER_DATA}/prowlarr/Custom:/config/Definitions/Custom
+
+x-prowlarr-volumes-nzb: &prowlarr-volumes-nzb
+  - ${DOCKER_DATA}/nzb-prowlarr/config:/config
+  - ${DOCKER_DATA}/nzb-prowlarr/custom-definitions:/config/Definitions/Custom
+
+# --------------------------------------------------------------------------------
+# SERVICES
+# --------------------------------------------------------------------------------
+services:
+  # --- MAIN PROWLARR (Default) ---
   prowlarr:
-    image: ghcr.io/hotio/prowlarr:release-2.3.0.5236
+    <<: *prowlarr-base
     container_name: prowlarr
-    hostname: prowlarr
-    restart: unless-stopped
+    profiles: ["main"]
+    environment:
+      <<: *env-prowlarr
+      WEBUI_PORT: 9696
+    volumes: *prowlarr-volumes-config
     ports:
       - 9696:9696
-    networks:
-      - proxy-network
+
+  # --- NZB PROWLARR (Only starts with --profile nzb) ---
+  prowlarr-nzb:
+    <<: *prowlarr-base
+    container_name: nzb-prowlarr
+    profiles: ["nzb"]
     environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
-      WEBUI_PORT: 9696
-    volumes:
-      - .${DOCKER_DATA}/prowlarr/config:/config
-      - .${DOCKER_DATA}/prowlarr/Custom:/config/Definitions/Custom
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    
-      
+      <<: *env-prowlarr
+    volumes: *prowlarr-volumes-nzb
+    ports:
+      - 9797:9696
+
 networks:
   proxy-network:
     name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
