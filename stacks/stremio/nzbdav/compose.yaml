@@ -2,20 +2,21 @@ services:
   nzbdav:
     image: ghcr.io/nzbdav-dev/nzbdav:0.5.4 #latest
     container_name: nzbdav
-    env_file:
-      - .env
-    environment:
-      - TZ=${TZ}
-      - PUID=${PUID} 
-      - PGID=${PGID}
-    ports:
-      - "3003:3000"   # Web UI accessible on host:3000 (can be reverse proxied later)
-    volumes:
-      - ./config:/config
-      - /mnt:/mnt:rshared
+    hostname: nzbdav
     restart: unless-stopped
+    ports:
+      - 3003:3000   # Web UI accessible on host:3000 (can be reverse proxied later)
     networks:
-      - stremio-net
+      - proxy-network
+    env_file:
+      - ${DOCKER_DATA}/nzbdav/.env
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID} 
+      PGID: ${PGID}
+    volumes:
+      - ${DOCKER_DATA}/nzbdav/config:/config
+      - /mnt:/mnt:rshared
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 5s
@@ -26,18 +27,19 @@ services:
   nzbdav-rclone:
     image: rclone/rclone:latest
     container_name: nzbdav-rclone
-    env_file:
-      - .env
+    hostname: nzbdav-rclone
     restart: unless-stopped
     networks:
-      - stremio-net
+      - proxy-network
+    env_file:
+      - ${DOCKER_DATA}/nzbdav/.env
     environment:
-      - TZ=${TZ}
-      - PUID=${PUID} 
-      - PGID=${PGID}
+      TZ: ${TZ}
+      PUID: ${PUID} 
+      PGID: ${PGID}
     volumes:
-      - ./rclone.conf:/config/rclone/rclone.conf:ro
-      - ./entrypoint.sh:/entrypoint.sh
+      - ${DOCKER_DATA}/nzbdav/rclone.conf:/config/rclone/rclone.conf:ro
+      - ${DOCKER_DATA}/nzbdav/entrypoint.sh:/entrypoint.sh
       - /mnt/.cache:/mnt/.cache:/root/.cache/rclone  
       - /mnt/nzbdav/data/:/data:rshared #data here comes from the entrypoint.sh where the webdav is mounted inside the container
     cap_add:
@@ -54,5 +56,6 @@ services:
     init: true
 
 networks:
-  stremio-net:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true

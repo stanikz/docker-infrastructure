@@ -9,7 +9,7 @@ services:
     networks:
       - proxy-network
     env_file:
-      - .env
+      - ${DOCKER_DATA}/usenetstreamer/.env
     environment:
       TZ: ${TZ}
       INDEXER_MANAGER: ${INDEXER_MANAGER}

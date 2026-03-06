@@ -1,0 +1,20 @@
+services:
+  easynews-plus-plus:
+    image: ghcr.io/pantelx/easynews-plus-plus:2.6.3
+    container_name: easynews-plus-plus
+    hostname: easynews-plus-plus
+    restart: unless-stopped
+    ports:
+      - 1337:1337
+    networks:
+      - proxy-network
+    env_file:
+      - .env
+    volumes:
+      - ${DOCKER_DATA}/services/easynews-plus-plus/custom-titles.json:/app/custom-titles.json
+      - ${DOCKER_DATA}/services/easynews-plus-plus/.env:/app/.env
+    
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true

@@ -11,7 +11,7 @@ services:
       - internal-net
     env_file:
       - ${DOCKER_DATA}/comet/app/data/.env
-      - .env
+      - ${DOCKER_DATA}/comet/.env
     depends_on:
       comet_db:
         condition: service_healthy
@@ -23,8 +23,12 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-    cpus: 0.85
-    cpu_shares: 512
+    deploy:
+      resources:
+        limits:
+          cpus: "0.85"
+        reservations:
+          cpus: "0.5"
     
 
   comet_db:
@@ -56,6 +60,8 @@ services:
       resources:
         limits:
           cpus: "0.4"
+        reservations:
+          cpus: "0.2"
 
 networks:
   proxy-network:

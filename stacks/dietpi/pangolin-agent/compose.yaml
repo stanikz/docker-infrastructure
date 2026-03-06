@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     networks:
       - pangolin-network
-    env_file: .env
+    env_file: ${DOCKER_DATA}/pangolin-tunnel/.env
     environment:
       PANGOLIN_ENDPOINT: ${PANGOLIN_ENDPOINT}
       NEWT_ID: ${NEWT_ID}

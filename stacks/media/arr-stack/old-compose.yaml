@@ -1,0 +1,397 @@
+services:
+  agregarr:
+    image: agregarr/agregarr:v2.4.0
+    container_name: agregarr
+    hostname: agregarr
+    restart: unless-stopped
+    ports:
+      - 7474:7171    
+    networks:
+      - internal-net
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ}
+    user: "${PUID}:${PGID}"
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/agregarr/config:/app/config
+      - /mnt/media/arrs/agregarr/movie-placeholder:/data/movies
+      - /mnt/media/arrs/agregarr/tv-placeholder:/data/tv
+      - /mnt/media/arrs/agregarr/kids-placeholder:/data/kids
+  
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:v1.5.5-ls337 #v1.5.4-ls331 https://github.com/linuxserver/docker-bazarr/releases
+    container_name: bazarr
+    hostname: bazarr
+    restart: unless-stopped
+    ports:
+      - 7373:6767
+    networks:
+      - internal-net
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/bazarr/config:/config
+      - /mnt:/mnt:rslave
+    depends_on:
+      radarr:
+        condition: service_healthy
+      sonarr:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6767"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+  
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:v3.4.6
+    container_name: flaresolverr
+    hostname: flaresolverr
+    restart: unless-stopped
+    ports:
+      - 8192:8191
+    networks:
+      - internal-net
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      LOG_HTML: ${LOG_HTML:-false}
+      CAPTCHA_SOLVER: ${CAPTCHA_SOLVER:-none}
+      TZ: ${TZ}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8191"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+  
+#  huntarr:
+#    image: ghcr.io/plexguide/huntarr:9.3.0
+#    container_name: huntarr
+#    hostname: huntarr
+#    restart: unless-stopped
+#    ports:
+#      - 9705:9705
+#    volumes:
+#      - ${DOCKER_DATA}/arr-stack/huntarr/config:/config
+#    environment:
+#      PUID: ${PUID}
+#      PGID: ${PGID}
+#      TZ: ${TZ}
+#    networks:
+#      - internal-net
+#      - proxy-network
+#    depends_on:
+#      radarr:
+#        condition: service_healthy
+#      sonarr:
+#        condition: service_healthy
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:9705/api/health"]
+#      interval: 10s
+#      timeout: 3s
+#      retries: 5
+
+  seerr:
+    image: ghcr.io/seerr-team/seerr:v3.0.1 #https://github.com/seerr-team/seerr/releases
+    init: true
+    container_name: seerr
+    hostname: seerr
+    restart: unless-stopped
+    ports:
+      - 7777:5055
+    networks:
+      - internal-net
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      LOG_LEVEL: debug
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/seerr/config:/app/config
+    depends_on:
+      radarr:
+        condition: service_healthy
+      sonarr:
+        condition: service_healthy
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+        
+  prowlarr:
+    image: ghcr.io/hotio/prowlarr:release-2c583e5 #release-3d8016b https://github.com/hotio/prowlarr/pkgs/container/prowlarr/versions
+    container_name: prowlarr
+    hostname: prowlarr
+    restart: unless-stopped
+    ports:
+      - 7676:9696
+    networks: 
+      - internal-net
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/prowlarr/config:/config
+      - ${DOCKER_DATA}/arr-stack/prowlarr/Custom:/config/Definitions/Custom
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      - flaresolverr
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9696"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  decypharr:
+    image: cy01/blackhole:v1.1.6
+    container_name: decypharr
+    hostname: decypharr
+    restart: unless-stopped
+    ports:
+      - 7575:8282
+    networks:
+      - internal-net
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/decypharr/config:/app
+      - /mnt/:/mnt:rshared
+    devices:
+      - /dev/fuse:/dev/fuse:rwm
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    healthcheck:
+      test: ["CMD", "/usr/bin/healthcheck", "--config", "/app/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      zurg:
+        condition: service_healthy
+      rclone:
+        condition: service_healthy
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:6.0.4.10291-ls293 #ls292 #ls289 #https://github.com/linuxserver/docker-radarr/tags
+    container_name: radarr
+    hostname: radarr
+    restart: unless-stopped
+    ports:
+      - 7878:7878
+    networks:
+      - internal-net
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      UMASK: ${UMASK}
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/radarr/config:/config
+      - /mnt:/mnt:rslave
+    #  - /mnt/media/arrs/zurg-mount:/mnt/media/arrs/zurg-mount
+    depends_on:
+      prowlarr:
+        condition: service_healthy
+      flaresolverr:
+        condition: service_healthy
+      decypharr:
+        condition: service_healthy
+      zurg:
+        condition: service_healthy
+      rclone:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7878"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+  
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:4.0.16.2944-ls303 #ls302 #ls300 #https://github.com/linuxserver/docker-sonarr/tags
+    container_name: sonarr
+    hostname: sonarr
+    restart: unless-stopped
+    ports:
+      - 7272:8989
+    networks:
+      - internal-net
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      UMASK: ${UMASK}
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/sonarr/config:/config
+      - /mnt:/mnt:rslave
+    #  - /mnt/media/arrs/zurg-mount:/mnt/media/arrs/zurg-mount
+    depends_on:
+      prowlarr:
+        condition: service_healthy
+      flaresolverr:
+        condition: service_healthy
+      decypharr:
+        condition: service_healthy
+      zurg:
+        condition: service_healthy
+      rclone:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8989"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+  
+  zilean:
+    image: ipromknight/zilean:v3.5.0
+    container_name: zilean
+    hostname: zilean
+    restart: unless-stopped
+    ports:
+      - 8181:8181
+    networks:
+      - internal-net
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      - Zilean__Database__ConnectionString=${ZILEAN_CONNECTION_STRING}
+    #pull_policy: always
+    tty: true
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/zilean:/app/data
+      - ${DOCKER_DATA}/arr-stack/zilean/tmp:/tmp
+    healthcheck:
+      test: curl --connect-timeout 10 --silent --show-error --fail http://localhost:8181/healthchecks/ping
+      timeout: 60s
+      interval: 30s
+      retries: 10
+    depends_on:
+      postgres:
+        condition: service_healthy
+      
+  zurg:
+    image: ghcr.io/debridmediamanager/zurg-testing:v0.9.3-final
+    container_name: zurg
+    hostname: zurg
+    restart: unless-stopped
+    ports:
+      - 9997:9999
+    networks:
+      - internal-net
+      - proxy-network
+    healthcheck:
+      test: curl -f localhost:9999/dav/version.txt || exit 1
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      user: ${PUID}:${PGID}
+      RD_KEY: ${RD_KEY}
+      PLEX_TOKEN: ${PLEX_TOKEN}
+    volumes:
+       - ${DOCKER_DATA}/arr-stack/zurg/zurg-plex_update.sh:/app/plex_update.sh
+       - ${DOCKER_DATA}/arr-stack/zurg/zurg-config.yml:/app/config.yml
+       - ${DOCKER_DATA}/arr-stack/zurg/zurg_data:/app/data
+
+  rclone:
+    image: rclone/rclone:1.73.0
+    container_name: rclone
+    hostname: rclone
+    restart: unless-stopped
+    networks:
+      - internal-net
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    devices:
+      - /dev/fuse:/dev/fuse:rwm
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/zurg/entrypoint.sh:/entrypoint.sh
+      - ${DOCKER_DATA}/arr-stack/zurg/rclone.conf:/config/rclone/rclone.conf
+      - /mnt/media/arrs/.zurg-cache:/root/.cache/rclone
+      - /mnt/media/arrs/zurg-mount:/data:rshared #all provider/cloud folders (__all__, movies, series) reside here.
+    depends_on:
+      zurg:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD", "test", "-d", "/data/__all__"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+  
+  postgres:
+    image: postgres:17.0-alpine3.20
+    container_name: postgres
+    restart: unless-stopped
+    ports:
+      - 5433:5432 #due to databasus is on another host machine
+    networks:
+      - internal-net
+      - proxy-network 
+    env_file:
+      - .env
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: zilean
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/postgres:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  internal-net:
+    driver: bridge
