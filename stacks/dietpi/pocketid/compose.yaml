@@ -8,7 +8,8 @@ services:
       - 1411:1411
     networks:
       - proxy-network
-    env_file: ${DOCKER_DATA}/pocketid/.env
+    env_file: 
+      - .env
     volumes:
       - ${DOCKER_DATA}/pocketid/data:/app/data
     # Optional healthcheck
