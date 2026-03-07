@@ -32,7 +32,7 @@ services:
       - 5432:5432
     networks:
       - internal-net
-      - db-net
+      - db-network
     environment:
       TZ: ${TZ}
       POSTGRES_DB: ${POSTGRES_DB}
