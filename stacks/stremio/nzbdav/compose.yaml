@@ -32,7 +32,7 @@ services:
     networks:
       - proxy-network
     env_file:
-      - ${DOCKER_DATA}/nzbdav/.env
+      - .env
     environment:
       TZ: ${TZ}
       PUID: ${PUID} 

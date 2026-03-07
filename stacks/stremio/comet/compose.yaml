@@ -10,8 +10,8 @@ services:
       - proxy-network
       - internal-net
     env_file:
-      - ${DOCKER_DATA}/comet/app/data/.env
-      - ${DOCKER_DATA}/comet/.env
+      - ./app/data/.env
+      - .env
     depends_on:
       comet_db:
         condition: service_healthy

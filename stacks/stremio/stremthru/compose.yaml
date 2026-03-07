@@ -9,7 +9,7 @@ services:
     networks:
       - proxy-network
     env_file:
-      - ${DOCKER_DATA}/stremthru/.env
+      - .env
     environment:
       TZ: ${TZ}
     volumes:
