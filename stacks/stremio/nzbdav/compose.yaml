@@ -30,7 +30,9 @@ services:
     hostname: nzbdav-rclone
     restart: unless-stopped
     networks:
-      - stremio-net
+      - proxy-network
+    env_file:
+      - .env
     environment:
       TZ: ${TZ}
       PUID: ${PUID} 
