@@ -5,7 +5,7 @@ x-aiostreams-base: &aiostreams-base
   environment:
     TZ: ${TZ}
   env_file:
-    - ${DOCKER_DATA}/aiostreams/.env
+    - .env
   healthcheck:
     test: wget -qO- http://localhost:3000/api/v1/status
     interval: 30s

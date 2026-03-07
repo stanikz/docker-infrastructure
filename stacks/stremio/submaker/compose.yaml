@@ -15,7 +15,7 @@ services:
       - proxy-network
     user: "1000:1000"
     env_file:
-      - ${DOCKER_DATA}/submaker/.env
+      - .env
     environment:
       TZ: ${TZ}
       # Override specific variables for local development
