@@ -5,7 +5,7 @@
     # build: .
 services:
   submaker:
-    image: xtremexq/submaker:1.4.66
+    image: xtremexq/submaker:1.4.71
     container_name: submaker
     hostname: submaker
     restart: unless-stopped
@@ -13,7 +13,7 @@ services:
       - "${PORT:-7001}:7001"
     networks:
       - proxy-network
-    user: "1000:1000"
+    user: ${PUID}:${PGID}
     env_file:
       - .env
     environment:
