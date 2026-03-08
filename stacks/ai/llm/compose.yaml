@@ -40,7 +40,7 @@ services:
       SEARXNG_BASE_URL: http://localhost:8080/ 
       TZ: ${TZ}
     volumes:
-      - ${DOCKER_DATA}/searxng:/etc/searxng:rw
+      - ${DOCKER_DATA}/llm/searxng:/etc/searxng:rw
       - searxng-data:/var/cache/searxng:rw  
     logging:
       driver: json-file
@@ -126,7 +126,7 @@ services:
       OLLAMA_NOPRUNE: true
     runtime: nvidia
     volumes:
-      - ${DOCKER_DATA}/ollama/data:/root/.ollama
+      - ${DOCKER_DATA}/llm/ollama/data:/root/.ollama
     depends_on:
      - redis
 
