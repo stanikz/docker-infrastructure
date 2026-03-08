@@ -10,7 +10,7 @@ services:
     networks:
       - proxy-network
     env_file: 
-      - .env
+      - ${DOCKER_DATA}/paperless/.env
     depends_on:
       - postgres
       - redis
@@ -34,7 +34,7 @@ services:
       - internal-net
       - db-network
     env_file: 
-      - .env
+      - ${DOCKER_DATA}/paperless/postgres/.env
     volumes:
       - ${DOCKER_DATA}/postgres/data:/var/lib/postgresql
   
@@ -48,7 +48,7 @@ services:
       - proxy-network
       - internal-net
     env_file: 
-      - .env
+      - ${DOCKER_DATA}/paperless/.env
     volumes:
       - ${DOCKER_DATA}/redis/data:/data
   
@@ -62,7 +62,7 @@ services:
       - proxy-network
       - internal-net
     env_file: 
-      - .env
+      - ${DOCKER_DATA}/paperless/.env
     command:
       - "gotenberg"
       - "--chromium-disable-javascript=true"
@@ -83,7 +83,7 @@ services:
       #- ollama
       - paperless
     env_file:
-      - .env
+      - ${DOCKER_DATA}/paperless/paperless-ai/.env
     volumes:
       - ${DOCKER_DATA}/paperless-ai/data:/app/data
   
@@ -103,7 +103,7 @@ services:
       #- ollama
       - paperless
     env_file:
-      - .env
+      - ${DOCKER_DATA}/paperless/paperless-gpt/.env
     volumes:
       - ${DOCKER_DATA}/paperless-gpt/prompts:/app/prompts
 
