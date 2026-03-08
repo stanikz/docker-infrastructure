@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# Cleanup on exit
+cleanup() {
+  echo "Unmounting /data..."
+  fusermount -uz /data || umount -l /data || true
+}
+trap cleanup EXIT INT TERM
+
 # Mount the zurg remote
 rclone mount zurg: /data \
   --allow-other \

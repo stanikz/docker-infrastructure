@@ -264,6 +264,8 @@ services:
       - apparmor:unconfined
     devices:
       - /dev/fuse:/dev/fuse:rwm
+    stop_grace_period: 5s  # Give it time to unmount cleanly
+    stop_signal: SIGTERM
     volumes:
       - ${DOCKER_DATA}/arr-stack/zurg/entrypoint.sh:/entrypoint.sh
       - ${DOCKER_DATA}/arr-stack/zurg/rclone.conf:/config/rclone/rclone.conf
