@@ -70,7 +70,7 @@ services:
     hostname: openwebui
     restart: unless-stopped
     env_file:
-      - ./openwebui/.env    
+      - ${DOCKER_DATA}/openwebui/.env    
     ports:
       - 3000:8080
     networks:
