@@ -95,11 +95,11 @@ services:
       - "${DOZZLE_PORT:-9999}:8080"
     networks:
       - proxy-network
-    command: ${DOZZLE_COMMAND}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       DOZZLE_REMOTE_AGENT: ${DOZZLE_REMOTE_AGENT}
+      DOZZLE_MODE: ${DOZZLE_MODE:-server}
     profiles: ["dozzle"]
 
 networks:
