@@ -9,6 +9,7 @@ services:
       - 8000:8000
     networks:
       - proxy-network
+      - internal-net
     env_file: 
       - ${DOCKER_DATA}/paperless/.env
     depends_on:
@@ -45,7 +46,6 @@ services:
     hostname: paperless-redis
     restart: unless-stopped
     networks:
-      - proxy-network
       - internal-net
     env_file: 
       - ${DOCKER_DATA}/paperless/.env
@@ -59,7 +59,6 @@ services:
     hostname: paperless-gotenberg
     restart: unless-stopped
     networks:
-      - proxy-network
       - internal-net
     env_file: 
       - ${DOCKER_DATA}/paperless/.env
