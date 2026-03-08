@@ -1,0 +1,157 @@
+services:
+  # paperless-ngx main service
+  paperless:
+    image: ghcr.io/paperless-ngx/paperless-ngx:2.20.6
+    container_name: paperless-ngx
+    hostname: paperless-ngx
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    networks:
+      - proxy-network
+    env_file: 
+      - ${DOCKER_DATA}/paperless-ngx/.env
+    depends_on:
+      - postgres
+      - redis
+      - gotenberg
+      #- tika
+    volumes:
+      - ${DOCKER_DATA}/paperless-ngx/data:/usr/src/paperless/data
+      - ${DOCKER_DATA}/paperless-ngx/media:/usr/src/paperless/media
+      - ${DOCKER_DATA}/paperless-ngx/export:/usr/src/paperless/export
+      - ${DOCKER_DATA}/paperless-ngx/consume:/usr/src/paperless/consume
+  
+  # postgres database for paperless-ngx
+  postgres:
+    image: postgres:18
+    restart: unless-stopped
+    container_name: paperless-postgres-18
+    hostname: paperless-postgres
+    ports:
+      - 5433:5432
+    networks:
+      - internal-net
+      - db-network
+    env_file: 
+      - ${DOCKER_DATA}/postgres/.env
+    volumes:
+      - ${DOCKER_DATA}/postgres/data:/var/lib/postgresql
+  
+  # redis database for paperless-ngx
+  redis:
+    image: docker.io/library/redis:8
+    container_name: paperless-redis
+    hostname: paperless-redis
+    restart: unless-stopped
+    networks:
+      - proxy-network
+      - internal-net
+    env_file: 
+      - ${DOCKER_DATA}/redis/.env
+    volumes:
+      - ${DOCKER_DATA}/redis/data:/data
+  
+  # gotenberg service that paperless uses for document conversion
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:8.26.0
+    container_name: paperless-gotenberg
+    hostname: paperless-gotenberg
+    restart: unless-stopped
+    networks:
+      - proxy-network
+      - internal-net
+    env_file: 
+      - .env
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+
+  # paperless-ai service
+  paperless-ai:
+    image: clusterzx/paperless-ai:3.0.9
+    container_name: paperless-ai
+    hostname: paperless-ai
+    restart: unless-stopped
+    ports:
+      - 3001:3000
+    networks:
+      - proxy-network
+      - internal-net
+    depends_on:
+      #- ollama
+      - paperless
+    env_file:
+      - ${DOCKER_DATA}/paperless-ai/.env
+    volumes:
+      - ${DOCKER_DATA}/paperless-ai/data:/app/data
+  
+
+  # paperless-gpt service
+  paperless-gpt:
+    image: icereed/paperless-gpt:v0.24.0
+    container_name: paperless-gpt
+    hostname: paperless-gpt
+    restart: unless-stopped
+    ports:
+      - 3002:8080
+    networks:
+      - proxy-network
+      - internal-net
+    depends_on:
+      #- ollama
+      - paperless
+    env_file:
+      - ${DOCKER_DATA}/paperless-gpt/.env
+    volumes:
+      - ${DOCKER_DATA}/paperless-gpt/prompts:/app/prompts
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  internal-net:
+    driver: bridge
+  db-network:
+    name: db-net
+    external: true
+  # tika service that paperless uses for document text extraction / reference to tika in ai folder 
+  #tika:
+  #  image: docker.io/apache/tika:latest
+  #  container_name: tika
+  #  restart: unless-stopped
+  #  env_file: ./tika/.env
+  
+
+    # open-webui service for LLM interaction
+  #open-webui:
+  #  image: ghcr.io/open-webui/open-webui:latest
+  #  container_name: open-webui
+  #  restart: unless-stopped
+  #  env_file:
+  #    - ./open-webui/.env
+  #  depends_on:
+  #    - ollama
+  #  ports:
+  #    - "3001:8080"
+  #  volumes:
+  #    - ./open-webui/data:/app/backend/data
+
+  # ollama service for local LLMs
+  #ollama:
+  #  image: ollama/ollama:latest
+  #  container_name: ollama
+  #  env_file:
+  #    - ./ollama/.env
+  #  volumes:
+  #    - ./ollama/data/:/root/.ollama
+  #    - ./ollama/models:/ollama-models
+  #  restart: unless-stopped
+  #  deploy:
+  #    resources:
+  #      reservations:
+  #        devices:
+  #          - driver: nvidia
+  #            count: all
+  #            capabilities: [gpu]
