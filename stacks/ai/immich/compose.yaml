@@ -85,7 +85,6 @@ services:
       # Do not edit the next line. If you want to change the database storage location on your system, edit the value of DB_DATA_LOCATION in the stack.env file
       - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
     shm_size: 128mb
-    
     healthcheck:
       disable: false
 

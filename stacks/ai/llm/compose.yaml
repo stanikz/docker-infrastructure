@@ -70,7 +70,7 @@ services:
     hostname: openwebui
     restart: unless-stopped
     env_file:
-      - ${DOCKER_DATA}/openwebui/.env    
+      - ${DOCKER_DATA}/llm/openwebui/.env    
     ports:
       - 3000:8080
     networks:
@@ -95,8 +95,8 @@ services:
       - redis
       - searxng
     volumes:
-      - ${DOCKER_DATA}/openwebui:/app/backend/data
-      - ${DOCKER_DATA}/openwebui/logs:/opt/open-webui/logs  
+      - ${DOCKER_DATA}/llm/openwebui:/app/backend/data
+      - ${DOCKER_DATA}/llm/openwebui/logs:/opt/open-webui/logs  
     extra_hosts:
         - 'host.docker.internal:host-gateway'
   ollama:
@@ -129,8 +129,6 @@ services:
       - ${DOCKER_DATA}/ollama/data:/root/.ollama
     depends_on:
      - redis
-
-  
 
 networks:
   proxy-network:
