@@ -85,23 +85,38 @@ services:
     profiles: ["agent-gpu"]
 
   # --------------------------------------------------------------------------------
-  # 4. DOZZLE (Runs if profile 'dozzle' is active)
+  # DOZZLE HUB (Runs only on the main server)
   # --------------------------------------------------------------------------------
-  dozzle:
+  dozzle-hub:
     image: amir20/dozzle:v10.0.1
-    container_name: ${DOZZLE_CONTAINER_NAME:-dozzle-agent}
+    container_name: dozzle-hub
     restart: always
     ports:
       - "${DOZZLE_PORT:-9999}:8080"
     networks:
       - proxy-network
-    command: ${DOZZLE_COMMAND}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       DOZZLE_REMOTE_AGENT: ${DOZZLE_REMOTE_AGENT}
-      DOZZLE_MODE: ${DOZZLE_MODE}
-    profiles: ["dozzle"]
+    profiles: ["dozzle-hub"]
+
+  # --------------------------------------------------------------------------------
+  # DOZZLE AGENT (Runs only on the agent machines)
+  # --------------------------------------------------------------------------------
+  dozzle-agent:
+    image: amir20/dozzle:v10.0.1
+    container_name: dozzle-agent
+    restart: always
+    command: agent
+    ports:
+      - "${DOZZLE_PORT:-9999}:7007"
+    networks:
+      - proxy-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    profiles: ["dozzle-agent"]
+
 
 networks:
   proxy-network:
