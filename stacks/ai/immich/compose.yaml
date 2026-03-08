@@ -20,7 +20,7 @@ services:
       - proxy-network
       - internal-net
     env_file:
-      - ${DOCKER_DATA}/immich/.env
+      - .env
     extends:
       file: ${DOCKER_DATA}/immich/config/hwaccel.transcoding.yaml
       service: ${TRANSCODING_BACKEND:-cpu} # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
@@ -45,7 +45,7 @@ services:
     networks:
       - internal-net
     env_file:
-      - ${DOCKER_DATA}/immich/.env
+      - .env
     extends: # uncomment this section for hardware acceleration - see https://docs.immich.app/features/ml-hardware-acceleration
       file: ${DOCKER_DATA}/immich/config/hwaccel.ml.yaml
       service: cuda # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable

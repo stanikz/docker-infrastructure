@@ -10,7 +10,7 @@ services:
     networks:
       - proxy-network
     env_file: 
-      - ${DOCKER_DATA}/paperless-ngx/.env
+      - .env
     depends_on:
       - postgres
       - redis
@@ -34,7 +34,7 @@ services:
       - internal-net
       - db-network
     env_file: 
-      - ${DOCKER_DATA}/postgres/.env
+      - .env
     volumes:
       - ${DOCKER_DATA}/postgres/data:/var/lib/postgresql
   
@@ -48,7 +48,7 @@ services:
       - proxy-network
       - internal-net
     env_file: 
-      - ${DOCKER_DATA}/redis/.env
+      - .env
     volumes:
       - ${DOCKER_DATA}/redis/data:/data
   
@@ -83,7 +83,7 @@ services:
       #- ollama
       - paperless
     env_file:
-      - ${DOCKER_DATA}/paperless-ai/.env
+      - .env
     volumes:
       - ${DOCKER_DATA}/paperless-ai/data:/app/data
   
@@ -103,7 +103,7 @@ services:
       #- ollama
       - paperless
     env_file:
-      - ${DOCKER_DATA}/paperless-gpt/.env
+      - .env
     volumes:
       - ${DOCKER_DATA}/paperless-gpt/prompts:/app/prompts
 
