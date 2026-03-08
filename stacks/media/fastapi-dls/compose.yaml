@@ -8,7 +8,7 @@ services:
       - 443:443
     environment:
       TZ: ${TZ}
-      DLS_URL: 192.168.10.90
+      DLS_URL: ${DLS_URL:-192.168.10.90}
       DLS_PORT: 443
       LEASE_EXPIRE_DAYS: 90
     volumes:
