@@ -285,7 +285,8 @@ services:
   postgres:
     <<: *service-base
     image: postgres:17.0-alpine3.20
-    container_name: postgres
+    container_name: zilean-db-postgres-17
+    hostname: zilean-postgres-17
     ports:
       - 5433:5432
     environment:
