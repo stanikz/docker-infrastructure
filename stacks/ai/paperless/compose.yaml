@@ -18,10 +18,10 @@ services:
       - gotenberg
       #- tika
     volumes:
-      - ${DOCKER_DATA}/paperless-ngx/data:/usr/src/paperless/data
-      - ${DOCKER_DATA}/paperless-ngx/media:/usr/src/paperless/media
-      - ${DOCKER_DATA}/paperless-ngx/export:/usr/src/paperless/export
-      - ${DOCKER_DATA}/paperless-ngx/consume:/usr/src/paperless/consume
+      - ${DOCKER_DATA}/paperless/paperless-ngx/data:/usr/src/paperless/data
+      - ${DOCKER_DATA}/paperless/paperless-ngx/media:/usr/src/paperless/media
+      - ${DOCKER_DATA}/paperless/paperless-ngx/export:/usr/src/paperless/export
+      - ${DOCKER_DATA}/paperless/paperless-ngx/consume:/usr/src/paperless/consume
   
   # postgres database for paperless-ngx
   postgres:
@@ -37,7 +37,7 @@ services:
     env_file: 
       - ${DOCKER_DATA}/paperless/postgres/.env
     volumes:
-      - ${DOCKER_DATA}/postgres/data:/var/lib/postgresql
+      - ${DOCKER_DATA}/paperless/postgres/data:/var/lib/postgresql
   
   # redis database for paperless-ngx
   redis:
@@ -50,7 +50,7 @@ services:
     env_file: 
       - ${DOCKER_DATA}/paperless/.env
     volumes:
-      - ${DOCKER_DATA}/redis/data:/data
+      - ${DOCKER_DATA}/paperless/redis/data:/data
   
   # gotenberg service that paperless uses for document conversion
   gotenberg:
@@ -84,7 +84,7 @@ services:
     env_file:
       - ${DOCKER_DATA}/paperless/paperless-ai/.env
     volumes:
-      - ${DOCKER_DATA}/paperless-ai/data:/app/data
+      - ${DOCKER_DATA}/paperless/paperless-ai/data:/app/data
   
 
   # paperless-gpt service
@@ -104,7 +104,7 @@ services:
     env_file:
       - ${DOCKER_DATA}/paperless/paperless-gpt/.env
     volumes:
-      - ${DOCKER_DATA}/paperless-gpt/prompts:/app/prompts
+      - ${DOCKER_DATA}/paperless/paperless-gpt/prompts:/app/prompts
 
 networks:
   proxy-network:
