@@ -1,11 +1,11 @@
 services:
   nzbdav:
-    image: ghcr.io/nzbdav-dev/nzbdav:0.5.4 #latest
+    image: ghcr.io/nzbdav-dev/nzbdav:0.6.0
     container_name: nzbdav
     hostname: nzbdav
     restart: unless-stopped
     ports:
-      - 3003:3000   # Web UI accessible on host:3000 (can be reverse proxied later)
+      - 3003:3000
     networks:
       - proxy-network
     env_file:

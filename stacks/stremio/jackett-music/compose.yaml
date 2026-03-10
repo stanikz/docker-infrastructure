@@ -1,6 +1,6 @@
 services:
   jackett:
-    image: lscr.io/linuxserver/jackett:0.24.1316
+    image: lscr.io/linuxserver/jackett:0.24.1332
     container_name: jackett-music
     hostname: jackett-music
     restart: unless-stopped
