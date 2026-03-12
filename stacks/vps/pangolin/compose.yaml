@@ -9,7 +9,7 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
       TZ: ${TZ}
       NODE_OPTIONS: --max-old-space-size=600
     env_file:
-      - ./config/.env
+      - ${DOCKER_DATA}/pangolin/config/.env
     volumes:
       - ${DOCKER_DATA}/pangolin/config:/app/config
       - ${DOCKER_DATA}/pangolin/config/pangolin-data/certificates:/var/certificates
