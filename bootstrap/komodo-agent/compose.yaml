@@ -9,7 +9,7 @@ services:
   periphery:
     image: ghcr.io/moghtech/komodo-periphery:${COMPOSE_KOMODO_IMAGE_TAG:-1.19.5}
     container_name: komodo-agent
-    hostname: komodo-${HOSTNAME:-media}
+    hostname: komodo-${HOSTNAME:-change-this-to-server-name}
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
     restart: unless-stopped
@@ -45,6 +45,7 @@ services:
       ## Default: /etc/komodo.
       - ${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}:${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}
     ## If periphery is being run remote from the core server, ports need to be exposed
+      - /mydocker:/mydocker
     ports:
       - 8120:8120
     ## If you want to use a custom periphery config file, use command to pass it to periphery.

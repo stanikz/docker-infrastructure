@@ -1,0 +1,26 @@
+#######################################################################################################
+### THIS SERVICE NEEDS TO BE REMOVED AND INSTEAD THE COMMON TEMPLATE FOR MONITORING SHOULD BE USED ####
+#######################################################################################################
+
+#services:
+#  uptime-kuma:
+#    image: louislam/uptime-kuma:2.2.1
+#    container_name: kuma
+#    hostname: kuma-vps
+#    restart: unless-stopped
+#    ports:
+#      - 3010:3001
+#    networks:
+#      - pangolin
+#    environment:
+#      TZ: Europe/Stockholm
+#      PUID: 1001
+#      PGID: 989
+#    volumes:
+#      - ${DOCKER_DATA}/kuma/data:/app/data
+#      - /var/run/docker.sock:/var/run/docker.sock
+#    #
+
+#networks:
+#  pangolin:
+#    external: true
