@@ -5,15 +5,15 @@ services:
     hostname: forgejo
     restart: unless-stopped
     ports:
-      - "3222:3000"
-      - "222:22"
+      - 3222:3000
+      - 2222:22
     networks:
       - internal-net
       - proxy-network
     env_file:
       - .env
     environment:
-      - TZ=${TZ}
+      TZ: ${TZ}
     volumes:
       - ${DOCKER_DATA}/forgejo/app:/data
       - /etc/localtime:/etc/localtime:ro 
