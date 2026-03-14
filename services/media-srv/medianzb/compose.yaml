@@ -1,6 +1,6 @@
 services:
   nzbhydra2:
-    image: lscr.io/linuxserver/nzbhydra2:7.19.2
+    image: lscr.io/linuxserver/nzbhydra2:8.5.2
     container_name: nzbhydra
     hostname: nzbhydra
     restart: unless-stopped
@@ -17,7 +17,7 @@ services:
       - /mnt/nas/download:/downloads    
 
   sabnzbd:
-    image: lscr.io/linuxserver/sabnzbd:4.5.3
+    image: lscr.io/linuxserver/sabnzbd:4.5.5
     container_name: sabnzbd
     hostname: sabnzbd
     restart: unless-stopped
