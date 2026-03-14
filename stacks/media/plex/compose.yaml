@@ -41,6 +41,7 @@ services:
     volumes:
       - ${DOCKER_DATA}/plex:/config
       - /mnt/media:/mnt/media
+      - /mnt/nas:/mnt/private
       - type: tmpfs
         target: /tmp
         tmpfs:
