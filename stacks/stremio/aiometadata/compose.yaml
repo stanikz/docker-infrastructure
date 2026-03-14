@@ -5,7 +5,7 @@ services:
     hostname: aiometadata
     restart: unless-stopped
     env_file:
-      - ${DOCKER_DATA}/aiostreams-nightly/.env
+      - ${DOCKER_DATA}/aiometadata/.env
     ports:
       - 3232:3232
     networks:
