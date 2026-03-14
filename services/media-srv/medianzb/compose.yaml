@@ -14,7 +14,7 @@ services:
       TZ: ${TZ}
     volumes:
       - ${DOCKER_DATA}/services/nzbhydra/data:/config
-      - /mnt/media/download:/downloads    
+      - /mnt/nas/download:/downloads    
 
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:4.5.3
@@ -31,8 +31,8 @@ services:
       TZ: ${TZ}
     volumes:
       - ${DOCKER_DATA}/services/sabnzbd/config:/config
-      - /mnt/media/download:/downloads
-      - /mnt/media/download/incomplete:/incomplete-downloads
+      - /mnt/nas/download:/downloads
+      - /mnt/nas/download/incomplete:/incomplete-downloads
 
 networks:
   proxy-network:
