@@ -57,7 +57,6 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
   traefik:
     image: traefik:v3.6.0
     container_name: traefik
-    hostname: traefik-vps
     restart: unless-stopped
     environment:
       TZ: ${TZ}
