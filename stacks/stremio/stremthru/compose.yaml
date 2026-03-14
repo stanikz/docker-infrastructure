@@ -1,6 +1,6 @@
 services:
   stremthru:
-    image: ghcr.io/muniftanjim/stremthru:0.98.6
+    image: ghcr.io/muniftanjim/stremthru:0.98.8
     container_name: stremthru
     hostname: stremthru
     restart: unless-stopped
@@ -10,7 +10,7 @@ services:
       - proxy-network
       - internal-net
     env_file:
-      - .env
+      - ${DOCKER_DATA}/stremthru/.env
     environment:
       TZ: ${TZ}
     volumes:
