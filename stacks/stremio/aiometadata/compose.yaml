@@ -12,13 +12,10 @@ services:
       - proxy-network
     environment:
       TZ: ${TZ}
-      PORT: ${PORT}
-      REDIS_URL: ${REDIS_URL}
       META_TTL: 604800
       CATALOG_TTL: 86400s
       NO_CACHE: false
       DEBUG: true
-      ADMIN_KEY: ${ADMIN_KEY}
     volumes:
       - ${DOCKER_DATA}/aiometadata/data:/app/addon/data
     healthcheck:
