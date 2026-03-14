@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/sooti/stremio-addon-debrid-search:v1.8.8.1
+    image: ghcr.io/sooti/stremio-addon-debrid-search:v1.8.9
     container_name: sootio
     hostname: sootio
     restart: unless-stopped
@@ -9,7 +9,7 @@ services:
     networks:
       - proxy-network
     env_file:
-      - .env
+      - ${DOCKER_DATA}/sootio/.env
     environment:
       - NODE_ENV=production
     volumes:

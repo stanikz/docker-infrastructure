@@ -9,7 +9,7 @@ services:
     networks:
       - proxy-network
     env_file:
-      - .env
+      - ${DOCKER_DATA}/nzbdav/.env
     environment:
       TZ: ${TZ}
       PUID: ${PUID} 
