@@ -3,7 +3,7 @@ services:
   # 1. BESZEL HUB (Main Dashboard + Kuma) - Runs if profile 'hub' is active
   # --------------------------------------------------------------------------------
   beszel-hub:
-    image: henrygd/beszel:0.18.3
+    image: henrygd/beszel:0.18.4
     container_name: beszel
     restart: unless-stopped
     networks:
@@ -23,7 +23,7 @@ services:
     profiles: ["hub"]
   
   uptime-kuma:
-    image: louislam/uptime-kuma:2.1.0
+    image: louislam/uptime-kuma:2.2.1
     container_name: kuma
     hostname: kuma
     restart: unless-stopped
@@ -42,7 +42,7 @@ services:
   # 2. BESZEL AGENT - STANDARD (Runs if profile 'agent' is active)
   # --------------------------------------------------------------------------------
   beszel-agent:
-    image: henrygd/beszel-agent:0.18.3
+    image: henrygd/beszel-agent:0.18.4
     container_name: beszel-agent
     restart: unless-stopped
     network_mode: host
@@ -61,7 +61,7 @@ services:
   # 3. BESZEL AGENT - NVIDIA (Runs if profile 'agent-gpu' is active)
   # --------------------------------------------------------------------------------
   beszel-agent-gpu:
-    image: henrygd/beszel-agent-nvidia:0.18.3
+    image: henrygd/beszel-agent-nvidia:0.18.4
     container_name: beszel-agent
     restart: unless-stopped
     network_mode: host
@@ -88,7 +88,7 @@ services:
   # DOZZLE HUB (Runs only on the main server)
   # --------------------------------------------------------------------------------
   dozzle-hub:
-    image: amir20/dozzle:v10.1.0
+    image: amir20/dozzle:v10.1.1
     container_name: dozzle-hub
     restart: always
     ports:
@@ -105,7 +105,7 @@ services:
   # DOZZLE AGENT (Runs only on the agent machines)
   # --------------------------------------------------------------------------------
   dozzle-agent:
-    image: amir20/dozzle:v10.1.0
+    image: amir20/dozzle:v10.1.1
     container_name: dozzle-agent
     restart: always
     command: agent

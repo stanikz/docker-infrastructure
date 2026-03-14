@@ -1,6 +1,6 @@
 services:
   bookstack:
-    image: linuxserver/bookstack:25.12.3 #v25.12.1-ls239 #v25.11.6-ls235
+    image: linuxserver/bookstack:25.12.9
     container_name: bookstack
     hostname: bookstack-app
     restart: unless-stopped
@@ -41,7 +41,7 @@ services:
         condition: service_healthy
         
   bookstack_db:
-    image: ghcr.io/linuxserver/mariadb:11.4.8-r0-ls204 #11.4.8-r0-ls201 #11.4.8-r0-ls197
+    image: ghcr.io/linuxserver/mariadb:11.4.9
     container_name: bookstack_db
     hostname: bookstack-mariadb
     restart: unless-stopped
