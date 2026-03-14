@@ -10,11 +10,6 @@ services:
       - proxy-network
     env_file:
       - ${DOCKER_DATA}/nzbdav/.env
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID} 
-      PGID: ${PGID}
-      UPGRADE: 0.6.0
     volumes:
       - ${DOCKER_DATA}/nzbdav/config:/config
       - /mnt:/mnt:rshared
@@ -33,11 +28,7 @@ services:
     networks:
       - proxy-network
     env_file:
-      - .env
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID} 
-      PGID: ${PGID}
+      - ${DOCKER_DATA}/nzbdav/.env
     volumes:
       - ${DOCKER_DATA}/nzbdav/rclone.conf:/config/rclone/rclone.conf:ro
       - ${DOCKER_DATA}/nzbdav/entrypoint.sh:/entrypoint.sh
