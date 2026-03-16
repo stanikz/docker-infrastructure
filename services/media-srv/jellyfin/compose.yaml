@@ -3,7 +3,7 @@
 #--------------------------------------------------------------------------
 services:
   jellyfin:
-    image: jellyfin/jellyfin:10.11.0 #linuxserver/jellyfin:10.11.0-rc9
+    image: jellyfin/jellyfin:10.11.6 #linuxserver/jellyfin:10.11.0-rc9
     container_name: jellyfin
     environment:
       TZ: ${TZ}
