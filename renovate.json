@@ -6,7 +6,8 @@
   "assignees": ["stanikz"],
   "labels": ["renovate"],
   "prHourlyLimit": 0,
-  "ignorePaths": ["services/**"],
+  "gitAuthor": "Renovate Bot <renovate@example.com>",
+  "ignorePaths": ["services/*"],
   "docker-compose": {
     "hostRules": [
       {
