@@ -19,3 +19,6 @@ jobs:
         with:
           configurationFile: renovate.json
           token: ${{ secrets.RENOVATE_TOKEN }}
+        env:
+          RENOVATE_AUTODISCOVER: "false"
+          RENOVATE_AUTODISCOVER_FILTER: "stanikz/docker-infrastructure"
