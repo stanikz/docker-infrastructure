@@ -12,10 +12,12 @@
     "services/**",
     "bootstrap/**"
   ],
-  "baseBranches": ["main"],
+  "baseBranchPatterns": [
+    "main"
+  ],
   "separateMajorMinor": false,
   "separateMinorPatch": false,
-  "semanticCommits": true,
+  "semanticCommits": "enabled",
   "semanticCommitType": "chore",
   "semanticCommitScope": "deps",
   "packageRules": [
@@ -33,37 +35,51 @@
     },
     {
       "description": "AI stack updates",
-      "matchPaths": ["stacks/ai/**"],
+      "matchFileNames": [
+        "stacks/ai/**"
+      ],
       "branchTopic": "renovate-stacks-ai"
     },
     {
       "description": "DietPi stack updates",
-      "matchPaths": ["stacks/dietpi/**"],
+      "matchFileNames": [
+        "stacks/dietpi/**"
+      ],
       "branchTopic": "renovate-stacks-dietpi"
     },
     {
       "description": "Docker stack updates",
-      "matchPaths": ["stacks/docker/**"],
+      "matchFileNames": [
+        "stacks/docker/**"
+      ],
       "branchTopic": "renovate-stacks-docker"
     },
     {
       "description": "Media stack updates",
-      "matchPaths": ["stacks/media/**"],
+      "matchFileNames": [
+        "stacks/media/**"
+      ],
       "branchTopic": "renovate-stacks-media"
     },
     {
       "description": "Stremio stack updates",
-      "matchPaths": ["stacks/stremio/**"],
+      "matchFileNames": [
+        "stacks/stremio/**"
+      ],
       "branchTopic": "renovate-stacks-stremio"
     },
     {
       "description": "VPS stack updates",
-      "matchPaths": ["stacks/vps/**"],
+      "matchFileNames": [
+        "stacks/vps/**"
+      ],
       "branchTopic": "renovate-stacks-vps"
     },
     {
       "description": "Common monitoring updates",
-      "matchPaths": ["common/monitoring/**"],
+      "matchFileNames": [
+        "common/monitoring/**"
+      ],
       "branchTopic": "renovate-common-monitoring"
     }
   ],
