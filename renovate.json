@@ -20,39 +20,51 @@
   "semanticCommitScope": "deps",
   "packageRules": [
     {
+      "description": "Disable database updates",
+      "matchPackageNames": [
+        "postgres",
+        "mysql",
+        "redis",
+        "mongodb",
+        "mariadb",
+        "valkey"
+      ],
+      "enabled": false
+    },
+    {
       "description": "AI stack updates",
       "matchPaths": ["stacks/ai/**"],
-      "branchName": "renovate-stacks-ai"
+      "branchTopic": "renovate-stacks-ai"
     },
     {
       "description": "DietPi stack updates",
       "matchPaths": ["stacks/dietpi/**"],
-      "branchName": "renovate-stacks-dietpi"
+      "branchTopic": "renovate-stacks-dietpi"
     },
     {
       "description": "Docker stack updates",
       "matchPaths": ["stacks/docker/**"],
-      "branchName": "renovate-stacks-docker"
+      "branchTopic": "renovate-stacks-docker"
     },
     {
       "description": "Media stack updates",
       "matchPaths": ["stacks/media/**"],
-      "branchName": "renovate-stacks-media"
+      "branchTopic": "renovate-stacks-media"
     },
     {
       "description": "Stremio stack updates",
       "matchPaths": ["stacks/stremio/**"],
-      "branchName": "renovate-stacks-stremio"
+      "branchTopic": "renovate-stacks-stremio"
     },
     {
       "description": "VPS stack updates",
       "matchPaths": ["stacks/vps/**"],
-      "branchName": "renovate-stacks-vps"
+      "branchTopic": "renovate-stacks-vps"
     },
     {
       "description": "Common monitoring updates",
       "matchPaths": ["common/monitoring/**"],
-      "branchName": "renovate-common-monitoring"
+      "branchTopic": "renovate-common-monitoring"
     }
   ],
   "docker-compose": {
