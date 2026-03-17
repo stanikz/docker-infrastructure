@@ -31,7 +31,7 @@ services:
     
 
   comet_db:
-    image: postgres:17-alpine3.22
+    image: postgres:18-alpine3.22
     container_name: comet-db-postgres-17
     hostname: comet-db
     restart: unless-stopped

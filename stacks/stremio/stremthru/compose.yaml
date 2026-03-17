@@ -1,6 +1,6 @@
 services:
   stremthru:
-    image: ghcr.io/muniftanjim/stremthru:0.98.8
+    image: ghcr.io/muniftanjim/stremthru:0.98.9
     container_name: stremthru
     hostname: stremthru
     restart: unless-stopped
@@ -26,7 +26,7 @@ services:
           cpus: "0.2"
 
   postgres:
-    image: postgres:16.6-alpine
+    image: postgres:18.3-alpine
     container_name: stremthru-db-postgres-16
     hostname: stremthru-postgres-16
     ports:
