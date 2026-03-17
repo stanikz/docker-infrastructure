@@ -1,6 +1,6 @@
 services:
   web:
-    image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-0.30.0}
+    image: ghcr.io/karakeep-app/karakeep:0.30.0
     container_name: karakeep-web
     restart: unless-stopped
     hostname: karakeep-web
@@ -45,7 +45,7 @@ services:
       - --hide-scrollbars
       
   meilisearch:
-    image: getmeili/meilisearch:v1.32.1
+    image: getmeili/meilisearch:v1.39.0
     container_name: karakeep-milisearch
     hostname: karakeep-milisearch
     restart: unless-stopped
@@ -57,8 +57,8 @@ services:
       - ${DOCKER_DATA}/karakeep/meilisearch:/meili_data
     ports:
       - 7700:7700  #--> THIS PART IS ONLY NEEDED WHEN UPGRADING AND IMPORTING THE DB DUMP <---
-    #command: >
-    #  meilisearch --import-dump /meili_data/dumps/20260114-134531436.dump
+    command: >
+      meilisearch --import-dump /meili_data/dumps/20260317-220045964.dump
     
 networks:
   proxy-network:
