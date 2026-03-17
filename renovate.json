@@ -22,65 +22,37 @@
     {
       "description": "AI stack updates",
       "matchPaths": ["stacks/ai/**"],
-      "branchName": "renovate-stacks-ai",
-      "grouping": {
-        "branchName": "renovate-stacks-ai",
-        "commitMessagePrefix": "[renovate-ai]"
-      }
+      "branchName": "renovate-stacks-ai"
     },
     {
       "description": "DietPi stack updates",
       "matchPaths": ["stacks/dietpi/**"],
-      "branchName": "renovate-stacks-dietpi",
-      "grouping": {
-        "branchName": "renovate-stacks-dietpi",
-        "commitMessagePrefix": "[renovate-dietpi]"
-      }
+      "branchName": "renovate-stacks-dietpi"
     },
     {
-      "description": "Main docker stack updates",
+      "description": "Docker stack updates",
       "matchPaths": ["stacks/docker/**"],
-      "branchName": "renovate-stacks-main-docker",
-      "grouping": {
-        "branchName": "renovate-stacks-main-docker",
-        "commitMessagePrefix": "[renovate-main-docker]"
-      }
+      "branchName": "renovate-stacks-docker"
     },
     {
       "description": "Media stack updates",
       "matchPaths": ["stacks/media/**"],
-      "branchName": "renovate-stacks-media",
-      "grouping": {
-        "branchName": "renovate-stacks-media",
-        "commitMessagePrefix": "[renovate-media]"
-      }
+      "branchName": "renovate-stacks-media"
     },
     {
       "description": "Stremio stack updates",
       "matchPaths": ["stacks/stremio/**"],
-      "branchName": "renovate-stacks-stremio",
-      "grouping": {
-        "branchName": "renovate-stacks-stremio",
-        "commitMessagePrefix": "[renovate-stremio]"
-      }
+      "branchName": "renovate-stacks-stremio"
     },
     {
       "description": "VPS stack updates",
       "matchPaths": ["stacks/vps/**"],
-      "branchName": "renovate-stacks-vps",
-      "grouping": {
-        "branchName": "renovate-stacks-vps",
-        "commitMessagePrefix": "[renovate-vps]"
-      }
+      "branchName": "renovate-stacks-vps"
     },
     {
-      "description": "Common updates",
-      "matchPaths": ["common/**"],
-      "branchName": "renovate-common",
-      "grouping": {
-        "branchName": "renovate-common",
-        "commitMessagePrefix": "[renovate-monitoring]"
-      }
+      "description": "Common monitoring updates",
+      "matchPaths": ["common/monitoring/**"],
+      "branchName": "renovate-common-monitoring"
     }
   ],
   "docker-compose": {
