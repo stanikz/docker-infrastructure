@@ -64,7 +64,7 @@ x-depends-on-core: &depends-on-core
 services:
   agregarr:
     <<: *arr-service
-    image: agregarr/agregarr:v2.4.0
+    image: agregarr/agregarr:v2.4.2
     container_name: agregarr
     hostname: agregarr
     ports:
