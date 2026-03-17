@@ -28,7 +28,7 @@ services:
     #  - no-new-privileges:true
   
   db:
-    image: postgres:17
+    image: postgres:18
     container_name: gitea-db
     hostname: gitea-postgres17
     restart: always

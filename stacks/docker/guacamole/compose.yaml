@@ -1,13 +1,13 @@
 services:
   guacd:
-    image: guacamole/guacd:1.5.5
+    image: guacamole/guacd:1.6.0
     container_name: guacd
     restart: unless-stopped
     networks:
       - internal-net
     
   postgres:
-    image: postgres:15
+    image: postgres:18
     container_name: guac-db
     restart: unless-stopped
     ports:
@@ -24,7 +24,7 @@ services:
       - ${DOCKER_DATA}/apache/config/guacamole/init:/docker-entrypoint-initdb.d
       
   guacamole:
-    image: guacamole/guacamole:1.5.5
+    image: guacamole/guacamole:1.6.0
     container_name: guacamole
     restart: unless-stopped
     ports:

@@ -1,6 +1,6 @@
 services:
   bookstack:
-    image: linuxserver/bookstack:25.12.9
+    image: linuxserver/bookstack:26.03.20260315
     container_name: bookstack
     hostname: bookstack-app
     restart: unless-stopped
