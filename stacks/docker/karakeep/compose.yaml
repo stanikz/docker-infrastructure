@@ -55,10 +55,10 @@ services:
       MEILI_NO_ANALYTICS: "true"
     volumes:
       - ${DOCKER_DATA}/karakeep/meilisearch:/meili_data
-    ports:
-      - 7700:7700  #--> THIS PART IS ONLY NEEDED WHEN UPGRADING AND IMPORTING THE DB DUMP <---
-    command: >
-      meilisearch --import-dump /meili_data/dumps/20260317-220045964.dump
+    #ports:
+    #  - 7700:7700  #--> THIS PART IS ONLY NEEDED WHEN UPGRADING AND IMPORTING THE DB DUMP <---
+    #command: >     #--> FOLLOW the Instruction in Bookstack on migration process#
+    #  meilisearch --import-dump /meili_data/dumps/20260317-220045964.dump
     
 networks:
   proxy-network:
