@@ -64,7 +64,7 @@ x-depends-on-core: &depends-on-core
 services:
   agregarr:
     <<: *arr-service
-    image: agregarr/agregarr:v2.4.0
+    image: agregarr/agregarr:v2.4.2
     container_name: agregarr
     hostname: agregarr
     ports:
@@ -110,7 +110,7 @@ services:
 
   seerr:
     <<: *service-base
-    image: ghcr.io/seerr-team/seerr:v3.0.1
+    image: ghcr.io/seerr-team/seerr:v3.1.0
     init: true
     container_name: seerr
     hostname: seerr
@@ -252,7 +252,7 @@ services:
 
   rclone:
     <<: *service-base
-    image: rclone/rclone:1.73.0
+    image: rclone/rclone:1.73.2
     container_name: rclone
     hostname: rclone
     networks:
