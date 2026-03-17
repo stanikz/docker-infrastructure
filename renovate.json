@@ -6,8 +6,83 @@
   "assignees": ["stanikz"],
   "labels": ["renovate"],
   "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
   "gitAuthor": "Renovate Bot <renovate@example.com>",
-  "ignorePaths": ["services/*"],
+  "ignorePaths": [
+    "services/**",
+    "bootstrap/**"
+  ],
+  "baseBranches": ["main"],
+  "separateMajorMinor": false,
+  "separateMinorPatch": false,
+  "semanticCommits": true,
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps",
+  "packageRules": [
+    {
+      "description": "AI stack updates",
+      "matchPaths": ["stacks/ai/**"],
+      "branchName": "renovate-stacks-ai",
+      "grouping": {
+        "branchName": "renovate-stacks-ai",
+        "commitMessagePrefix": "[renovate-ai]"
+      }
+    },
+    {
+      "description": "DietPi stack updates",
+      "matchPaths": ["stacks/dietpi/**"],
+      "branchName": "renovate-stacks-dietpi",
+      "grouping": {
+        "branchName": "renovate-stacks-dietpi",
+        "commitMessagePrefix": "[renovate-dietpi]"
+      }
+    },
+    {
+      "description": "Main docker stack updates",
+      "matchPaths": ["stacks/docker/**"],
+      "branchName": "renovate-stacks-main-docker",
+      "grouping": {
+        "branchName": "renovate-stacks-main-docker",
+        "commitMessagePrefix": "[renovate-main-docker]"
+      }
+    },
+    {
+      "description": "Media stack updates",
+      "matchPaths": ["stacks/media/**"],
+      "branchName": "renovate-stacks-media",
+      "grouping": {
+        "branchName": "renovate-stacks-media",
+        "commitMessagePrefix": "[renovate-media]"
+      }
+    },
+    {
+      "description": "Stremio stack updates",
+      "matchPaths": ["stacks/stremio/**"],
+      "branchName": "renovate-stacks-stremio",
+      "grouping": {
+        "branchName": "renovate-stacks-stremio",
+        "commitMessagePrefix": "[renovate-stremio]"
+      }
+    },
+    {
+      "description": "VPS stack updates",
+      "matchPaths": ["stacks/vps/**"],
+      "branchName": "renovate-stacks-vps",
+      "grouping": {
+        "branchName": "renovate-stacks-vps",
+        "commitMessagePrefix": "[renovate-vps]"
+      }
+    },
+    {
+      "description": "Common updates",
+      "matchPaths": ["common/**"],
+      "branchName": "renovate-common",
+      "grouping": {
+        "branchName": "renovate-common",
+        "commitMessagePrefix": "[renovate-monitoring]"
+      }
+    }
+  ],
   "docker-compose": {
     "hostRules": [
       {
