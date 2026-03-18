@@ -12,18 +12,16 @@
     "services/**",
     "bootstrap/**"
   ],
-  "baseBranchPatterns": [
-    "main"
-  ],
+  "baseBranches": ["main"],
   "separateMajorMinor": false,
   "separateMinorPatch": false,
-  "semanticCommits": "enabled",
+  "semanticCommits": true,
   "semanticCommitType": "chore",
   "semanticCommitScope": "deps",
   "packageRules": [
     {
-      "description": "Disable database updates",
-      "matchPackageNames": [
+      "description": "Disable database and cache updates",
+      "matchPackagePatterns": [
         "postgres",
         "mysql",
         "redis",
