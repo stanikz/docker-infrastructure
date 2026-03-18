@@ -20,6 +20,13 @@
   "semanticCommitScope": "deps",
   "packageRules": [
     {
+      "description": "Disable immich stack updates",
+      "matchFileNames": [
+        "stacks/ai/immich/**"
+      ],
+      "enabled": false
+    },
+    {
       "description": "Disable database and cache updates",
       "matchPackagePatterns": [
         "postgres",
