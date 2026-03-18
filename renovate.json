@@ -22,6 +22,11 @@
   "semanticCommitScope": "deps",
   "packageRules": [
     {
+      "description": "Disable immich stack updates",
+      "matchPaths": ["stacks/ai/immich/**"],
+      "enabled": false
+    },
+    {
       "description": "Disable database and cache updates",
       "enabled": false,
       "matchPackageNames": [
@@ -35,52 +40,38 @@
     },
     {
       "description": "AI stack updates",
-      "matchFileNames": [
-        "stacks/ai/**"
-      ],
-      "branchTopic": "renovate-stacks-ai"
+      "matchPaths": ["stacks/ai/**"],
+      "branchTopic": "stacks-ai"
     },
     {
       "description": "DietPi stack updates",
-      "matchFileNames": [
-        "stacks/dietpi/**"
-      ],
-      "branchTopic": "renovate-stacks-dietpi"
+      "matchPaths": ["stacks/dietpi/**"],
+      "branchTopic": "stacks-dietpi"
     },
     {
       "description": "Docker stack updates",
-      "matchFileNames": [
-        "stacks/docker/**"
-      ],
-      "branchTopic": "renovate-stacks-docker"
+      "matchPaths": ["stacks/docker/**"],
+      "branchTopic": "stacks-docker"
     },
     {
       "description": "Media stack updates",
-      "matchFileNames": [
-        "stacks/media/**"
-      ],
-      "branchTopic": "renovate-stacks-media"
+      "matchPaths": ["stacks/media/**"],
+      "branchTopic": "stacks-media"
     },
     {
       "description": "Stremio stack updates",
-      "matchFileNames": [
-        "stacks/stremio/**"
-      ],
-      "branchTopic": "renovate-stacks-stremio"
+      "matchPaths": ["stacks/stremio/**"],
+      "branchTopic": "stacks-stremio"
     },
     {
       "description": "VPS stack updates",
-      "matchFileNames": [
-        "stacks/vps/**"
-      ],
-      "branchTopic": "renovate-stacks-vps"
+      "matchPaths": ["stacks/vps/**"],
+      "branchTopic": "stacks-vps"
     },
     {
       "description": "Common monitoring updates",
-      "matchFileNames": [
-        "common/monitoring/**"
-      ],
-      "branchTopic": "renovate-common-monitoring"
+      "matchPaths": ["common/monitoring/**"],
+      "branchTopic": "common-monitoring"
     }
   ],
   "docker-compose": {
