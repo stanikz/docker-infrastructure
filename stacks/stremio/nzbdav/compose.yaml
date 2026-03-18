@@ -1,6 +1,6 @@
 services:
   nzbdav:
-    image: ghcr.io/nzbdav-dev/nzbdav@sha256:a0a1a01c1af17f0a50949cb8274ee7d40e366e183d1be20f769edb825bdc598f #ghcr.io/nzbdav-dev/nzbdav:0.6.1
+    image: ghcr.io/nzbdav-dev/nzbdav@sha256:e533e0f40f4ba71aca05b5987fbb9d3d182156f1165c68cc0c9c33b6221b6a5f #ghcr.io/nzbdav-dev/nzbdav:0.6.1
     container_name: nzbdav
     hostname: nzbdav
     restart: unless-stopped
