@@ -23,7 +23,9 @@
   "packageRules": [
     {
       "description": "Disable immich stack updates",
-      "matchPaths": ["stacks/ai/immich/**"],
+      "matchFileNames": [
+        "stacks/ai/immich/**"
+      ],
       "enabled": false
     },
     {
@@ -40,37 +42,51 @@
     },
     {
       "description": "AI stack updates",
-      "matchPaths": ["stacks/ai/**"],
+      "matchFileNames": [
+        "stacks/ai/**"
+      ],
       "branchTopic": "stacks-ai"
     },
     {
       "description": "DietPi stack updates",
-      "matchPaths": ["stacks/dietpi/**"],
+      "matchFileNames": [
+        "stacks/dietpi/**"
+      ],
       "branchTopic": "stacks-dietpi"
     },
     {
       "description": "Docker stack updates",
-      "matchPaths": ["stacks/docker/**"],
+      "matchFileNames": [
+        "stacks/docker/**"
+      ],
       "branchTopic": "stacks-docker"
     },
     {
       "description": "Media stack updates",
-      "matchPaths": ["stacks/media/**"],
+      "matchFileNames": [
+        "stacks/media/**"
+      ],
       "branchTopic": "stacks-media"
     },
     {
       "description": "Stremio stack updates",
-      "matchPaths": ["stacks/stremio/**"],
+      "matchFileNames": [
+        "stacks/stremio/**"
+      ],
       "branchTopic": "stacks-stremio"
     },
     {
       "description": "VPS stack updates",
-      "matchPaths": ["stacks/vps/**"],
+      "matchFileNames": [
+        "stacks/vps/**"
+      ],
       "branchTopic": "stacks-vps"
     },
     {
       "description": "Common monitoring updates",
-      "matchPaths": ["common/monitoring/**"],
+      "matchFileNames": [
+        "common/monitoring/**"
+      ],
       "branchTopic": "common-monitoring"
     }
   ],
