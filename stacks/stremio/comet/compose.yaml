@@ -1,6 +1,6 @@
 services:  
   comet:
-    image: ghcr.io/g0ldyy/comet:latest #dev # Use 'latest' for production, 'dev' for development builds
+    image: ghcr.io/g0ldyy/comet@sha256:b978fa27d54a33fcb91014741913627ced7bde31419539949e924ad590aa4cda
     container_name: comet
     hostname: comet-app
     restart: unless-stopped
