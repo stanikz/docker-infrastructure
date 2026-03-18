@@ -12,24 +12,26 @@
     "services/**",
     "bootstrap/**"
   ],
-  "baseBranches": ["main"],
+  "baseBranchPatterns": [
+    "main"
+  ],
   "separateMajorMinor": false,
   "separateMinorPatch": false,
-  "semanticCommits": true,
+  "semanticCommits": "enabled",
   "semanticCommitType": "chore",
   "semanticCommitScope": "deps",
   "packageRules": [
     {
       "description": "Disable database and cache updates",
-      "matchPackagePatterns": [
-        "postgres",
-        "mysql",
-        "redis",
-        "mongodb",
-        "mariadb",
-        "valkey"
-      ],
-      "enabled": false
+      "enabled": false,
+      "matchPackageNames": [
+        "/postgres/",
+        "/mysql/",
+        "/redis/",
+        "/mongodb/",
+        "/mariadb/",
+        "/valkey/"
+      ]
     },
     {
       "description": "AI stack updates",
