@@ -11,6 +11,7 @@ services:
       - proxy-network
       - internal-net
     env_file: 
+      - ${DOCKER_DATA}/paperless/paperless-ngx/.env
       - ${DOCKER_DATA}/paperless/.env
     depends_on:
       - postgres
