@@ -5,7 +5,7 @@
     # build: .
 services:
   submaker:
-    image: xtremexq/submaker:1.4.76
+    image: xtremexq/submaker:1.4.77
     container_name: submaker
     hostname: submaker
     restart: unless-stopped
