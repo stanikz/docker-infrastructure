@@ -1,6 +1,6 @@
 services:
   stremthru:
-    image: ghcr.io/muniftanjim/stremthru:0.99.0
+    image: ghcr.io/muniftanjim/stremthru:0.99.1
     container_name: stremthru
     hostname: stremthru
     restart: unless-stopped
