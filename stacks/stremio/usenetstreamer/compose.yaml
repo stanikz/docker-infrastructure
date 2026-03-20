@@ -1,6 +1,6 @@
 services:
   usenetstreamer:
-    image: ghcr.io/sanket9225/usenetstreamer:1.7.6
+    image: ghcr.io/sanket9225/usenetstreamer:1.7.7
     container_name: usenetstreamer
     hostname: usenetstreamer
     restart: unless-stopped
