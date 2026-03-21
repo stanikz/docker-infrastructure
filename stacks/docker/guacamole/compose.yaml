@@ -16,9 +16,9 @@ services:
       - internal-net
       - db-network
     environment:
-      POSTGRES_DB: ${POSTGRESQL_DB}
-      POSTGRES_USER: ${POSTGRESQL_USER}
-      POSTGRES_PASSWORD: ${GUACAMOLE_PSQL_PASS}
+      POSTGRESQL_DB: ${POSTGRESQL_DB}
+      POSTGRESQL_USER: ${POSTGRESQL_USER}
+      POSTGRESSQL_PASSWORD: ${GUACAMOLE_PSQL_PASS}
     volumes:
       - ${DOCKER_DATA}/apache/config/db:/var/lib/postgresql/data
       - ${DOCKER_DATA}/apache/config/guacamole/init:/docker-entrypoint-initdb.d
