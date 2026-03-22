@@ -91,7 +91,7 @@ services:
         ipv4_address: ${NPM_INT_IP:-172.22.0.8}
       proxy-network:
     volumes:
-      - "${DOCKER_DATA}/dns-ha-proxy/npm/internal:/config"
+      - "${DOCKER_DATA}/dns-ha-proxy/npm/config:/config:rw"
     profiles: ["npm-int"]
 
   # ---------------- NPM (EXTERNAL) ----------------
