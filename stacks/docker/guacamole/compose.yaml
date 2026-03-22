@@ -7,7 +7,7 @@ services:
       - internal-net
     
   postgres:
-    image: postgres:15
+    image: postgres:15.17
     container_name: guac-db
     restart: unless-stopped
     ports:
@@ -15,10 +15,12 @@ services:
     networks:
       - internal-net
       - db-network
+    env_file:
+      - ${DOCKER_DATA}/apache/config/.env
     environment:
-      POSTGRESQL_DB: ${POSTGRESQL_DB}
-      POSTGRESQL_USER: ${POSTGRESQL_USER}
-      POSTGRESSQL_PASSWORD: ${GUACAMOLE_PSQL_PASS}
+      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${GUACAMOLE_PSQL_PASS}
     volumes:
       - ${DOCKER_DATA}/apache/config/db:/var/lib/postgresql/data
       - ${DOCKER_DATA}/apache/config/guacamole/init:/docker-entrypoint-initdb.d
@@ -32,12 +34,14 @@ services:
     networks:
       - internal-net
       - proxy-network
+    env_file:
+      - ${DOCKER_DATA}/apache/config/.env
     environment:
       GUACD_HOSTNAME: guacd
-      POSTGRES_HOSTNAME: postgres
-      POSTGRES_DATABASE: ${POSTGRESQL_DB}
-      POSTGRES_USER: ${POSTGRESQL_USER}
-      POSTGRES_PASSWORD: ${GUACAMOLE_PSQL_PASS}
+      POSTGRESQL_HOSTNAME: postgres
+      POSTGRESQL_DATABASE: ${POSTGRESQL_DB}
+      POSTGRESQL_USER: ${POSTGRESQL_USER}
+      POSTGRESQL_PASSWORD: ${GUACAMOLE_PSQL_PASS}
       #GUACAMOLE_AUTH_PROVIDER: "openid"
       #OPENID_AUTHORIZATION_ENDPOINT: ${OPENID_AUTHORIZATION_ENDPOINT} 
       #OPENID_JWKS_ENDPOINT: ${OPENID_JWKS_ENDPOINT}
