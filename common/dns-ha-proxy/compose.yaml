@@ -36,7 +36,7 @@ services:
   pihole:
     image: pihole/pihole:2026.02.0
     container_name: pihole
-    hostname: pihole-${INSTANCE_ID}.local
+    hostname: pihole-${INSTANCE_ID:-primary}.local
     <<: *restart
     networks:
       dns-internal-net:
@@ -129,17 +129,37 @@ services:
     container_name: nebula-sync
     <<: *restart
     networks:
-      dns-internal-net:
-      proxy-network:
+      - dns-internal-net
+      - proxy-network
     env_file:
       - ${DOCKER_DATA}/dns-ha-proxy/nebula-sync/.env #Contains all the primary and secondary and all rules for the sync
     profiles: ["sync"]
 
+  # ---------------- ANALYTICS (RUN ON SECONDARY HOST ONLY) ----------------
+  goaccess:
+    image: justsky/goaccess-for-nginxproxymanager
+    container_name: goaccess-npm
+    hostname: goaccess-npm
+    <<: *restart
+    ports:
+      - 7880:7880
+    networks:
+      - proxy-network
+    environment:
+      <<: *common-env
+    volumes:
+      # Added :ro (read-only) for security since it only needs to read logs
+      - ${DOCKER_DATA}/dns-ha-proxy/nginxproxymanager/config/log:/opt/log:ro
+    depends_on:
+      # Changed this to point to the correct service name in this compose file
+      - npm-external
+    profiles: ["analytics"]
 # --------------------------------------------------------------------------------
 # NETWORKS
 # --------------------------------------------------------------------------------
 networks:
   dns-internal-net:
+    name: dns-ha-proxy-net
     driver: bridge
     ipam:
       config:
