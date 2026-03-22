@@ -128,6 +128,9 @@ services:
     image: ghcr.io/lovelaze/nebula-sync:v0.11.1
     container_name: nebula-sync
     <<: *restart
+    networks:
+      dns-internal-net:
+      proxy-network:
     env_file:
       - ${DOCKER_DATA}/dns-ha-proxy/nebula-sync/.env #Contains all the primary and secondary and all rules for the sync
     profiles: ["sync"]
