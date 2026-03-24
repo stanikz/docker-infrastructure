@@ -52,7 +52,7 @@ services:
   # APACHE TIKA
   # --------------------------------------------------------
   tika:
-    image: apache/tika:3.2.3.0-full
+    image: apache/tika:3.3.0.0-full
     container_name: llm-tika
     hostname: tika
     restart: unless-stopped
