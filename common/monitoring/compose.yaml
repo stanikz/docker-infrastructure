@@ -88,7 +88,7 @@ services:
   # DOZZLE HUB (Runs only on the main server)
   # --------------------------------------------------------------------------------
   dozzle-hub:
-    image: amir20/dozzle:v10.1.2
+    image: amir20/dozzle:v10.2.0
     container_name: dozzle-hub
     restart: always
     ports:
@@ -105,7 +105,7 @@ services:
   # DOZZLE AGENT (Runs only on the agent machines)
   # --------------------------------------------------------------------------------
   dozzle-agent:
-    image: amir20/dozzle:v10.1.2
+    image: amir20/dozzle:v10.2.0
     container_name: dozzle-agent
     restart: always
     command: agent
