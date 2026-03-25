@@ -1,6 +1,6 @@
 services:
   aiometadata:
-    image: ghcr.io/cedya77/aiometadata@sha256:994add082e940204900965673855b9777e1df78ad4f1cac1a989b960a7cb9cab
+    image: ghcr.io/cedya77/aiometadata@sha256:3743fe5a77fd38866a39c4d23237cb6bdb7dd32b4772d9fb5a5e1bf864e39ea3
     container_name: aiometadata
     hostname: aiometadata
     restart: unless-stopped
