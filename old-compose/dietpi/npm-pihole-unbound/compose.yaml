@@ -1,0 +1,83 @@
+services:
+  pihole:
+    image: pihole/pihole:2026.02.0 #pihole/pihole:2025.11.1
+    container_name: pihole
+    hostname: pihole.local
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "82:80/tcp"
+      #- "4430:443/tcp"
+    networks:
+      proxy-network:
+        ipv4_address: 172.22.0.6
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ}
+      WEBPASSWORD: ${PIHOLE_CREDENTIALS}
+      DNS1: '172.22.0.7#5335'
+      DNSMASQ_LISTENING: all
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - "${DOCKER_DATA}/dns-ha-proxy/pihole/etc/pihole:/etc/pihole"
+      - "${DOCKER_DATA}/dns-ha-proxy/pihole/etc/dnsmasq.d:/etc/dnsmasq.d/"
+      - "${DOCKER_DATA}/dns-ha-proxy/pihole/etc/resolv.conf:/etc/resolv.conf"
+    depends_on:
+      - unbound
+
+  unbound:
+    image: mvance/unbound-rpi:1.22.0
+    container_name: unbound
+    hostname: unbound
+    restart: unless-stopped
+    ports:
+      - "5335:5335/tcp" #changed from 5335:53 to 5335:5335 because 0.0.0.0@5335 in unbound.conf"
+      - "5335:5335/udp"
+    networks:
+      proxy-network:
+        ipv4_address: 172.22.0.7
+    volumes:
+      - "${DOCKER_DATA}/dns-ha-proxy/unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf:rw"
+      - "${DOCKER_DATA}/dns-ha-proxy/unbound/unbound.log:/opt/unbound/etc/unbound/unbound.log:rw"
+    logging:
+         driver: "json-file"
+         options:
+           max-size: "100m"
+           max-file: "3"
+    healthcheck:
+      disable: true
+
+  nginx-proxy-manager:
+    image: jlesage/nginx-proxy-manager:v26.03.2
+    container_name: npm
+    hostname: npm
+    restart: unless-stopped
+    ports:
+      - "81:8181"
+      - "80:8080"
+      - "443:4443"
+    networks:
+      proxy-network:
+        ipv4_address: 172.22.0.8
+    volumes:
+      - "${DOCKER_DATA}/dns-ha-proxy/npm/config:/config:rw"
+
+networks:
+  proxy-network:
+    driver: bridge
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+    external: true
+
+#networks:
+#  dns_net:
+#    driver: bridge
+#    name: "proxy-network"
+#    ipam:
+#      config:
+#        - subnet: 172.22.0.0/16

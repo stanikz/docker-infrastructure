@@ -13,7 +13,7 @@ services:
     environment:
       TZ: ${TZ}  
     volumes:
-      - ${DOCKER_DATA}/nginxproxymanager/config:/config:rw
+      - ${DOCKER_DATA}/dns-ha-proxy/nginxproxymanager/config:/config:rw
 
   goaccess:
     image: justsky/goaccess-for-nginxproxymanager
@@ -27,7 +27,7 @@ services:
     environment:
       TZ: ${TZ}
     volumes:
-      - ${DOCKER_DATA}/nginxproxymanager/config/log:/opt/log
+      - ${DOCKER_DATA}/dns-ha-proxy/nginxproxymanager/config/log:/opt/log
     depends_on:
       - nginx-proxy-manager
       
