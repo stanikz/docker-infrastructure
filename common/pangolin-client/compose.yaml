@@ -1,17 +1,14 @@
+### CURRENTLY IN USE ON RMC-1, RMC-2 and DIETPI ###
 services:
   newt:
     image: fosrl/newt:1.10.4
-    container_name: newt
-    hostname: pangolin-agent
+    container_name: pangolin-newt
+    hostname: pangolin-client-${HOSTNAME}
     restart: unless-stopped
     networks:
       - pangolin-network
     env_file: 
-      - .env
-    environment:
-      PANGOLIN_ENDPOINT: ${PANGOLIN_ENDPOINT}
-      NEWT_ID: ${NEWT_ID}
-      NEWT_SECRET: ${NEWT_SECRET}
+      - ${DOCKER_DATA}/pangolin-newt/.env
 
 networks:
   pangolin-network:
