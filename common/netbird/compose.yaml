@@ -1,8 +1,10 @@
+## CURENTLY IN USE in DOCKER ON VPS and MEDIA ##
+## AS BINARY IN NETBIRD LXC, RMC-1, RMC-2 and WIZ ### 
 services:
   netbird:
     image: netbirdio/netbird:0.67.1
     container_name: netbird-client
-    hostname: netbird-vps
+    hostname: netbird-${HOSTNAME}
     restart: always
     network_mode: host
     devices:

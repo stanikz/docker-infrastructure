@@ -49,7 +49,7 @@ services:
       - postgres
     
   core:
-    image: ghcr.io/moghtech/komodo-core:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
+    image: ghcr.io/moghtech/komodo-core:${COMPOSE_KOMODO_IMAGE_TAG:-2}
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
     container_name: komodo-core
@@ -82,7 +82,7 @@ services:
   ## or deploy the Periphery binary with systemd using 
   ## https://github.com/moghtech/komodo/tree/main/scripts
   periphery:
-    image: ghcr.io/moghtech/komodo-periphery:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
+    image: ghcr.io/moghtech/komodo-periphery:${COMPOSE_KOMODO_IMAGE_TAG:-2}
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
     container_name: komodo-agent
