@@ -12,13 +12,17 @@ Contains foundational services that require manual deployment. These components 
 📂 common
 Houses global services and configurations that are intended to be deployed across all servers in the infrastructure (e.g., monitoring agents, base networking tools).
 
+📂 old-compose
+Here resides all the compose files that are outdate/old, which have either been moved to the common templating services or completely removed. 
+
 📂 services
-A catalog of optional or experimental services. These are fully configured deployment files for applications that are currently not active in production but are available for future use or testing ("nice-to-haves").
+A catalog of optional or experimental services. These are fully configured deployment files for applications that are currently not active in "production" but are available for future use or testing ("nice-to-haves").
 
 📂 stacks
 This is the core directory containing active production deployments. It is segmented by server, where each folder represents a distinct machine with a specific purpose and goal.
 
-As of 2026-03-03, the infrastructure consists of the following server stacks:
+
+As of 2026-03-31, the infrastructure consists of the following server stacks:
 
 ```
  stacks
@@ -26,7 +30,9 @@ As of 2026-03-03, the infrastructure consists of the following server stacks:
     ├── dietpi
     ├── docker
     ├── media
-    └── stremio
+    ├── stremio
+    └── vps
+    
 ```
 
 - ai – Services that utilizes AI and LLM workloads - e.g.; ollama
@@ -34,3 +40,4 @@ As of 2026-03-03, the infrastructure consists of the following server stacks:
 - docker – General container management
 - media – Media server applications (Plex/Arr stack)
 - stremio – streaming services
+- vps - Services that resides inside my VPS

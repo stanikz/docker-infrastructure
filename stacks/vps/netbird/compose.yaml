@@ -1,24 +1,27 @@
-## TEMPORARY DISABLED ##
-#services:
-#  netbird:
-#    image: netbirdio/netbird:0.66.4
-#    container_name: netbird
-#    hostname: vps-1.oci.remote
-#    restart: always
-#    mem_limit: 80m
-#    memswap_limit: 160m
-#    network_mode: host
-#    privileged: true
-#    env_file:
-#      -  ${DOCKER_DATA}/netbird/.env
-#    environment:
-#      NB_SETUP_KEY: ${NB_SETUP_KEY}
-#      NB_SERIVCE: netbird
-#      NB_LOG_LEVEL: info
-#    cap_add:
-#      - NET_ADMIN
-#      - SYS_ADMIN
-#      - SYS_RESOURCE
-#    volumes:
-#      - ${DOCKER_DATA}/netbird/:/etc/netbird
-#    entrypoint: "netbird service run"
+services:
+  netbird:
+    image: netbirdio/netbird:0.67.1
+    container_name: netbird-client
+    hostname: netbird-vps
+    restart: always
+    network_mode: host
+    devices:
+      # Required when using userspace mode or when kernel module is not available
+      - /dev/net/tun
+    env_file:
+      -  ${DOCKER_DATA}/netbird/.env
+    environment:
+      NB_SETUP_KEY: ${NB_SETUP_KEY}
+      NB_WIREGUARD_PORT: ${NB_WIREGUARD_PORT}
+      NB_LOG_LEVEL: info
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
+    volumes:
+      - ${DOCKER_DATA}/netbird/:/var/lib/netbird
+    
+    #privileged: true
+    #mem_limit: 80m
+    #memswap_limit: 160m
+    
