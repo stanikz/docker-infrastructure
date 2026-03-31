@@ -11,8 +11,6 @@ services:
     env_file:
       -  ${DOCKER_DATA}/netbird/.env
     environment:
-      NB_SETUP_KEY: ${NB_SETUP_KEY}
-      NB_WIREGUARD_PORT: ${NB_WIREGUARD_PORT}
       NB_LOG_LEVEL: info
     cap_add:
       - NET_ADMIN
