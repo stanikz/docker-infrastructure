@@ -59,6 +59,7 @@ networks:
     name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true
   internal-net:
+    name: stremthru-net
     driver: bridge
   db-network:
     name: db-net

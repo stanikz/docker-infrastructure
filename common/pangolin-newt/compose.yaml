@@ -14,5 +14,5 @@ services:
 
 networks:
   pangolin-network:
-    name: pangolin-network
+    name: pangolin-net
     external: true

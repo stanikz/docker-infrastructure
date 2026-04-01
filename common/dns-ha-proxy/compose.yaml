@@ -164,7 +164,6 @@ networks:
     ipam:
       config:
         - subnet: ${SUBNET:-172.22.0.0/16}
-
   proxy-network:
     name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true
