@@ -119,7 +119,7 @@ services:
     environment:
       <<: *common-env
     volumes:
-      - "${DOCKER_DATA}/dns-ha-proxy/keepalived/keepalived.conf:/container/services/keepalived/assets/keepalived.conf:ro"
+      - "${DOCKER_DATA}/dns-ha-proxy/keepalived/keepalived.conf:/etc/keepalived/keepalived.conf:ro"
       - /etc/localtime:/etc/localtime:ro
     profiles: ["ha"]
   
