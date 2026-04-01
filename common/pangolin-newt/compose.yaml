@@ -1,4 +1,6 @@
-### CURRENTLY IN USE ON RMC-1, RMC-2 and DIETPI ###
+#########################################################################
+### CURRENTLY IN USE ON FOLLOWING SERVERS: RMC-1, RMC-2, DIETPI, STREMIO
+######################################################################### 
 services:
   newt:
     image: fosrl/newt:1.10.4
