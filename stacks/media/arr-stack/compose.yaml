@@ -307,4 +307,5 @@ networks:
     name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true
   internal-net:
+    name: arr-stack-net
     driver: bridge

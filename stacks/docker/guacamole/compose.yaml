@@ -64,6 +64,7 @@ networks:
     name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
     external: true
   internal-net:
+    name: guacamole-net
     driver: bridge
   db-network:
     name: db-net

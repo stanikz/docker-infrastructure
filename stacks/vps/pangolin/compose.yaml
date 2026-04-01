@@ -79,4 +79,4 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
 networks:
   default:
     driver: bridge
-    name: pangolin
+    name: pangolin-net
