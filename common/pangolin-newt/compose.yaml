@@ -10,7 +10,7 @@ services:
     networks:
       - pangolin-network
     env_file: 
-      - ${DOCKER_DATA}/pangolin-newt/.env
+      - .env
 
 networks:
   pangolin-network:
