@@ -6,7 +6,6 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
     hostname: pangolin-vps
     restart: unless-stopped
     environment:
-      TZ: ${TZ}
       NODE_OPTIONS: --max-old-space-size=600
     env_file:
       - ${DOCKER_DATA}/pangolin/config/.env
