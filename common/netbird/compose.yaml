@@ -4,7 +4,7 @@ services:
   netbird:
     image: netbirdio/netbird:0.67.1
     container_name: netbird-client
-    hostname: netbird-${HOSTNAME}
+    hostname: netbird-${NETBIRD_HOSTNAME}
     restart: always
     network_mode: host
     devices:
