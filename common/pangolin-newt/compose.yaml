@@ -5,7 +5,6 @@ services:
   newt:
     image: fosrl/newt:1.10.4
     container_name: pangolin-newt
-    hostname: pangolin-client-${HOSTNAME}
     restart: unless-stopped
     networks:
       - pangolin-network
