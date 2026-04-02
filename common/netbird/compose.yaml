@@ -2,7 +2,7 @@
 ## AS BINARY IN NETBIRD LXC, RMC-1, RMC-2 and WIZ ### 
 services:
   netbird:
-    image: netbirdio/netbird:0.67.1
+    image: netbirdio/netbird:0.67.3
     container_name: netbird-client
     hostname: netbird-${HOSTNAME}
     restart: always
