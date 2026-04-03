@@ -1,6 +1,6 @@
 services:
   databasus:
-    image: databasus/databasus:v3.30.0
+    image: databasus/databasus:v3.32.0
     container_name: db-backups
     hostname: databasus
     restart: unless-stopped
