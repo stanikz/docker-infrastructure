@@ -72,6 +72,9 @@ networks:
   internal-net:
     name: bookstack-net
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
   db-network:
     name: db-net
     external: true
