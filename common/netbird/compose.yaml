@@ -11,7 +11,7 @@ services:
       # Required when using userspace mode or when kernel module is not available
       - /dev/net/tun
     env_file:
-      -  ${DOCKER_DATA}/netbird/.env
+      -  ${DOCKER_PATH}/netbird/.env
     environment:
       NB_LOG_LEVEL: info
     cap_add:
@@ -19,7 +19,7 @@ services:
       - SYS_ADMIN
       - SYS_RESOURCE
     volumes:
-      - ${DOCKER_DATA}/netbird/:/var/lib/netbird
+      - ${DOCKER_PATH}/netbird/:/var/lib/netbird
     
     #privileged: true
     #mem_limit: 80m
