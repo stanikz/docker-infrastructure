@@ -7,6 +7,8 @@ services:
       - SYS_ADMIN
     ports:
       - 4096:4096
+    networks:
+      - proxy-network
     devices:
       - /dev/fuse:/dev/fuse
     environment:
@@ -20,3 +22,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_DATA}/zerobyte:/var/lib/zerobyte
       - ${DOCKER_DATA}:/data
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
