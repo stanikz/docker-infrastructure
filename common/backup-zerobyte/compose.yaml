@@ -30,6 +30,7 @@ services:
   zerobyte-private:
     extends:
       service: zerobyte
+    container_name: zerobyte-private
     profiles:
       - private
     volumes:
