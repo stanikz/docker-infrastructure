@@ -100,7 +100,7 @@ services:
     extra_hosts:
         - 'host.docker.internal:host-gateway'
   ollama:
-    image: ollama/ollama:0.20.0
+    image: ollama/ollama:0.20.2
     container_name: llm-ollama
     hostname: ollama
     restart: unless-stopped
