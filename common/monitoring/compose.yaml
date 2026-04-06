@@ -3,7 +3,7 @@ services:
   # 1. BESZEL HUB (Main Dashboard + Kuma) - Runs if profile 'hub' is active
   # --------------------------------------------------------------------------------
   beszel-hub:
-    image: henrygd/beszel:0.18.6
+    image: henrygd/beszel:0.18.7
     container_name: beszel
     restart: unless-stopped
     networks:
@@ -42,7 +42,7 @@ services:
   # 2. BESZEL AGENT - STANDARD (Runs if profile 'agent' is active)
   # --------------------------------------------------------------------------------
   beszel-agent:
-    image: henrygd/beszel-agent:0.18.6
+    image: henrygd/beszel-agent:0.18.7
     container_name: beszel-agent
     restart: unless-stopped
     network_mode: host
@@ -61,7 +61,7 @@ services:
   # 3. BESZEL AGENT - NVIDIA (Runs if profile 'agent-gpu' is active)
   # --------------------------------------------------------------------------------
   beszel-agent-gpu:
-    image: henrygd/beszel-agent-nvidia:0.18.6
+    image: henrygd/beszel-agent-nvidia:0.18.7
     container_name: beszel-agent
     restart: unless-stopped
     network_mode: host
