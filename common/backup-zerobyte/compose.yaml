@@ -1,8 +1,11 @@
 services:
+  # 1. Standard deployment (Base configuration)
   zerobyte:
     image: ghcr.io/nicotsx/zerobyte:v0.33.1
     container_name: zerobyte
     restart: unless-stopped
+    profiles:
+      - standard
     cap_add:
       - SYS_ADMIN
     ports:
@@ -13,15 +16,25 @@ services:
       - /dev/fuse:/dev/fuse
     environment:
       TZ: ${TZ}
-      BASE_URL: ${BASE_URL:-http://localhost:4096} 
-      APP_SECRET: ${APP_SECRET} # generate one with `openssl rand -hex 32`
-      TRUSTED_ORIGINS: ${TRUSTED_ORIGINS} # Comma-separated list of trusted origins for CORS
-      TRUST_PROXY: ${TRUST_PROXY} 
+      BASE_URL: ${BASE_URL:-http://localhost:4096}
+      APP_SECRET: ${APP_SECRET}
+      TRUSTED_ORIGINS: ${TRUSTED_ORIGINS}
+      TRUST_PROXY: ${TRUST_PROXY}
       RESTIC_HOSTNAME: ${RESTIC_HOSTNAME}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DOCKER_DATA}/zerobyte:/var/lib/zerobyte
+      - ${DOCKER_PATH}/zerobyte:/var/lib/zerobyte
       - ${DOCKER_DATA}:/data
+
+  # 2. Private deployment (Extends standard and appends the volume)
+  zerobyte-private:
+    extends:
+      service: zerobyte
+    profiles:
+      - private
+    volumes:
+      - ${PRIVATE_DATA}:${PRIVATE_DATA}:ro
+
 networks:
   proxy-network:
     name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
