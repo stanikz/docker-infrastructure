@@ -1,11 +1,10 @@
 services:
-  # 1. Standard deployment (Base configuration)
-  zerobyte:
+  # --- BASE TEMPLATE (Will never run on its own) ---
+  zerobyte-base:
     image: ghcr.io/nicotsx/zerobyte:v0.33.1
-    container_name: zerobyte
-    restart: unless-stopped
     profiles:
-      - standard
+      - donotrun
+    restart: unless-stopped
     cap_add:
       - SYS_ADMIN
     ports:
@@ -26,14 +25,23 @@ services:
       - ${DOCKER_PATH}/zerobyte:/var/lib/zerobyte
       - ${DOCKER_DATA}:/data
 
-  # 2. Private deployment (Extends standard and appends the volume)
+  # --- 1. STANDARD DEPLOYMENT ---
+  zerobyte:
+    extends:
+      service: zerobyte-base
+    container_name: zerobyte
+    profiles:
+      - standard
+
+  # --- 2. PRIVATE DEPLOYMENT ---
   zerobyte-private:
     extends:
-      service: zerobyte
+      service: zerobyte-base
     container_name: zerobyte-private
     profiles:
       - private
     volumes:
+      # This safely appends to the 3 volumes inherited from the base
       - ${PRIVATE_DATA:-/tmp}:${PRIVATE_DATA:-/tmp}:ro
 
 networks:
