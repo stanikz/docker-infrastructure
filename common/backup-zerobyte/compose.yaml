@@ -33,7 +33,7 @@ services:
     profiles:
       - private
     volumes:
-      - ${PRIVATE_DATA}:${PRIVATE_DATA}:ro
+      - ${PRIVATE_DATA:-/tmp}:${PRIVATE_DATA:-/tmp}:ro
 
 networks:
   proxy-network:
