@@ -47,6 +47,11 @@ services:
     extends:
       service: zerobyte-base
     container_name: zerobyte-nfs
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
     profiles:
       - nfs
     volumes:
