@@ -79,3 +79,5 @@ networks:
   default:
     driver: bridge
     name: pangolin-net
+    external: true
+      
