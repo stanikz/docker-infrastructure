@@ -28,7 +28,7 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
     hostname: gerbil-vps
     restart: unless-stopped
     ports:
-      - 51820:51820/udp
+      - 51821:51820/udp
       - 21820:21820/udp
       - 443:443
       - 80:80
