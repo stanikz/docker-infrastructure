@@ -43,6 +43,15 @@ services:
     volumes:
       # This safely appends to the 3 volumes inherited from the base
       - ${PRIVATE_DATA:-/tmp}:${PRIVATE_DATA:-/tmp}:ro
+  zerobyte-nfs:
+    extends:
+      service: zerobyte-base
+    container_name: zerobyte-nfs
+    profiles:
+      - nfs
+    volumes:
+      # This safely appends to the 3 volumes inherited from the base
+      - ${NFS_DATA:-/tmp}:${NFS_DATA:-/tmp}:ro
 
 networks:
   proxy-network:
