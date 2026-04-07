@@ -56,7 +56,7 @@ services:
       - nfs
     volumes:
       # This safely appends to the 3 volumes inherited from the base
-      - ${NFS_DATA:-/tmp}:${NFS_DATA:-/tmp}:ro
+      - ${NFS_DATA:-/tmp}:${NFS_DATA:-/tmp}
 
 networks:
   proxy-network:
