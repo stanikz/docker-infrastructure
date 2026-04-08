@@ -40,7 +40,7 @@ services:
       start_period: 40s
 
   chartdb:
-     image: ghcr.io/chartdb/chartdb:1.20.0
+     image: ghcr.io/chartdb/chartdb:1.20.1
      container_name: chartdb-server
      hostname: chartdb-server
      restart: unless-stopped
