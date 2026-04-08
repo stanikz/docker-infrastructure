@@ -15,9 +15,9 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
     #  - ${DOCKER_DATA}/pangolin/config/pangolin-data/dynamic:/var/dynamic
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/"]
-      interval: "20s" 
-      timeout: "5s"   
-      retries: 3
+      interval: "10s" 
+      timeout: "10s"   
+      retries: 15
 
 #    mem_limit: 700m
 #    memswap_limit: 1g
