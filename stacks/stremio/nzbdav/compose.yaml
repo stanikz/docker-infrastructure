@@ -1,6 +1,6 @@
 services:
   nzbdav:
-    image: ghcr.io/nzbdav-dev/nzbdav@sha256:2a72ad769f7b11887c417988b9d74f64b00678f26949c6876fe029fe29c5e9b4 #ghcr.io/nzbdav-dev/nzbdav:0.6.1
+    image: ghcr.io/nzbdav-dev/nzbdav@sha256:254381ac8200c41fe13ef8462d65bb53402a94bc2fb82ac6ad06a99d477f58fe #ghcr.io/nzbdav-dev/nzbdav:0.6.1
     container_name: nzbdav
     hostname: nzbdav
     restart: unless-stopped
@@ -21,7 +21,7 @@ services:
       start_period: 10s
 
   nzbdav-rclone:
-    image: rclone/rclone@sha256:66af24d7c8809af336dc16068149257cf447c80f8c60aa9f5679153f42017b85
+    image: rclone/rclone@sha256:654f6517c7aaec7e377690b2caf7c272dbe5f3b8200afbc14a00df6b4a9aa6ef
     container_name: nzbdav-rclone
     hostname: nzbdav-rclone
     restart: unless-stopped
