@@ -1,0 +1,30 @@
+app:
+  dashboard_url: "${DASHBOARD_URL}"
+  log_level: "info"
+
+domains:
+  domain1:
+    base_domain: "${BASE_DOMAIN}"
+
+server:
+  secret: "${SERVER_SECRET}"
+
+gerbil:
+  base_endpoint: "vps.${BASE_DOMAIN}"
+  start_port: 51820
+  use_subdomain: true
+  block_size: 24
+  site_block_size: 30
+  subnet_group: 100.90.128.0/24
+
+orgs:
+  block_size: 24
+  subnet_group: 100.90.128.0/20
+
+flags:
+  require_email_verification: false
+  disable_signup_without_invite: true
+  disable_user_create_org: false
+  allow_raw_resources: true
+  enable_integration_api: true
+  enable_clients: true

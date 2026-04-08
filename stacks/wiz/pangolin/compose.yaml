@@ -7,12 +7,13 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
     restart: unless-stopped
     environment:
       NODE_OPTIONS: --max-old-space-size=600
+      DASHBOARD_URL: ${DASHBOARD_URL}
+      BASE_DOMAIN: ${BASE_DOMAIN}
+      SERVER_SECRET: ${SERVER_SECRET}
     env_file:
       - ${DOCKER_DATA}/pangolin/config/.env
     volumes:
       - ${DOCKER_DATA}/pangolin/config:/app/config
-    #  - ${DOCKER_DATA}/pangolin/config/pangolin-data/certificates:/var/certificates
-    #  - ${DOCKER_DATA}/pangolin/config/pangolin-data/dynamic:/var/dynamic
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/"]
       interval: "10s" 
@@ -59,18 +60,19 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
     restart: unless-stopped
     environment:
       TZ: ${TZ}
+      BASE_DOMAIN: ${BASE_DOMAIN}
+      DASHBOARD_URL: ${DASHBOARD_URL}
+      EMAIL: ${EMAIL}
     network_mode: service:gerbil
     depends_on:
       pangolin:
         condition: service_healthy
-    command:
-      - --configFile=/etc/traefik/traefik_config.yml
+    entrypoint: /scripts/start-traefik.sh
     volumes:
+      - ${DOCKER_DATA}/pangolin/scripts:/scripts:ro
       - ${DOCKER_DATA}/pangolin/config/traefik:/etc/traefik:ro
       - ${DOCKER_DATA}/pangolin/config/letsencrypt:/letsencrypt
       - ${DOCKER_DATA}/pangolin/config/traefik/logs:/var/log/traefik
-#      - ${DOCKER_DATA}/pangolin/config/pangolin-data/certificates:/var/certificates:ro
-#      - ${DOCKER_DATA}/pangolin/config/pangolin-data/dynamic:/var/dynamic:ro
     
 #     mem_limit: 100m
 #     memswap_limit: 200m
