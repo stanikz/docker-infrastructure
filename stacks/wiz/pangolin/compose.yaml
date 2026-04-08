@@ -67,7 +67,7 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
     depends_on:
       pangolin:
         condition: service_healthy
-    entrypoint: /scripts/start-traefik.sh
+    entrypoint: sh -c "apk add --no-cache gettext && /scripts/start-traefik.sh"
     volumes:
       - ${DOCKER_DATA}/pangolin/scripts:/scripts:ro
       - ${DOCKER_DATA}/pangolin/config/traefik:/etc/traefik
