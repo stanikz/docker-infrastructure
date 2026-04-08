@@ -12,7 +12,7 @@ x-env-common: &env-common
 
 # 2. Base Service Template (Image, Restart, Security, GPU)
 x-plex-base: &plex-base
-  image: ghcr.io/linuxserver/plex:1.43.0
+  image: ghcr.io/linuxserver/plex:1.43.1
   restart: unless-stopped
   security_opt:
     - no-new-privileges:true
