@@ -1,8 +1,9 @@
 services:
-  backrest:
+  # --- BASE TEMPLATE (never runs directly) ---
+  backrest-base:
     image: garethgeorge/backrest:v1.12.1
-    container_name: backrest
-    hostname: backrest-${INSTANCE_NAME:-main}
+    profiles:
+      - donotrun
     restart: unless-stopped
     ports:
       - 9898:9898
@@ -23,6 +24,26 @@ services:
       #- ${DOCKER_DATA}/backrest/rclone:/root/.config/rclone # Mount for rclone config (needed when using rclone remotes)
       #- /MY-BACKUP-DATA:/userdata # [optional] mount local paths to backup here.
       #- /MY-REPOS:/repos # [optional] mount repos if using local storage, not necessary for remotes e.g. B2, S3, etc.
+
+  # --- 1. STANDARD PROFILE ---
+  backrest:
+    extends:
+      service: backrest-base
+    container_name: backrest
+    profiles:
+      - standard
+
+  # --- 2. PRIVATE BACKUP ---
+  backrest-private:
+    extends:
+      service: backrest-base
+    container_name: backrest-private
+    hostname: backrest-${INSTANCE_NAME}
+    profiles:
+      - private
+    volumes:
+      # adds private backup source + repo storage
+      - ${PRIVATE_DATA:-/tmp}:${PRIVATE_DATA:-/tmp}:ro
     
 networks:
   proxy-network:
