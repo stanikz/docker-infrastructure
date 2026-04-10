@@ -1,3 +1,8 @@
+x-labels-backrest: &labels-backrest
+  backrest.backup: "true"
+  backrest.priority: "medium"
+  backrest.action: "none"
+
 name: pangolin
 services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
   pangolin:
@@ -19,6 +24,8 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
       interval: "10s" 
       timeout: "10s"   
       retries: 15
+    labels:
+      <<: *labels-backrest
 
 #    mem_limit: 700m
 #    memswap_limit: 1g
@@ -50,6 +57,8 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
+    labels:
+      <<: *labels-backrest
     
 #    mem_limit: 80m
 #    memswap_limit: 160m
@@ -73,6 +82,8 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
       - ${DOCKER_DATA}/pangolin/config/traefik:/etc/traefik
       - ${DOCKER_DATA}/pangolin/config/letsencrypt:/letsencrypt
       - ${DOCKER_DATA}/pangolin/config/traefik/logs:/var/log/traefik
+    labels:
+      <<: *labels-backrest
     
 #     mem_limit: 100m
 #     memswap_limit: 200m

@@ -1,3 +1,9 @@
+x-backrest-labels: &backrest-labels
+    backrest.backup: "true"
+    backrest.priority: "high"
+    backrest.action: "stop"
+    backrest.wait-time: "30"
+
 services:
   # --------------------------------------------------------------------------------
   # 1. BESZEL HUB (Main Dashboard + Kuma) - Runs if profile 'hub' is active
@@ -21,6 +27,8 @@ services:
     volumes:
       - ${DOCKER_DATA}/beszel/data:/beszel_data
     profiles: ["hub"]
+    labels:
+      <<: *backrest-labels
   
   uptime-kuma:
     image: louislam/uptime-kuma:2.2.1
@@ -37,6 +45,8 @@ services:
       - ${DOCKER_DATA}/uptime-kuma/data:/app/data
       - /var/run/docker.sock:/var/run/docker.sock
     profiles: ["hub"]
+    labels:
+      <<: *backrest-labels
 
   # --------------------------------------------------------------------------------
   # 2. BESZEL AGENT - STANDARD (Runs if profile 'agent' is active)
@@ -56,6 +66,8 @@ services:
       HUB_URL: ${BESZEL_HUB_URL}
       LOG_LEVEL: "${LOG_LEVEL:-info}"
     profiles: ["agent"]
+    labels:
+      backrest.backup: "false"
 
   # --------------------------------------------------------------------------------
   # 3. BESZEL AGENT - NVIDIA (Runs if profile 'agent-gpu' is active)
@@ -83,6 +95,8 @@ services:
               count: all
               capabilities: [utility]
     profiles: ["agent-gpu"]
+    labels:
+      backrest.backup: "false"
 
   # --------------------------------------------------------------------------------
   # DOZZLE HUB (Runs only on the main server)
@@ -100,6 +114,9 @@ services:
     environment:
       DOZZLE_REMOTE_AGENT: ${DOZZLE_REMOTE_AGENT}
     profiles: ["dozzle-hub"]
+    labels:
+      backrest.backup: "false"
+
 
   # --------------------------------------------------------------------------------
   # DOZZLE AGENT (Runs only on the agent machines)
@@ -116,6 +133,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     profiles: ["dozzle-agent"]
+    labels:
+      backrest.backup: "false"
 
 
 networks:

@@ -1,3 +1,7 @@
+x-backrest-labels: &backrest-labels
+    backrest.backup: "true"
+    backrest.priority: "high"
+    backrest.action: "stop"
 services:
   guacd:
     image: guacamole/guacd:1.6.0
@@ -5,6 +9,9 @@ services:
     restart: unless-stopped
     networks:
       - internal-net
+    labels:
+      <<: *backrest-labels
+      backrest.wait-time: "20"
     
   postgres:
     image: postgres:15.17
@@ -24,6 +31,10 @@ services:
     volumes:
       - ${DOCKER_DATA}/apache/config/db:/var/lib/postgresql/data
       - ${DOCKER_DATA}/apache/config/guacamole/init:/docker-entrypoint-initdb.d
+    labels:
+      <<: *backrest-labels
+      backrest.priority: "critical"
+      backrest.wait-time: "60"
       
   guacamole:
     image: guacamole/guacamole:1.6.0
@@ -58,6 +69,9 @@ services:
     depends_on:
       - guacd
       - postgres
+    labels:
+      <<: *backrest-labels
+      backrest.wait-time: "30"
 
 networks:
   proxy-network:

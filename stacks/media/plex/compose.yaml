@@ -25,6 +25,10 @@ x-plex-base: &plex-base
           - driver: nvidia
             count: all
             capabilities: [gpu, compute, video, utility]
+  labels:
+    backrest.backup: "true"
+    backrest.priority: "high"
+    backrest.action: "stop"
 
 # --------------------------------------------------------------------------------
 # SERVICES

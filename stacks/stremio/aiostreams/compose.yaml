@@ -12,6 +12,11 @@ x-aiostreams-base: &aiostreams-base
     timeout: 10s
     retries: 3
     start_period: 10s
+  labels:
+    backrest.backup: "true"
+    backrest.priority: "high"
+    backrest.action: "stop"
+    backrest.wait-time: "30"
     
 services:
   aiostreams:

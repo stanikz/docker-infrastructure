@@ -14,7 +14,11 @@ services:
       TZ: ${TZ}
     volumes:
       - ${DOCKER_DATA}/tautulli/config:/config
-
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "medium"
+      backrest.action: "none"
+      
 networks:  
   proxy-network:
     name: ${EXTERNAL_NETWORK_NAME:-proxy-network}

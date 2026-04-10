@@ -8,6 +8,11 @@ services:
       - 8087:8080
     networks:
       - proxy-network
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "low"
+      backrest.action: "none"
+    
     
 networks:
   proxy-network:

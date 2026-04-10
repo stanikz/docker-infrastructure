@@ -7,6 +7,7 @@ x-env-common: &env-common
   PUID: ${PUID}
   PGID: ${PGID}
   TZ: ${TZ}
+  
 
 # 2. Base Service Template (Restart, Networks, Logging)
 x-service-base: &service-base
@@ -16,6 +17,7 @@ x-service-base: &service-base
     - proxy-network
   env_file:
     - .env
+
 
 # 3. Healthcheck Template
 x-healthcheck-curl: &healthcheck-curl
@@ -58,6 +60,11 @@ x-depends-on-core: &depends-on-core
   rclone:
     condition: service_healthy
 
+# 8. Backrest Labels
+x-labels-backrest: &labels-backrest
+  backrest.priority: "high"
+  backrest.action: "stop"
+  backrest.wait-time: "30"
 # --------------------------------------------------------------------------------
 # SERVICES
 # --------------------------------------------------------------------------------
@@ -75,6 +82,8 @@ services:
       - /mnt/media/arrs/agregarr/movie-placeholder:/data/movies
       - /mnt/media/arrs/agregarr/tv-placeholder:/data/tv
       - /mnt/media/arrs/agregarr/kids-placeholder:/data/kids
+    labels:
+      <<: *labels-backrest
 
   bazarr:
     <<: *arr-service
@@ -90,6 +99,8 @@ services:
     healthcheck:
       <<: *healthcheck-curl
       test: ["CMD", "curl", "-f", "http://localhost:6767"]
+    labels:
+      <<: *labels-backrest
 
   flaresolverr:
     <<: *service-base
@@ -107,6 +118,11 @@ services:
     healthcheck:
       <<: *healthcheck-curl
       test: ["CMD", "curl", "-f", "http://localhost:8191"]
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "low"
+      backrest.action: "none"
+
 
   seerr:
     <<: *service-base
@@ -128,6 +144,8 @@ services:
       timeout: 3s
       interval: 15s
       retries: 3
+    labels:
+      <<: *labels-backrest
 
   prowlarr:
     <<: *service-base
@@ -147,6 +165,8 @@ services:
     healthcheck:
       <<: *healthcheck-curl
       test: ["CMD", "curl", "-f", "http://localhost:9696"]
+    labels:
+      <<: *labels-backrest
 
   decypharr:
     <<: *service-base
@@ -177,6 +197,8 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+    labels:
+      <<: *labels-backrest
 
   radarr:
     <<: *arr-service
@@ -192,6 +214,9 @@ services:
     healthcheck:
       <<: *healthcheck-curl
       test: ["CMD", "curl", "-f", "http://localhost:7878"]
+    labels:
+      <<: *labels-backrest
+    
 
   sonarr:
     <<: *arr-service
@@ -207,6 +232,8 @@ services:
     healthcheck:
       <<: *healthcheck-curl
       test: ["CMD", "curl", "-f", "http://localhost:8989"]
+    labels:
+      <<: *labels-backrest
 
   zilean:
     <<: *service-base
@@ -229,6 +256,10 @@ services:
       timeout: 60s
       interval: 30s
       retries: 10
+    labels:
+      <<: *labels-backrest
+      backrest.priority: "critical"
+      backrest.wait-time: "30"
 
   zurg:
     <<: *service-base
@@ -249,6 +280,10 @@ services:
     healthcheck:
       <<: *healthcheck-curl
       test: curl -f localhost:9999/dav/version.txt || exit 1
+    labels:
+      <<: *labels-backrest
+      backrest.priority: "critical"
+      backrest.wait-time: "30"
 
   rclone:
     <<: *service-base
@@ -281,6 +316,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
+    labels:
+      <<: *labels-backrest
 
   postgres:
     <<: *service-base
@@ -301,6 +338,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    labels:
+      <<: *labels-backrest
+      backrest.priority: "critical"
+      backrest.wait-time: "30"
 
 networks:
   proxy-network:

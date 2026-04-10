@@ -1,0 +1,51 @@
+x-common-env: &common-env
+  PUID: ${PUID}
+  PGID: ${PGID}
+  TZ: ${TZ}
+
+# Create a base service anchor for shared container configurations
+x-base-service: &base-service
+  restart: unless-stopped
+  network_mode: host
+  labels:
+    backrest.backup: "false"
+
+x-labels-backrest: &labels-backrest
+  backrest.backup: "true"
+  backrest.priority: "low"
+  backrest.action: "none"
+
+services:
+  cloudflare-ddns:
+    <<: *base-service
+    image: oznu/cloudflare-ddns@sha256:19bd73d8aea9641dc329ec18ae693b2b9c33ff7cdc007f368266ce584446f995
+    container_name: cloudflare
+    hostname: cloudflare
+    profiles:
+      - cloudflare
+    environment:
+      <<: *common-env
+      API_KEY: ${encryption}
+      PROXIED: ${PROXIED}
+      SUBDOMAIN: ${SUBDOMAIN}
+      ZONE: ${ZONE}
+    labels:
+      <<: *labels-backrest
+
+  duckdns:
+    <<: *base-service
+    image: lscr.io/linuxserver/duckdns:arm64v8-version-112a5cbb
+    container_name: duckdns
+    hostname: duckdns
+    profiles:
+      - duckdns
+    environment:
+      <<: *common-env
+      SUBDOMAINS: ${SUBDOMAINS}
+      TOKEN: ${TOKEN}
+      UPDATE_IP: ipv4
+      LOG_FILE: "true"
+    volumes:
+      - ${DOCKER_DATA}/duckdns/config:/config
+    labels:
+      <<: *labels-backrest

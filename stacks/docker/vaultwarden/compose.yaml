@@ -1,3 +1,7 @@
+x-backrest-labels: &backrest-labels
+    backrest.backup: "true"
+    backrest.priority: "critical"
+    backrest.action: "stop"
 services:
   vaultwarden:
     image: vaultwarden/server:1.35.4
@@ -14,6 +18,9 @@ services:
       SIGNUPS_ALLOWED: false
     volumes:
       - ${DOCKER_DATA}/vaultwarden/vw-data:/data
+    labels:
+      <<: *backrest-labels
+      backrest.wait-time: "30"
           
 networks:
   proxy-network:

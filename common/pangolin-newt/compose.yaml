@@ -11,6 +11,10 @@ services:
       - pangolin-network
     env_file: 
       - .env
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "low"
+      backrest.action: "none"
 
 networks:
   pangolin-network:

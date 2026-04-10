@@ -1,3 +1,7 @@
+x-labels-backrest: &labels-backrest
+  backrest.backup: "true"
+  backrest.priority: "medium"
+  backrest.action: "none"
 services:
   jackett:
     image: lscr.io/linuxserver/jackett:0.24.1332
@@ -13,10 +17,12 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
     volumes:
-      - ${DOCKER_DATA}/jackett/appdata:/config
-      - ${DOCKER_DATA}/jackett/downloads:/downloads
+      - ${DOCKER_DATA}/jackett-music/appdata:/config
+      - ${DOCKER_DATA}/jackett-music/downloads:/downloads
     depends_on:
       - flaresolverr
+    labels:
+      <<: *labels-backrest
     
   
   flaresolverr:
@@ -38,6 +44,8 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+    labels:
+      <<: *labels-backrest
     
 networks:  
   proxy-network:

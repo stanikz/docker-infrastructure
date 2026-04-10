@@ -1,3 +1,7 @@
+x-backrest-labels: &backrest-labels
+    backrest.backup: "true"
+    backrest.priority: "low"
+    backrest.action: "none"
 services:
   code-server:
     image: lscr.io/linuxserver/code-server:4.111.0-ls323
@@ -22,6 +26,8 @@ services:
       PWA_APPNAME: code-server
     volumes:
       - ${DOCKER_DATA}/vscode-server/config:/config
+    labels:
+      <<: *backrest-labels
 
 networks:
   proxy-network:

@@ -23,6 +23,11 @@ services:
       HMAC_SECRET: ${HMAC_SECRET}
     volumes:
       - ${DOCKER_DATA}/authelia/config:/config #change this to a shared folder on your system. DO NOT use a "volume"
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "high"
+      backrest.action: "stop"
+      backrest.wait-time: "20"
     
 networks:
   proxy-network:

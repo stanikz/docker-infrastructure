@@ -1,3 +1,7 @@
+x-backrest-labels: &backrest-labels
+    backrest.backup: "false"
+    backrest.priority: "low"
+    backrest.action: "none"
 services:
   it-tools:
     image: corentinth/it-tools:2024.10.22-7ca5933
@@ -8,6 +12,9 @@ services:
       - 8182:80
     networks:
       - proxy-network
+    labels:
+      <<: *backrest-labels
+    
 
   it-tools-main:
     image: sharevb/it-tools:2026.1.4
@@ -18,6 +25,8 @@ services:
       - 8183:8080
     networks:
       - proxy-network
+    labels:
+      <<: *backrest-labels
     
   networking-toolbox:
     image: lissy93/networking-toolbox:1.6.0
@@ -38,6 +47,8 @@ services:
       timeout: 5s
       retries: 3
       start_period: 40s
+    labels:
+      <<: *backrest-labels
 
   chartdb:
      image: ghcr.io/chartdb/chartdb:1.20.1
@@ -56,6 +67,11 @@ services:
      #- OPENAI_API_KEY=<YOUR_OPEN_AI_KEY>
      depends_on:
          - db
+     labels:
+       backrest.backup: "true"
+       backrest.priority: "high"
+       backrest.action: "stop"
+       backrest.wait-time: "20"
   db:
     image: postgres:15
     container_name: chartdb_postgres
@@ -70,6 +86,11 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - chartsdb_data:/var/lib/postgresql/data
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "critical"
+      backrest.action: "stop"
+      backrest.wait-time: "30"
       
 volumes:
   chartsdb_data:
