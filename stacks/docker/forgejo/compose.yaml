@@ -4,7 +4,7 @@ x-backrest-labels: &backrest-labels
     backrest.action: "stop"
 services:
   server:
-    image: codeberg.org/forgejo/forgejo:14.0.3
+    image: codeberg.org/forgejo/forgejo:14.0.4
     container_name: forgejo
     hostname: forgejo
     restart: unless-stopped
