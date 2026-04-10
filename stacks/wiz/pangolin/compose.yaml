@@ -72,6 +72,7 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
       BASE_DOMAIN: ${BASE_DOMAIN}
       DASHBOARD_URL: ${DASHBOARD_URL}
       EMAIL: ${EMAIL}
+      CROWDSEC_API_KEY: ${CROWDSEC_API_KEY}
     network_mode: service:gerbil
     depends_on:
       pangolin:

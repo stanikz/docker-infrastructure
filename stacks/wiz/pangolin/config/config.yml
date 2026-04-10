@@ -11,7 +11,7 @@ server:
 
 gerbil:
   base_endpoint: "vps.${BASE_DOMAIN}"
-  start_port: 51820
+  start_port: 51821 #Due to running Netbird on the host which occupies the 51820 port
   use_subdomain: true
   block_size: 24
   site_block_size: 30
