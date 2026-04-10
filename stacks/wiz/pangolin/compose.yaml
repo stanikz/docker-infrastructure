@@ -110,7 +110,7 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
         retries: 3
         start_period: 30s
       labels:
-        - "traefik.enable=false"
+        traefik.enable: "false"
         <<: *labels-backrest
       volumes:
         # Crowdsec config and data (Updated to be inside pangolin)
