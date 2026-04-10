@@ -20,6 +20,7 @@ experimental:
 
 log:
   level: "INFO"
+  filePath: "/var/log/traefik/traefik.log"
   format: "json" # Changed to JSON default -> "common"
   maxSize: 100
   maxBackups: 3
