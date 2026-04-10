@@ -1,3 +1,9 @@
+x-labels-backrest: &labels-backrest
+  backrest.backup: "true"
+  backrest.priority: "high"
+  backrest.action: "stop"
+  backrest.wait-time: "20"
+  
 services:
   stremthru:
     image: ghcr.io/muniftanjim/stremthru:0.99.1
@@ -24,6 +30,8 @@ services:
           cpus: "1.0"
         reservations:
           cpus: "0.2"
+    labels:
+      <<: *labels-backrest
 
   postgres:
     image: postgres:16.6-alpine
@@ -53,6 +61,10 @@ services:
           cpus: "0.6"
         reservations:
           cpus: "0.2"
+    labels:
+      <<: *labels-backrest
+      backrest.priority: "critical"
+      backrest.wait-time: "30"
 
 networks:
   proxy-network:

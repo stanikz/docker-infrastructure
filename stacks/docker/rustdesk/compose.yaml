@@ -1,3 +1,7 @@
+x-backrest-labels: &backrest-labels
+    backrest.backup: "true"
+    backrest.priority: "low"
+    backrest.action: "none"
 services:
   hbbs:
     image: rustdesk/rustdesk-server:1.1.15
@@ -15,6 +19,9 @@ services:
       - ${DOCKER_DATA}/rustdesk/data:/root
     depends_on:
       - hbbr
+    labels:
+      <<: *backrest-labels
+
     
   hbbr:
     image: rustdesk/rustdesk-server:1.1.15
@@ -28,6 +35,8 @@ services:
     command: hbbr
     volumes:
       - ${DOCKER_DATA}/rustdesk/data:/root
+    labels:
+      <<: *backrest-labels
 
 networks:
   proxy-network:

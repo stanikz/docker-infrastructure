@@ -30,6 +30,10 @@ services:
       - ${DOCKER_DATA}/submaker/.cache:/app/.cache
       - ${DOCKER_DATA}/submaker/logs:/app/logs
       - ${DOCKER_DATA}/submaker/keys:/app/keys
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "low"
+      backrest.action: "none"
 
 networks:
   proxy-network:

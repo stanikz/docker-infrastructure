@@ -1,3 +1,8 @@
+x-labels-backrest: &labels-backrest
+  backrest.backup: "true"
+  backrest.priority: "low"
+  backrest.action: "none"
+
 services:
   nzbdav:
     image: ghcr.io/nzbdav-dev/nzbdav:alpha
@@ -21,6 +26,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    labels:
+      <<: *labels-backrest
 
   nzbdav-rclone:
     image: rclone/rclone:latest
@@ -49,6 +56,8 @@ services:
     entrypoint: ["/bin/sh", "/entrypoint.sh"]
     stop_grace_period: 30s
     init: true
+    labels:
+      <<: *labels-backrest
 
 networks:
   proxy-network:

@@ -1,3 +1,9 @@
+x-labels-backrest: &labels-backrest  
+  backrest.backup: "true"
+  backrest.priority: "high"
+  backrest.action: "stop"
+  backrest.wait-time: "30"
+
 services:
   aiometadata:
     image: ghcr.io/cedya77/aiometadata@sha256:3743fe5a77fd38866a39c4d23237cb6bdb7dd32b4772d9fb5a5e1bf864e39ea3
@@ -21,6 +27,8 @@ services:
     depends_on:
       aiometadata_redis:
         condition: service_healthy
+    labels:
+      <<: *labels-backrest
 
   aiometadata_redis:
     image: redis:8.6.1
@@ -36,6 +44,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    labels:
+      <<: *labels-backrest
 
 networks:  
   proxy-network:

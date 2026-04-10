@@ -29,6 +29,13 @@ x-prowlarr-volumes-nzb: &prowlarr-volumes-nzb
   - ${DOCKER_DATA}/nzb-prowlarr/config:/config
   - ${DOCKER_DATA}/nzb-prowlarr/custom-definitions:/config/Definitions/Custom
 
+# 4. Labels Template
+x-labels-backrest: &labels-backrest
+  backrest.backup: "true"
+  backrest.priority: "high"
+  backrest.action: "stop"
+  backrest.wait-time: "20"
+  
 # --------------------------------------------------------------------------------
 # SERVICES
 # --------------------------------------------------------------------------------
@@ -44,6 +51,8 @@ services:
     volumes: *prowlarr-volumes-config
     ports:
       - 9696:9696
+    labels:
+      <<: *labels-backrest
 
   # --- NZB PROWLARR (Only starts with --profile nzb) ---
   prowlarr-nzb:
@@ -55,6 +64,8 @@ services:
     volumes: *prowlarr-volumes-nzb
     ports:
       - 9797:9696
+    labels:
+      <<: *labels-backrest
 
 networks:
   proxy-network:

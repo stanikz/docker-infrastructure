@@ -17,6 +17,10 @@ services:
       resources:
         limits:
           cpus: "0.5"
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "low"
+      backrest.action: "none"
     
 networks:
   proxy-network:

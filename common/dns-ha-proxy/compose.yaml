@@ -17,6 +17,12 @@ x-logging: &logging
       max-size: "100m"
       max-file: "3"
 
+x-backrest-labels: &backrest-labels
+    backrest.backup: "true"
+    backrest.priority: "high"
+    backrest.action: "stop"
+    backrest.wait-time: "30"
+
 # --------------------------------------------------------------------------------
 # SERVICE TEMPLATES
 # --------------------------------------------------------------------------------
@@ -29,6 +35,8 @@ x-npm-base: &npm-base
     - "81:8181"
     - "80:8080"
     - "443:4443"
+  labels:
+    <<: *backrest-labels
 
 # --------------------------------------------------------------------------------
 # SERVICES
@@ -63,6 +71,10 @@ services:
       - "${DOCKER_DATA}/dns-ha-proxy/pihole/etc/dnsmasq.d:/etc/dnsmasq.d/"
       - "${DOCKER_DATA}/dns-ha-proxy/pihole/etc/resolv.conf:/etc/resolv.conf"
     profiles: ["dns"]
+    labels:
+      <<: *backrest-labels
+    
+
 
   unbound:
     # Dynamically selects the image based on the .env file. Defaults to x86.
@@ -83,6 +95,8 @@ services:
     healthcheck:
       disable: true
     profiles: ["dns"]
+    labels:
+      <<: *backrest-labels
 
   # ---------------- NPM (INTERNAL) ----------------
   npm-internal:
@@ -125,6 +139,9 @@ services:
       - "${DOCKER_DATA}/dns-ha-proxy/keepalived/keepalived.conf:/etc/keepalived/keepalived.conf:ro"
       - /etc/localtime:/etc/localtime:ro
     profiles: ["ha"]
+    labels:
+      backrest.priority: "low"
+      backrest.action: "none"
   
   # ---------------- SYNC SERVICE (RUN ON ONE HOST ONLY) ----------------
   nebula-sync:
@@ -137,6 +154,10 @@ services:
     env_file:
       - ${DOCKER_DATA}/dns-ha-proxy/nebula-sync/.env #Contains all the primary and secondary and all rules for the sync
     profiles: ["sync"]
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "medium"
+      backrest.action: "none"
 
   # ---------------- ANALYTICS (RUN ON SECONDARY HOST ONLY) ----------------
   goaccess:
@@ -157,6 +178,10 @@ services:
       # Changed this to point to the correct service name in this compose file
       - npm-external
     profiles: ["analytics"]
+    labels:
+      backrest.backup: "false"
+      backrest.priority: "low"
+      backrest.action: "none"
 # --------------------------------------------------------------------------------
 # NETWORKS
 # --------------------------------------------------------------------------------

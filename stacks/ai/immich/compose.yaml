@@ -1,3 +1,8 @@
+x-backrest-labels: &backrest-labels
+    backrest.backup: "true"
+    backrest.priority: "high"
+    backrest.action: "stop"
+
 #
 # WARNING: To install Immich, follow our guide: https://docs.immich.app/install/docker-compose
 #
@@ -31,9 +36,11 @@ services:
     depends_on:
       - redis
       - database
-    
     healthcheck:
       disable: false
+    labels:
+      <<: *backrest-labels
+      backrest.wait-time: "30"
 
   immich-machine-learning:
     # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
@@ -52,7 +59,10 @@ services:
     volumes:
       - model-cache:/cache
     healthcheck:
-      disable: false    
+      disable: false
+    labels:
+      <<: *backrest-labels
+      backrest.wait-time: "30"
 
   redis:
     container_name: immich_redis
@@ -63,6 +73,9 @@ services:
     image: docker.io/valkey/valkey:9@sha256:546304417feac0874c3dd576e0952c6bb8f06bb4093ea0c9ca303c73cf458f63
     healthcheck:
       test: redis-cli ping || exit 1
+    labels:
+      <<: *backrest-labels
+      backrest.wait-time: "30"
     
 
   database:
@@ -87,6 +100,10 @@ services:
     shm_size: 128mb
     healthcheck:
       disable: false
+    labels:
+      <<: *backrest-labels
+      backrest.priority: "critical"
+      backrest.wait-time: "60"
 
 volumes:
   model-cache:

@@ -1,3 +1,7 @@
+x-backrest-labels: &backrest-labels
+    backrest.backup: "true"
+    backrest.action: "stop"
+
 services:
   # --------------------------------------------------------
   # REDIS / VALKEY
@@ -23,7 +27,11 @@ services:
       options:
         max-size: "10m"
         max-file: "1"
-
+    labels:
+      <<: *backrest-labels
+      backrest.priority: "high"
+      backrest.wait-time: "25"
+      
   # --------------------------------------------------------
   # SEARXNG
   # --------------------------------------------------------
@@ -47,7 +55,11 @@ services:
       options:
         max-size: "10m"
         max-file: "1"
-
+    labels:
+      <<: *backrest-labels
+      backrest.priority: "high"
+      backrest.wait-time: "10"
+      
   # --------------------------------------------------------
   # APACHE TIKA
   # --------------------------------------------------------
@@ -60,6 +72,10 @@ services:
       - 9998:9998
     networks:
       - proxy-network
+    labels:
+      <<: *backrest-labels
+      backrest.priority: "high"
+      backrest.wait-time: "20"
   
   # --------------------------------------------------------
   # OPEN WEBUI (CLIENT ONLY, TALKS TO MODEL-RUNNER)
@@ -99,6 +115,10 @@ services:
       - ${DOCKER_DATA}/llm/openwebui/logs:/opt/open-webui/logs  
     extra_hosts:
         - 'host.docker.internal:host-gateway'
+    labels:
+      <<: *backrest-labels
+      backrest.priority: "high"
+      backrest.wait-time: "20"
   ollama:
     image: ollama/ollama:0.20.3
     container_name: llm-ollama
@@ -129,6 +149,10 @@ services:
       - ${DOCKER_DATA}/llm/ollama/data:/root/.ollama
     depends_on:
      - redis
+    labels:
+      <<: *backrest-labels
+      backrest.priority: "high"
+      backrest.wait-time: "20"
 
 networks:
   proxy-network:

@@ -1,3 +1,4 @@
+
 services:
   pocket-id:
     image: ghcr.io/pocket-id/pocket-id:v2.5.0 
@@ -19,6 +20,11 @@ services:
       timeout: 5s
       retries: 2
       start_period: 10s
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "critical"
+      backrest.action: "stop"
+      backrest.wait-time: "30"
 
 networks:
   proxy-network:

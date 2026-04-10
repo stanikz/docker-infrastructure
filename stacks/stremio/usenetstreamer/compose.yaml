@@ -23,6 +23,10 @@ services:
       ADDON_BASE_URL: ${ADDON_BASE_URL}
     volumes:
       - ${DOCKER_DATA}/usenetstreamer/data:/data/config
+    labels:
+      backrest.backup: "false"
+      backrest.priority: "low"
+      backrest.action: "none"    
     
 
 networks:

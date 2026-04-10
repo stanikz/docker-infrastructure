@@ -20,6 +20,10 @@ services:
       - SYS_RESOURCE
     volumes:
       - ${DOCKER_PATH}/netbird/:/var/lib/netbird
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "low"
+      backrest.action: "none"
     
     #privileged: true
     #mem_limit: 80m

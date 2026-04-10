@@ -1,3 +1,7 @@
+x-backrest-labels: &backrest-labels
+    backrest.backup: "true"
+    backrest.priority: "high"
+    backrest.action: "stop"
 services:       
   server:
     image: gitea/gitea:1.25.5
@@ -24,6 +28,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - db
+    labels:
+      <<: *backrest-labels
+      backrest.wait-time: "30"
     #security_opt:
     #  - no-new-privileges:true
   
@@ -42,6 +49,10 @@ services:
       TZ: ${TZ}
     volumes:
       - ${DOCKER_DATA}/gitea/postgres:/var/lib/postgresql/data
+    labels:
+      <<: *backrest-labels
+      backrest.priority: "critical"
+      backrest.wait-time: "60"
 
 networks:
   proxy-network:
