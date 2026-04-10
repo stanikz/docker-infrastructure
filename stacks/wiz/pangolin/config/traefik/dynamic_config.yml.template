@@ -19,6 +19,25 @@ http:
         regex: "^(https://pi\\.${BASE_DOMAIN})/?$"
         replacement: "${1}/admin"
         permanent: true
+    
+    # ADDED CROWDSEC MIDDLEWARE
+    crowdsec:
+      plugin:
+        crowdsec:
+          enabled: true
+          logLevel: INFO
+          crowdsecMode: live
+          crowdsecAppsecEnabled: true
+          crowdsecAppsecHost: crowdsec:7422
+          crowdsecLapiHost: crowdsec:8080
+          crowdsecLapiScheme: http
+          crowdsecLapiKey: "${CROWDSEC_API_KEY}"
+          forwardedHeadersTrustedIPs:
+            - "0.0.0.0/0"
+          clientTrustedIPs:
+            - "10.0.0.0/8"
+            - "172.16.0.0/12"
+            - "192.168.0.0/16"
 
   routers:
     # HTTP to HTTPS redirect router

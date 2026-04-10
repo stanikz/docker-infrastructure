@@ -14,14 +14,30 @@ experimental:
     badger:
       moduleName: "github.com/fosrl/badger"
       version: "v1.4.0"
+    crowdsec: # Added CrowdSec Plugin
+      moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
+      version: "v1.5.1"
 
 log:
   level: "INFO"
-  format: "common"
+  format: "json" # Changed to JSON default -> "common"
   maxSize: 100
   maxBackups: 3
   maxAge: 3
   compress: true
+
+# Access Logs for CrowdSec
+accessLog:
+  filePath: "/var/log/traefik/access.log"
+  format: json
+  filters:
+    statusCodes:
+      - "200-299"
+      - "400-499"
+      - "500-599"
+    retryAttempts: true
+    minDuration: "10ms"
+  bufferingSize: 100
 
 certificatesResolvers:
   letsencrypt:
@@ -43,6 +59,8 @@ entryPoints:
     http:
       tls:
         certResolver: "letsencrypt"
+      middlewares:
+        - crowdsec@file # Added CrowdSec Middleware here
       encodedCharacters:
         allowEncodedSlash: true
         allowEncodedQuestionMark: true
