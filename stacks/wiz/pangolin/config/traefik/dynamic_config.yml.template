@@ -38,6 +38,8 @@ http:
             - "10.0.0.0/8"
             - "172.16.0.0/12"
             - "192.168.0.0/16"
+            - "100.90.128.0/24"
+            - "100.113.100.0/24"
 
   routers:
     # HTTP to HTTPS redirect router
@@ -49,6 +51,7 @@ http:
       middlewares:
         - redirect-to-https
         - badger
+        - crowdsec
 
     # Next.js router (handles everything except API and WebSocket paths)
     next-router:
@@ -58,6 +61,7 @@ http:
         - websecure
       middlewares:
         - badger
+        - crowdsec
       tls:
         certResolver: letsencrypt
 
@@ -69,6 +73,7 @@ http:
         - websecure
       middlewares:
         - badger
+        - crowdsec
       tls:
         certResolver: letsencrypt
 
@@ -80,6 +85,7 @@ http:
         - websecure
       middlewares:
         - badger
+        - crowdsec
       tls:
         certResolver: letsencrypt
 
@@ -98,6 +104,8 @@ http:
       rule: "Host(`pi.${BASE_DOMAIN}`) && Path(`/`)"
       middlewares:
         - "redirect-root-to-admin"
+        - badger
+        - crowdsec
       service: "noop@internal"
       priority: 100
       tls:

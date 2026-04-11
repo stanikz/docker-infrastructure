@@ -77,6 +77,8 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
     depends_on:
       pangolin:
         condition: service_healthy
+      crowdsec:
+        condition: service_healthy
     entrypoint: sh -c "apk add --no-cache gettext && /scripts/start-traefik.sh"
     volumes:
       - ${DOCKER_DATA}/pangolin/scripts:/scripts:ro
@@ -96,6 +98,8 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
     ports:
       - 6060:6060 # Metrics endpoint
       - 8080:8080 # Local API port (needed if you add host firewall later)
+    networks:
+      - default
     environment:
     #  GID: "1000"
       TZ: ${TZ}
