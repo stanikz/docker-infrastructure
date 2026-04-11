@@ -27,44 +27,39 @@ log:
   maxAge: 3
   compress: true
 
-# Access Logs for CrowdSec
+# Access Logs for CrowdSec - Security Optimized
 accessLog:
   filePath: "/var/log/traefik/access.log"
   format: json
+  bufferingSize: 100
+
   filters:
     statusCodes:
-      - "200-299"
-      - "400-499"
-      - "500-599"
-    retryAttempts: true
-    minDuration: "100ms"
-  bufferingSize: 100
+      - "400"      # Bad Request
+      - "403"      # Forbidden
+      - "404"      # Not Found
+      - "405"      # Method Not Allowed
+      - "429"      # Too Many Requests (rate limiting)
+      - "500-599"  # All server errors
+    # NOTE: 401 intentionally excluded - stops Komodo /ws/periphery flood
+    # NOTE: minDuration and retryAttempts REMOVED. 
+    # Because filters are OR-connected, adding them would log all long-lived websockets!
+
   fields:
-    defaultMode: drop
+    defaultMode: keep  # Safest for CrowdSec to prevent 'nil' parsing errors
     names:
-      ClientAddr: keep
-      ClientHost: keep
-      RequestMethod: keep
-      RequestPath: keep
-      RequestProtocol: keep
-      DownstreamStatus: keep
-      DownstreamContentSize: keep
-      Duration: keep
-      ServiceName: keep
-      StartUTC: keep
-      TLSVersion: keep
-      TLSCipher: keep
-      RetryAttempts: keep
+      # Drop high-cardinality/useless fields to save disk space
+      RequestCount: drop
+      GzipRatio: drop
+      Overhead: drop
     headers:
       defaultMode: drop
       names:
-        User-Agent: keep
-        X-Real-Ip: keep
-        X-Forwarded-For: keep
-        X-Forwarded-Proto: keep
-        Content-Type: keep
-        Authorization: redact
-        Cookie: redact
+        X-Forwarded-For: keep  # Real client IP (most important for CrowdSec)
+        X-Real-Ip: keep        # Real client IP fallback
+        User-Agent: keep       # Bot/scanner detection
+        Authorization: redact  # Never log tokens
+        Cookie: redact         # Never log sessions
 
 certificatesResolvers:
   letsencrypt:

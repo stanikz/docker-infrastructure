@@ -1,5 +1,7 @@
-poll_without_inotify: false
+poll_without_inotify: true # This is needed for Traefik to work properly with CrowdSec in a Docker environment,
+# as inotify events may not be properly propagated to the container. 
+# By enabling polling, Traefik can still detect changes in the CrowdSec configuration files and update its routing accordingly.
 filenames:
-  - /var/log/traefik/*.log
+  - /var/log/traefik/access.log
 labels:
   type: traefik
