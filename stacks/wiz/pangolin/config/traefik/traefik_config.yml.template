@@ -82,7 +82,7 @@ entryPoints:
       tls:
         certResolver: "letsencrypt"
       #middlewares:
-      #  - crowdsec@file # Added CrowdSec Middleware here
+      #  - crowdsec@file # Added CrowdSec Middleware here - this is outcommented and instead added per router in dynamic_config template
       encodedCharacters:
         allowEncodedSlash: true
         allowEncodedQuestionMark: true
