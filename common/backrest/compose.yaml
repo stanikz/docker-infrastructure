@@ -21,7 +21,7 @@ services:
       - ${DOCKER_PATH}/backrest/cache:/cache
       - ${DOCKER_PATH}/backrest/tmp:/tmp
       - ${DOCKER_PATH}/backrest/logs:/var/log/backrest
-      - ./backrest/scripts:/usr/local/bin/scripts:ro
+      - ${SCRIPTS_PATH}:/usr/local/bin/scripts:ro
       #- ${DOCKER_DATA}/backrest/rclone:/root/.config/rclone # Mount for rclone config (needed when using rclone remotes)
       #- /MY-BACKUP-DATA:/userdata # [optional] mount local paths to backup here.
       #- /MY-REPOS:/repos # [optional] mount repos if using local storage, not necessary for remotes e.g. B2, S3, etc.
