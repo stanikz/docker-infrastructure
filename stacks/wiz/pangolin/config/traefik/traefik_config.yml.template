@@ -16,7 +16,7 @@ experimental:
       version: "v1.4.0"
     crowdsec: # Added CrowdSec Plugin
       moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
-      version: "v1.4.4"
+      version: "v1.5.1"
 
 log:
   level: "INFO"
