@@ -43,8 +43,7 @@ done
 echo "[$TIMESTAMP] Flushing filesystem caches..." | tee -a "$LOG_FILE"
 sync
 sync
-# Try to drop caches, but don't fail if read-only
-( echo 3 > /proc/sys/vm/drop_caches 2>/dev/null ) || true
+{ echo 3 > /proc/sys/vm/drop_caches; } 2>/dev/null || true
 
 echo "[$TIMESTAMP] === PRE-SNAPSHOT HOOK COMPLETED ===" | tee -a "$LOG_FILE"
 exit 0
