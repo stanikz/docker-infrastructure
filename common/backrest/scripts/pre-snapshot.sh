@@ -21,7 +21,7 @@ stop_containers() {
         wait_time=${wait_time:-30} # Fallback to 30s if missing
         
         echo "[$TIMESTAMP] Stopping $name (wait: ${wait_time}s)" | tee -a "$LOG_FILE"
-        docker stop --time="$wait_time" "$container" 2>&1 | tee -a "$LOG_FILE" || true
+        docker stop --timeout="$wait_time" "$container" 2>&1 | tee -a "$LOG_FILE" || true
     done
 }
 
