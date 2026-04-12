@@ -3,7 +3,7 @@ set -e
 
 HOST=$(hostname)
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
-LOG_FILE="/var/log/backrest-post-snapshot.log"
+LOG_FILE="/var/log/backrest/backrest-post-snapshot.log"
 
 echo "[$TIMESTAMP] === POST-SNAPSHOT HOOK STARTED on $HOST ===" | tee -a "$LOG_FILE"
 
