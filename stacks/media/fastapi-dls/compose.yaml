@@ -16,6 +16,10 @@ services:
     volumes:
       - ${DOCKER_DATA}/fastapi-dls/cert:/app/cert
       - nvidia-license-db:/app/database
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "low"
+      backrest.action: "none"
 
 volumes:
   nvidia-license-db:
