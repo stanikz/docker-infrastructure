@@ -62,6 +62,7 @@ x-depends-on-core: &depends-on-core
 
 # 8. Backrest Labels
 x-labels-backrest: &labels-backrest
+  backrest.backup: "true"
   backrest.priority: "high"
   backrest.action: "stop"
   backrest.wait-time: "30"
