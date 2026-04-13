@@ -3,7 +3,7 @@ set -e
 
 HOST=$(hostname)
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
-LOG_FILE="/var/log/backrest/backrest-pre-snapshot.log"
+LOG_FILE="/var/log/backrest/pre-snapshot_${TIMESTAMP}.log"
 
 echo "[$TIMESTAMP] === PRE-SNAPSHOT HOOK STARTED on $HOST ===" | tee -a "$LOG_FILE"
 
@@ -18,7 +18,7 @@ stop_containers() {
         [ -z "$container" ] && continue
         name=$(docker inspect -f '{{.Name}}' "$container" | sed 's/^\///')
         wait_time=$(docker inspect -f '{{index .Config.Labels "backrest.wait-time"}}' "$container")
-        wait_time=${wait_time:-30} # Fallback to 30s if missing
+        wait_time=${wait_time:-20} # Fallback to 20s if missing
         
         echo "[$TIMESTAMP] Stopping $name (wait: ${wait_time}s)" | tee -a "$LOG_FILE"
         docker stop --timeout="$wait_time" "$container" 2>&1 | tee -a "$LOG_FILE" || true

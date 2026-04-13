@@ -2,7 +2,7 @@
 
 HOST=$(hostname)
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
-ERROR_LOG="/var/log/backrest/backrest-errors.log"
+ERROR_LOG="/var/log/backrest/errors_${TIMESTAMP}.log"
 
 {
     echo "[$TIMESTAMP] ❌ BACKUP FAILED on $HOST"
