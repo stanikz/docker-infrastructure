@@ -41,6 +41,8 @@ services:
       service: backrest-base
     container_name: backrest-private
     hostname: backrest-${INSTANCE_NAME}
+    environment:
+      PRIVATE_DATA: ${PRIVATE_DATA}
     profiles:
       - private
     volumes:
