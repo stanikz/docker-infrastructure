@@ -55,7 +55,7 @@ services:
       backrest.wait-time: "20"
       
   meilisearch:
-    image: getmeili/meilisearch:v1.41.0
+    image: getmeili/meilisearch:v1.42.1
     container_name: karakeep-milisearch
     hostname: karakeep-milisearch
     restart: unless-stopped
