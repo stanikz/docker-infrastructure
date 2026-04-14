@@ -395,7 +395,7 @@ services:
     volumes:
       - ${DOCKER_DATA}/arr-stack/tracearr/db:/home/postgres/pgdata/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${TRACEARR_DB_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U ${TRACEARR_DB_USER} -d ${TRACEARR_DB_NAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
