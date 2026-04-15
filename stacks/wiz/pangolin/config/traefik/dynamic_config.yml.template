@@ -4,28 +4,28 @@ http:
       plugin:
         badger:
           disableForwardAuth: true
-    # ADDED CROWDSEC MIDDLEWARE
-    crowdsec:
-      plugin:
-        crowdsec:
-          banHTMLFilePath: /etc/traefik/ban.html
-          enabled: true
-          logLevel: INFO
-          crowdsecMode: live
-          crowdsecAppsecEnabled: true
-          crowdsecAppsecHost: crowdsec:7422
-          crowdsecLapiHost: crowdsec:8080
-          crowdsecLapiScheme: http
-          crowdsecLapiKey: "${CROWDSEC_API_KEY}"
-          forwardedHeadersTrustedIPs:
-            - "0.0.0.0/0"
-          clientTrustedIPs:
-            - "10.0.0.0/8"
-            - "172.16.0.0/12"
-            - "192.168.0.0/16"
-            - "100.90.128.0/24"
-            - "100.113.100.0/24"
-          
+    ## ADDED CROWDSEC MIDDLEWARE
+    #crowdsec:
+    #  plugin:
+    #    crowdsec:
+    #      banHTMLFilePath: /etc/traefik/ban.html
+    #      enabled: true
+    #      logLevel: INFO
+    #      crowdsecMode: live
+    #      crowdsecAppsecEnabled: true
+    #      crowdsecAppsecHost: crowdsec:7422
+    #      crowdsecLapiHost: crowdsec:8080
+    #      crowdsecLapiScheme: http
+    #      crowdsecLapiKey: "${CROWDSEC_API_KEY}"
+    #      forwardedHeadersTrustedIPs:
+    #        - "0.0.0.0/0"
+    #      clientTrustedIPs:
+    #        - "10.0.0.0/8"
+    #        - "172.16.0.0/12"
+    #        - "192.168.0.0/16"
+    #        - "100.90.128.0/24"
+    #        - "100.113.100.0/24"
+    #      
     redirect-to-https:
       redirectScheme:
         scheme: https
@@ -52,7 +52,7 @@ http:
       middlewares:
         - redirect-to-https
         - badger
-        - crowdsec
+        #- crowdsec
 
     # Next.js router (handles everything except API and WebSocket paths)
     next-router:
@@ -62,7 +62,7 @@ http:
         - websecure
       middlewares:
         - badger
-        - crowdsec
+        #- crowdsec
       tls:
         certResolver: letsencrypt
 
@@ -74,7 +74,7 @@ http:
         - websecure
       middlewares:
         - badger
-        - crowdsec
+        #- crowdsec
       tls:
         certResolver: letsencrypt
 
@@ -86,7 +86,7 @@ http:
         - websecure
       middlewares:
         - badger
-        - crowdsec
+        #- crowdsec
       tls:
         certResolver: letsencrypt
 
@@ -106,7 +106,7 @@ http:
       middlewares:
         - "redirect-root-to-admin"
         - badger
-        - crowdsec
+        #- crowdsec
       service: "noop@internal"
       priority: 100
       tls:

@@ -72,15 +72,15 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
       BASE_DOMAIN: ${BASE_DOMAIN}
       DASHBOARD_URL: ${DASHBOARD_URL}
       EMAIL: ${EMAIL}
-      CROWDSEC_API_KEY: ${CROWDSEC_API_KEY}
+      #CROWDSEC_API_KEY: ${CROWDSEC_API_KEY}
     network_mode: service:gerbil
     depends_on:
       pangolin:
         condition: service_healthy
       gerbil:
         condition: service_started
-      crowdsec:
-        condition: service_healthy
+      #crowdsec:
+      #  condition: service_healthy
     entrypoint: sh -c "apk add --no-cache gettext && /scripts/start-traefik.sh"
     volumes:
       - ${DOCKER_DATA}/pangolin/scripts:/scripts:ro
@@ -92,39 +92,39 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
 #     mem_limit: 100m
 #     memswap_limit: 200m
 
-  crowdsec:
-    image: docker.io/crowdsecurity/crowdsec:v1.7.7
-    container_name: crowdsec
-    hostname: crowdsec-vps
-    restart: unless-stopped
-    ports:
-      - 6060:6060 # Metrics endpoint
-      - 8080:8080 # Local API port (needed if you add host firewall later)
-    networks:
-      - default
-    environment:
-    #  GID: "1000"
-      TZ: ${TZ}
-      COLLECTIONS: crowdsecurity/traefik crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules
-      ENROLL_INSTANCE_NAME: "pangolin-crowdsec"
-      PARSERS: crowdsecurity/whitelists
-      ENROLL_TAGS: docker
-      BOUNCER_KEY_TRAEFIK: ${CROWDSEC_API_KEY}
-    healthcheck:
-      test: ["CMD", "cscli", "lapi", "status"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 30s
-    labels:
-      traefik.enable: "false"
-      <<: *labels-backrest
-    volumes:
-      # Crowdsec config and data (Updated to be inside pangolin)
-      - ${DOCKER_DATA}/pangolin/config/crowdsec/config:/etc/crowdsec
-      - ${DOCKER_DATA}/pangolin/config/crowdsec/data:/var/lib/crowdsec/data
-      # Read Traefik logs (unchanged)
-      - ${DOCKER_DATA}/pangolin/config/traefik/logs:/var/log/traefik:ro
+#  crowdsec:
+#    image: docker.io/crowdsecurity/crowdsec:v1.7.7
+#    container_name: crowdsec
+#    hostname: crowdsec-vps
+#    restart: unless-stopped
+#    ports:
+#      - 6060:6060 # Metrics endpoint
+#      - 8080:8080 # Local API port (needed if you add host firewall later)
+#    networks:
+#      - default
+#    environment:
+#    #  GID: "1000"
+#      TZ: ${TZ}
+#      COLLECTIONS: crowdsecurity/traefik crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules
+#      ENROLL_INSTANCE_NAME: "pangolin-crowdsec"
+#      PARSERS: crowdsecurity/whitelists
+#      ENROLL_TAGS: docker
+#      BOUNCER_KEY_TRAEFIK: ${CROWDSEC_API_KEY}
+#    healthcheck:
+#      test: ["CMD", "cscli", "lapi", "status"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 3
+#      start_period: 30s
+#    labels:
+#      traefik.enable: "false"
+#      <<: *labels-backrest
+#    volumes:
+#      # Crowdsec config and data (Updated to be inside pangolin)
+#      - ${DOCKER_DATA}/pangolin/config/crowdsec/config:/etc/crowdsec
+#      - ${DOCKER_DATA}/pangolin/config/crowdsec/data:/var/lib/crowdsec/data
+#      # Read Traefik logs (unchanged)
+#      - ${DOCKER_DATA}/pangolin/config/traefik/logs:/var/log/traefik:ro
       
 networks:
   default:
