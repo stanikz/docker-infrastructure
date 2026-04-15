@@ -77,6 +77,8 @@ services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
     depends_on:
       pangolin:
         condition: service_healthy
+      gerbil:
+        condition: service_started
       crowdsec:
         condition: service_healthy
     entrypoint: sh -c "apk add --no-cache gettext && /scripts/start-traefik.sh"
