@@ -21,7 +21,7 @@ x-aiostreams-base: &aiostreams-base
 services:
   aiostreams:
     <<: *aiostreams-base
-    image: ghcr.io/viren070/aiostreams:v2.27.0
+    image: ghcr.io/viren070/aiostreams:v2.27.1
     container_name: aiostreams
     hostname: aiostreams-stable
     ports:
