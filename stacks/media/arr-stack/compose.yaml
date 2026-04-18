@@ -314,10 +314,10 @@ services:
     entrypoint: ["/bin/sh", "/entrypoint.sh"]
     healthcheck:
       test: ["CMD", "test", "-d", "/data/__all__"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
-      retries: 3
-      start_period: 15s
+      retries: 5
+      start_period: 30s
     labels:
       <<: *labels-backrest
 

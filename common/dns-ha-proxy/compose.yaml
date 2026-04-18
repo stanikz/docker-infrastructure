@@ -49,6 +49,7 @@ services:
     container_name: pihole
     hostname: pihole-${INSTANCE_ID:-primary}.local
     <<: *restart
+    shm_size: 128m
     networks:
       dns-internal-net:
         ipv4_address: ${PIHOLE_IP:-172.22.0.6}

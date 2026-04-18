@@ -19,6 +19,7 @@ trap cleanup EXIT INT TERM
 # ── Mount ──────────────────────────────────────────────────────────────────────
 echo "[rclone] Mounting zurg: -> $MOUNT_POINT"
 rclone mount zurg: "$MOUNT_POINT" \
+  --log-level DEBUG \
   --allow-other \
   --allow-non-empty \
   --dir-cache-time=5s \
