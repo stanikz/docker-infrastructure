@@ -1,14 +1,24 @@
 #!/bin/sh
 
-# Cleanup on exit
+# ── Startup: clean any stale mount from previous run ──────────────────────────
+MOUNT_POINT="/data"
+
+if mountpoint -q "$MOUNT_POINT" 2>/dev/null; then
+  echo "[rclone] Stale mount detected at $MOUNT_POINT, cleaning up..."
+  fusermount -uz "$MOUNT_POINT" 2>/dev/null || umount -l "$MOUNT_POINT" 2>/dev/null || true
+  sleep 1
+fi
+
+# ── Shutdown: cleanup on exit ──────────────────────────────────────────────────
 cleanup() {
-  echo "Unmounting /data..."
-  fusermount -uz /data || umount -l /data || true
+  echo "[rclone] Unmounting $MOUNT_POINT..."
+  fusermount -uz "$MOUNT_POINT" || umount -l "$MOUNT_POINT" || true
 }
 trap cleanup EXIT INT TERM
 
-# Mount the zurg remote
-rclone mount zurg: /data \
+# ── Mount ──────────────────────────────────────────────────────────────────────
+echo "[rclone] Mounting zurg: -> $MOUNT_POINT"
+rclone mount zurg: "$MOUNT_POINT" \
   --allow-other \
   --allow-non-empty \
   --dir-cache-time=5s \

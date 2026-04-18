@@ -301,7 +301,7 @@ services:
       - apparmor:unconfined
     devices:
       - /dev/fuse:/dev/fuse:rwm
-    stop_grace_period: 5s  # Give it time to unmount cleanly
+    stop_grace_period: 15s  # Give it time to unmount cleanly
     stop_signal: SIGTERM
     volumes:
       - ${DOCKER_DATA}/arr-stack/zurg/entrypoint.sh:/entrypoint.sh
@@ -317,6 +317,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
+      start_period: 15s
     labels:
       <<: *labels-backrest
 
