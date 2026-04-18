@@ -3,19 +3,6 @@
 # ── Startup: clean any stale mount from previous run ──────────────────────────
 MOUNT_POINT="/data"
 
-if mountpoint -q "$MOUNT_POINT" 2>/dev/null; then
-  echo "[rclone] Stale mount detected at $MOUNT_POINT, cleaning up..."
-  fusermount -uz "$MOUNT_POINT" 2>/dev/null || umount -l "$MOUNT_POINT" 2>/dev/null || true
-  sleep 1
-fi
-
-# ── Shutdown: cleanup on exit ──────────────────────────────────────────────────
-cleanup() {
-  echo "[rclone] Unmounting $MOUNT_POINT..."
-  fusermount -uz "$MOUNT_POINT" || umount -l "$MOUNT_POINT" || true
-}
-trap cleanup EXIT INT TERM
-
 # ── Mount ──────────────────────────────────────────────────────────────────────
 echo "[rclone] Mounting zurg: -> $MOUNT_POINT"
 rclone mount zurg: "$MOUNT_POINT" \
