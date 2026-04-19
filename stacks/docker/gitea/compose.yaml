@@ -4,7 +4,7 @@ x-backrest-labels: &backrest-labels
     backrest.action: "stop"
 services:       
   server:
-    image: gitea/gitea:1.25.5
+    image: gitea/gitea:1.26.0
     container_name: gitea
     hostname: gitea
     restart: always
