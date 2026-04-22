@@ -2,7 +2,7 @@ services:
   mediaflow-proxy:
     container_name: mediaflow-proxy
     hostname: mediaflow-proxy
-    image: mhdzumair/mediaflow-proxy:v2.4.6
+    image: mhdzumair/mediaflow-proxy:v2.4.8
     restart: unless-stopped
     ports:
       - 8888:8888
