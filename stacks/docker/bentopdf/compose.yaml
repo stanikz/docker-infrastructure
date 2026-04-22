@@ -1,6 +1,6 @@
 services:
   bentopdf:
-    image: bentopdfteam/bentopdf:2.8.3
+    image: bentopdfteam/bentopdf:2.8.4
     container_name: bentopdf
     hostname: bentopdf
     restart: unless-stopped
