@@ -81,7 +81,7 @@ services:
   # OPEN WEBUI (CLIENT ONLY, TALKS TO MODEL-RUNNER)
   # --------------------------------------------------------
   open-webui:
-    image: ghcr.io/open-webui/open-webui:v0.9.1
+    image: ghcr.io/open-webui/open-webui:v0.9.2
     container_name: llm-open-webui
     hostname: openwebui
     restart: unless-stopped
@@ -120,7 +120,7 @@ services:
       backrest.priority: "high"
       backrest.wait-time: "20"
   ollama:
-    image: ollama/ollama:0.21.1
+    image: ollama/ollama:0.21.2
     container_name: llm-ollama
     hostname: ollama
     restart: unless-stopped
