@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/sooti/stremio-addon-debrid-search:v1.9.0
+    image: ghcr.io/sooti/stremio-addon-debrid-search:v1.9.1
     container_name: sootio
     hostname: sootio
     restart: unless-stopped
