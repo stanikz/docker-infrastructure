@@ -2,17 +2,12 @@
 set -e
 
 CONF="$PGDATA/postgresql.conf"
-MARKER="# --- custom docker tuning ---"
 
-echo "Postgres tuning entrypoint starting…"
+echo "Applying PostgreSQL tuning..."
 
-# Apply tuning only once
-if ! grep -q "$MARKER" "$CONF"; then
-  echo "Applying PostgreSQL tuning to existing config"
+cat >> "$CONF" <<EOF
 
-  cat >> "$CONF" <<EOF
-
-$MARKER
+# --- custom docker tuning ---
 shared_buffers = 512MB
 effective_cache_size = 1536MB
 work_mem = 16MB
@@ -34,9 +29,3 @@ min_wal_size = 512MB
 random_page_cost = 1.1
 effective_io_concurrency = 200
 EOF
-else
-  echo "PostgreSQL tuning already present — skipping"
-fi
-
-# Hand off to official entrypoint
-exec docker-entrypoint.sh postgres

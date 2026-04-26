@@ -48,10 +48,10 @@ services:
     - internal-net
     - db-network
     volumes:
-      - ${DOCKER_DATA}/comet/app/db:/var/lib/postgresql/
-      - ${DOCKER_DATA}/comet/custom-db-config.sh:/entrypoint.sh:ro
+      - ${DOCKER_DATA}/comet/app/db:/var/lib/postgresql/data
+      - ${DOCKER_DATA}/comet/custom-db-config.sh:/docker-entrypoint-initdb.d/01-tuning.sh:ro
     shm_size: 2G
-    entrypoint: ["/bin/sh", "/entrypoint.sh"]
+    #entrypoint: ["/bin/sh", "/entrypoint.sh"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U comet-user -d comet-db"]
       interval: 10s
