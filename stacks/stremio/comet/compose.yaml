@@ -48,7 +48,7 @@ services:
     - internal-net
     - db-network
     volumes:
-      - ${DOCKER_DATA}/comet/app/db:/var/lib/postgresql/data
+      - ${DOCKER_DATA}/comet/app/db:/var/lib/postgresql/
       - ${DOCKER_DATA}/comet/custom-db-config.sh:/entrypoint.sh:ro
     shm_size: 2G
     entrypoint: ["/bin/sh", "/entrypoint.sh"]
