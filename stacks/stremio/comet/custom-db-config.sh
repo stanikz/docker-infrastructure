@@ -21,7 +21,7 @@ max_parallel_workers = 2
 max_parallel_workers_per_gather = 1
 
 # WAL / checkpoints
-wal_buffers = 16M
+wal_buffers = 16MB
 max_wal_size = 2GB
 min_wal_size = 512MB
 
