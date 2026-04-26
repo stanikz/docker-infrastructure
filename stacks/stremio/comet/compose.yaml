@@ -47,6 +47,8 @@ services:
     networks:
     - internal-net
     - db-network
+    env_file:
+      - ${DOCKER_DATA}/comet/.env
     volumes:
       - ${DOCKER_DATA}/comet/app/db:/var/lib/postgresql/data
       - ${DOCKER_DATA}/comet/custom-db-config.sh:/docker-entrypoint-initdb.d/01-tuning.sh:ro
