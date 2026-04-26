@@ -5,7 +5,7 @@ services:
     hostname: sootio
     restart: unless-stopped
     ports:
-      - ${PORT:-6907}:${PORT:-55774}
+      - ${PORT:-6907}:${PORT:-55771}
     networks:
       - proxy-network
     env_file:
