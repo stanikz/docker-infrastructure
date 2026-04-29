@@ -6,7 +6,7 @@ x-labels-backrest: &labels-backrest
 name: pangolin
 services:             #[Versions: 1.15.4 and 1.13.1 worked best on the VPS]
   pangolin:
-    image: fosrl/pangolin:1.17.1
+    image: fosrl/pangolin:1.18.0
     container_name: pangolin
     hostname: pangolin-vps
     restart: unless-stopped
