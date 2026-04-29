@@ -3,7 +3,7 @@
 ######################################################################### 
 services:
   newt:
-    image: fosrl/newt:1.11.0
+    image: fosrl/newt:1.12.0
     container_name: pangolin-newt
     hostname: ${NEWT_HOSTNAME}
     restart: unless-stopped
