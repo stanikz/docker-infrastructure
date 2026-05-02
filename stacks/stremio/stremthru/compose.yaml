@@ -6,7 +6,7 @@ x-labels-backrest: &labels-backrest
   
 services:
   stremthru:
-    image: ghcr.io/muniftanjim/stremthru:0.100.7
+    image: ghcr.io/muniftanjim/stremthru:0.100.8
     container_name: stremthru
     hostname: stremthru
     restart: unless-stopped
