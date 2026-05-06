@@ -146,7 +146,7 @@ services:
   
   # ---------------- SYNC SERVICE (RUN ON ONE HOST ONLY) ----------------
   nebula-sync:
-    image: ghcr.io/lovelaze/nebula-sync:v0.11.1
+    image: ghcr.io/lovelaze/nebula-sync:v0.11.2
     container_name: nebula-sync
     <<: *restart
     networks:
