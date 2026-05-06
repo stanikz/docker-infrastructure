@@ -120,7 +120,7 @@ services:
       backrest.priority: "high"
       backrest.wait-time: "20"
   ollama:
-    image: ollama/ollama:0.22.1
+    image: ollama/ollama:0.23.0
     container_name: llm-ollama
     hostname: ollama
     restart: unless-stopped
