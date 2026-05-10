@@ -288,7 +288,7 @@ services:
 
   rclone:
     <<: *service-base
-    image: rclone/rclone:1.74.0
+    image: rclone/rclone:1.74.1
     container_name: rclone
     hostname: rclone
     networks:
