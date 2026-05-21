@@ -15,8 +15,8 @@ services:
     networks:
       - proxy-network
       - internal-net
-    env_file:
-      - ${DOCKER_DATA}/stremthru/.env
+    #env_file:
+    #  - ${DOCKER_DATA}/stremthru/.env
     environment:
       TZ: ${TZ}
     volumes:
