@@ -51,7 +51,7 @@ services:
       disable: true
 
   nginx-proxy-manager:
-    image: jlesage/nginx-proxy-manager:v26.03.2
+    image: jlesage/nginx-proxy-manager:v26.05.1
     container_name: npm
     hostname: npm
     restart: unless-stopped
