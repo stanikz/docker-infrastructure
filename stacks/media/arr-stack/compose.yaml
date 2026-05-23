@@ -212,7 +212,7 @@ services:
       <<: *env-common
       ORIGIN: ${PROFILARR_ORIGIN:-http://localhost:6868}
       #Uncomment and set the following if you want to use OIDC authentication with Profilarr
-      #AUTH: ${PROFILARR_AUTH:-oidc}
+      AUTH: ${PROFILARR_AUTH:-oidc}
       #OIDC_DISCOVERY_URL: https://your-provider/.well-known/openid-configuration
       #OIDC_CLIENT_ID: your-client-id
       #OIDC_CLIENT_SECRET: your-client-secret
