@@ -55,10 +55,10 @@ x-depends-on-core: &depends-on-core
     condition: service_healthy
   decypharr:
     condition: service_healthy
-  zurg:
-    condition: service_healthy
-  rclone:
-    condition: service_healthy
+  #zurg:
+  #  condition: service_healthy
+  #rclone:
+  #  condition: service_healthy
 
 # 8. Backrest Labels
 x-labels-backrest: &labels-backrest
@@ -187,17 +187,41 @@ services:
       - SYS_ADMIN
     security_opt:
       - apparmor:unconfined
-    depends_on:
-      zurg:
-        condition: service_healthy
-      rclone:
-        condition: service_healthy
+    #depends_on:
+    #  zurg:
+    #    condition: service_healthy
+    #  rclone:
+    #    condition: service_healthy
     healthcheck:
       test: ["CMD", "/usr/bin/healthcheck", "--config", "/app/"]
       interval: 10s
       timeout: 5s
       retries: 3
       start_period: 30s
+    labels:
+      <<: *labels-backrest
+  
+  profilarr:
+    <<: *service-base
+    image: ghcr.io/dictionarry-hub/profilarr:v2.0.4
+    container_name: profilarr
+    hostname: profilarr
+    ports:
+      - 6868:6868
+    environment:
+      <<: *env-common
+      ORIGIN: ${PROFILARR_ORIGIN:-http://localhost:6868}
+      #Uncomment and set the following if you want to use OIDC authentication with Profilarr
+      #AUTH: ${PROFILARR_AUTH:-oidc}
+      #OIDC_DISCOVERY_URL: https://your-provider/.well-known/openid-configuration
+      #OIDC_CLIENT_ID: your-client-id
+      #OIDC_CLIENT_SECRET: your-client-secret
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/profilarr/config:/config
+    logging: *logging-json
+    healthcheck:
+      <<: *healthcheck-curl
+      test: ["CMD", "curl", "-f", "http://localhost:6868"]
     labels:
       <<: *labels-backrest
 
@@ -236,114 +260,117 @@ services:
     labels:
       <<: *labels-backrest
 
-  zilean:
-    <<: *service-base
-    image: ipromknight/zilean:v3.5.0
-    container_name: zilean
-    hostname: zilean
-    ports:
-      - 8181:8181
-    environment:
-      Zilean__Database__ConnectionString: ${ZILEAN_CONNECTION_STRING}
-    tty: true
-    volumes:
-      - ${DOCKER_DATA}/arr-stack/zilean:/app/data
-      - ${DOCKER_DATA}/arr-stack/zilean/tmp:/tmp
-    depends_on:
-      postgres:
-        condition: service_healthy
-    healthcheck:
-      test: curl --connect-timeout 10 --silent --show-error --fail http://localhost:8181/healthchecks/ping
-      timeout: 60s
-      interval: 30s
-      retries: 10
-    labels:
-      <<: *labels-backrest
-      backrest.priority: "critical"
-      backrest.wait-time: "30"
 
-  zurg:
-    <<: *service-base
-    image: ghcr.io/debridmediamanager/zurg-testing:v0.9.3-final
-    container_name: zurg
-    hostname: zurg
-    ports:
-      - 9997:9999
-    environment:
-      <<: *env-common
-      user: ${PUID}:${PGID}
-      RD_KEY: ${RD_KEY}
-      PLEX_TOKEN: ${PLEX_TOKEN}
-    volumes:
-      - ${DOCKER_DATA}/arr-stack/zurg/zurg-plex_update.sh:/app/plex_update.sh
-      - ${DOCKER_DATA}/arr-stack/zurg/zurg-config.yml:/app/config.yml
-      - ${DOCKER_DATA}/arr-stack/zurg/zurg_data:/app/data
-    healthcheck:
-      <<: *healthcheck-curl
-      test: curl -f localhost:9999/dav/version.txt || exit 1
-    labels:
-      <<: *labels-backrest
-      backrest.priority: "critical"
-      backrest.wait-time: "30"
+##### Decommissioned Services (Kept for Reference) #####
 
-  rclone:
-    <<: *service-base
-    image: rclone/rclone:1.74.1
-    container_name: rclone
-    hostname: rclone
-    networks:
-      - internal-net
-    environment:
-      <<: *env-common
-    cap_add:
-      - SYS_ADMIN
-    security_opt:
-      - apparmor:unconfined
-    devices:
-      - /dev/fuse:/dev/fuse:rwm
-    stop_grace_period: 15s  # Give it time to unmount cleanly
-    stop_signal: SIGTERM
-    volumes:
-      - ${DOCKER_DATA}/arr-stack/zurg/entrypoint.sh:/entrypoint.sh
-      - ${DOCKER_DATA}/arr-stack/zurg/rclone.conf:/config/rclone/rclone.conf
-      - /mnt/media/arrs/.zurg-cache:/root/.cache/rclone
-      - /mnt/media/arrs/zurg-mount:/data:rshared
-    depends_on:
-      zurg:
-        condition: service_healthy
-    entrypoint: ["/bin/sh", "/entrypoint.sh"]
-    healthcheck:
-      test: ["CMD", "test", "-d", "/data/__all__"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    labels:
-      <<: *labels-backrest
+#  zilean:
+#    <<: *service-base
+#    image: ipromknight/zilean:v3.5.0
+#    container_name: zilean
+#    hostname: zilean
+#    ports:
+#      - 8181:8181
+#    environment:
+#      Zilean__Database__ConnectionString: ${ZILEAN_CONNECTION_STRING}
+#    tty: true
+#    volumes:
+#      - ${DOCKER_DATA}/arr-stack/zilean:/app/data
+#      - ${DOCKER_DATA}/arr-stack/zilean/tmp:/tmp
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#    healthcheck:
+#      test: curl --connect-timeout 10 --silent --show-error --fail http://localhost:8181/healthchecks/ping
+#      timeout: 60s
+#      interval: 30s
+#      retries: 10
+#    labels:
+#      <<: *labels-backrest
+#      backrest.priority: "critical"
+#      backrest.wait-time: "30"#
 
-  postgres:
-    <<: *service-base
-    image: postgres:17.0-alpine3.20
-    container_name: zilean-db-postgres-17
-    hostname: zilean-postgres-17
-    ports:
-      - 5433:5432
-    environment:
-      PGDATA: /var/lib/postgresql/data/pgdata
-      POSTGRES_DB: zilean
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - ${DOCKER_DATA}/arr-stack/postgres:/var/lib/postgresql/data/pgdata
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    labels:
-      <<: *labels-backrest
-      backrest.priority: "critical"
-      backrest.wait-time: "30"
+#  zurg:
+#    <<: *service-base
+#    image: ghcr.io/debridmediamanager/zurg-testing:v0.9.3-final
+#    container_name: zurg
+#    hostname: zurg
+#    ports:
+#      - 9997:9999
+#    environment:
+#      <<: *env-common
+#      user: ${PUID}:${PGID}
+#      RD_KEY: ${RD_KEY}
+#      PLEX_TOKEN: ${PLEX_TOKEN}
+#    volumes:
+#      - ${DOCKER_DATA}/arr-stack/zurg/zurg-plex_update.sh:/app/plex_update.sh
+#      - ${DOCKER_DATA}/arr-stack/zurg/zurg-config.yml:/app/config.yml
+#      - ${DOCKER_DATA}/arr-stack/zurg/zurg_data:/app/data
+#    healthcheck:
+#      <<: *healthcheck-curl
+#      test: curl -f localhost:9999/dav/version.txt || exit 1
+#    labels:
+#      <<: *labels-backrest
+#      backrest.priority: "critical"
+#      backrest.wait-time: "30"
+
+#  rclone:
+#    <<: *service-base
+#    image: rclone/rclone:1.74.1
+#    container_name: rclone
+#    hostname: rclone
+#    networks:
+#      - internal-net
+#    environment:
+#      <<: *env-common
+#    cap_add:
+#      - SYS_ADMIN
+#    security_opt:
+#      - apparmor:unconfined
+#    devices:
+#      - /dev/fuse:/dev/fuse:rwm
+#    stop_grace_period: 15s  # Give it time to unmount cleanly
+#    stop_signal: SIGTERM
+#    volumes:
+#      - ${DOCKER_DATA}/arr-stack/zurg/entrypoint.sh:/entrypoint.sh
+#      - ${DOCKER_DATA}/arr-stack/zurg/rclone.conf:/config/rclone/rclone.conf
+#      - /mnt/media/arrs/.zurg-cache:/root/.cache/rclone
+#      - /mnt/media/arrs/zurg-mount:/data:rshared
+#    depends_on:
+#      zurg:
+#        condition: service_healthy
+#    entrypoint: ["/bin/sh", "/entrypoint.sh"]
+#    healthcheck:
+#      test: ["CMD", "test", "-d", "/data/__all__"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 30s
+#    labels:
+#      <<: *labels-backrest
+#
+#  postgres:
+#    <<: *service-base
+#    image: postgres:17.0-alpine3.20
+#    container_name: zilean-db-postgres-17
+#    hostname: zilean-postgres-17
+#    ports:
+#      - 5433:5432
+#    environment:
+#      PGDATA: /var/lib/postgresql/data/pgdata
+#      POSTGRES_DB: zilean
+#      POSTGRES_USER: ${POSTGRES_USER}
+#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#    volumes:
+#      - ${DOCKER_DATA}/arr-stack/postgres:/var/lib/postgresql/data/pgdata
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+#      interval: 5s
+#      timeout: 5s
+#      retries: 5
+#    labels:
+#      <<: *labels-backrest
+#      backrest.priority: "critical"
+#      backrest.wait-time: "30"
   
   tracearr:
     <<: *service-base
