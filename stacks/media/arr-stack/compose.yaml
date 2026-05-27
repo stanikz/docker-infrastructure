@@ -105,7 +105,7 @@ services:
 
   flaresolverr:
     <<: *service-base
-    image: ghcr.io/flaresolverr/flaresolverr:v3.4.6
+    image: ghcr.io/flaresolverr/flaresolverr:v3.5.0
     container_name: flaresolverr
     hostname: flaresolverr
     ports:
@@ -203,7 +203,7 @@ services:
   
   profilarr:
     <<: *service-base
-    image: ghcr.io/dictionarry-hub/profilarr:2.0.5
+    image: ghcr.io/dictionarry-hub/profilarr:2.0.6
     container_name: profilarr
     hostname: profilarr
     ports:
