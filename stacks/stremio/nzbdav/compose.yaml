@@ -28,7 +28,7 @@ services:
       <<: *labels-backrest
 
   nzbdav-rclone:
-    image: rclone/rclone:1.74.1
+    image: rclone/rclone:1.74.2
     container_name: nzbdav-rclone
     hostname: nzbdav-rclone
     restart: unless-stopped
