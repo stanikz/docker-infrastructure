@@ -38,6 +38,9 @@ x-arr-service: &arr-service
   environment:
     <<: *env-common
     UMASK: ${UMASK}
+    IGNORE_MATCH_BY_ID_WARNING: true
+    IMPROVE_QUEUE_RESPONSIVENESS: true
+    ACCEPT_RELEASE_ANY_UPGRADABLE: true #sonarr specific environment variable
   logging: *logging-json
 
 # 6. Services that depend on Radarr & Sonarr
@@ -134,6 +137,7 @@ services:
     ports:
       - 7777:5055
     environment:
+    
       LOG_LEVEL: debug
       <<: *env-common
     volumes:
@@ -227,7 +231,7 @@ services:
 
   radarr:
     <<: *arr-service
-    image: lscr.io/linuxserver/radarr:6.1.1.10360-ls302
+    image: ghcr.io/realzombee/radarr:6.5.1.2032 #lscr.io/linuxserver/radarr:6.1.1.10360-ls302
     container_name: radarr
     hostname: radarr
     ports:
@@ -245,11 +249,13 @@ services:
 
   sonarr:
     <<: *arr-service
-    image: lscr.io/linuxserver/sonarr:4.0.17.2952-ls311
+    image: ghcr.io/realzombee/sonarr:4.1.1.824 #lscr.io/linuxserver/sonarr:4.0.17.2952-ls311
     container_name: sonarr
     hostname: sonarr
     ports:
       - 7272:8989
+    environment:
+      ACCEPT_RELEASE_ANY_UPGRADABLE: true
     volumes:
       - ${DOCKER_DATA}/arr-stack/sonarr/config:/config
       - /mnt:/mnt:rslave
@@ -259,6 +265,99 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8989"]
     labels:
       <<: *labels-backrest
+ 
+  tracearr:
+    <<: *service-base
+    image: ghcr.io/connorgallopo/tracearr:1.4.28
+    container_name: tracearr
+    hostname: tracearr
+    ports:
+      - ${TRACEARR_PORT}:3000
+    logging: *logging-json
+    environment:
+      <<: *env-common
+      NODE_ENV: production
+      PORT: 3000
+      HOST: 0.0.0.0
+      DATABASE_URL: postgres://${TRACEARR_DB_USER}:${TRACEARR_DB_PASSWORD}@timescale:5432/${TRACEARR_DB_NAME}
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+      LOG_LEVEL: ${LOG_LEVEL}
+    depends_on:
+      timescale:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/tracearr/backups:/data/backup
+    labels:
+      <<: *labels-backrest
+
+  timescale:
+    image: timescale/timescaledb-ha:pg18.1-ts2.25.0
+    container_name: tracearr-db
+    hostname: tracearr-db
+    <<: *service-base
+    ports:
+      - 5434:5432
+    shm_size: 512mb
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    command: ${TIMESCALE_COMMAND}
+    environment:
+      <<: *env-common
+      POSTGRES_USER: ${TRACEARR_DB_USER}
+      POSTGRES_PASSWORD: ${TRACEARR_DB_PASSWORD}
+      POSTGRES_DB: ${TRACEARR_DB_NAME}
+      PGDATA: /home/postgres/pgdata/data
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/tracearr/db:/home/postgres/pgdata/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TRACEARR_DB_USER} -d ${TRACEARR_DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      <<: *labels-backrest
+      backrest.priority: "critical"
+      backrest.wait-time: "60"
+
+  redis:
+    <<: *service-base
+    # Note: Using service-base but removing proxy-network for Redis security
+    networks:
+      - internal-net
+    image: redis:8-alpine
+    container_name: tracearr-redis
+    hostname: tracearr-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/tracearr/redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      <<: *labels-backrest
+      backrest.priority: "critical"
+      backrest.wait-time: "45"
+
+# --------------------------------------------------------------------------------
+# NETWORKS
+# --------------------------------------------------------------------------------
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  internal-net:
+    name: arr-stack-net
+    driver: bridge
+
 
 
 ##### Decommissioned Services (Kept for Reference) #####
@@ -371,95 +470,3 @@ services:
 #      <<: *labels-backrest
 #      backrest.priority: "critical"
 #      backrest.wait-time: "30"
-  
-  tracearr:
-    <<: *service-base
-    image: ghcr.io/connorgallopo/tracearr:1.4.28
-    container_name: tracearr
-    hostname: tracearr
-    ports:
-      - ${TRACEARR_PORT}:3000
-    logging: *logging-json
-    environment:
-      <<: *env-common
-      NODE_ENV: production
-      PORT: 3000
-      HOST: 0.0.0.0
-      DATABASE_URL: postgres://${TRACEARR_DB_USER}:${TRACEARR_DB_PASSWORD}@timescale:5432/${TRACEARR_DB_NAME}
-      REDIS_URL: redis://redis:6379
-      JWT_SECRET: ${JWT_SECRET}
-      COOKIE_SECRET: ${COOKIE_SECRET}
-      CORS_ORIGIN: ${CORS_ORIGIN:-*}
-      LOG_LEVEL: ${LOG_LEVEL}
-    depends_on:
-      timescale:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    volumes:
-      - ${DOCKER_DATA}/arr-stack/tracearr/backups:/data/backup
-    labels:
-      <<: *labels-backrest
-
-  timescale:
-    image: timescale/timescaledb-ha:pg18.1-ts2.25.0
-    container_name: tracearr-db
-    hostname: tracearr-db
-    <<: *service-base
-    ports:
-      - 5434:5432
-    shm_size: 512mb
-    ulimits:
-      nofile:
-        soft: 65536
-        hard: 65536
-    command: ${TIMESCALE_COMMAND}
-    environment:
-      <<: *env-common
-      POSTGRES_USER: ${TRACEARR_DB_USER}
-      POSTGRES_PASSWORD: ${TRACEARR_DB_PASSWORD}
-      POSTGRES_DB: ${TRACEARR_DB_NAME}
-      PGDATA: /home/postgres/pgdata/data
-    volumes:
-      - ${DOCKER_DATA}/arr-stack/tracearr/db:/home/postgres/pgdata/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${TRACEARR_DB_USER} -d ${TRACEARR_DB_NAME}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    labels:
-      <<: *labels-backrest
-      backrest.priority: "critical"
-      backrest.wait-time: "60"
-
-  redis:
-    <<: *service-base
-    # Note: Using service-base but removing proxy-network for Redis security
-    networks:
-      - internal-net
-    image: redis:8-alpine
-    container_name: tracearr-redis
-    hostname: tracearr-redis
-    command: redis-server --appendonly yes
-    volumes:
-      - ${DOCKER_DATA}/arr-stack/tracearr/redis:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    labels:
-      <<: *labels-backrest
-      backrest.priority: "critical"
-      backrest.wait-time: "45"
-
-# --------------------------------------------------------------------------------
-# NETWORKS
-# --------------------------------------------------------------------------------
-networks:
-  proxy-network:
-    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
-    external: true
-  internal-net:
-    name: arr-stack-net
-    driver: bridge
