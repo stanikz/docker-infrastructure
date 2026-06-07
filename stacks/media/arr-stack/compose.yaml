@@ -265,6 +265,22 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8989"]
     labels:
       <<: *labels-backrest
+  
+  warrden:
+    <<: *service-base
+    image: code.neureka.dev/warrden/warrden:4.1.4
+    container_name: warrden
+    hostname: warrden
+    environment:
+      <<: *env-common
+      DATABASE_PATH: /app/data/warrden.db
+      CONFIG_PATH: /app/data/config.yaml
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/warrden/data:/app/data
+    labels:
+      <<: *labels-backrest
+      backrest.priority: "low"
+      backrest.action: "none"
  
   tracearr:
     <<: *service-base
