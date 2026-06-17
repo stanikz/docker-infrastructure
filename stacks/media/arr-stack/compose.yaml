@@ -154,13 +154,15 @@ services:
 
   prowlarr:
     <<: *service-base
-    image: ghcr.io/hotio/prowlarr:release-2c583e5
+    image: ghcr.io/realzombee/prowlarr:2.10.1.2011
     container_name: prowlarr
     hostname: prowlarr
     ports:
       - 7676:9696
     environment:
       <<: *env-common
+      CACHE_TTL_MINS: 15 #How long a particular query response should be cached for. Should be <15 mins to ensure RSS queries get fresh data.
+      CACHE_MAX_SIZE_MB: 150 #Maximum size of cache in memory before old records are cleaned up. Higher values will use more memory.
     volumes:
       - ${DOCKER_DATA}/arr-stack/prowlarr/config:/config
       - ${DOCKER_DATA}/arr-stack/prowlarr/Custom:/config/Definitions/Custom
