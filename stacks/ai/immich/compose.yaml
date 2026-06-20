@@ -15,7 +15,7 @@ x-backrest-labels: &backrest-labels
 name: immich
 services:
   immich-server:
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release} #current version changed from 2.5.2 to 2.7.5
     container_name: immich_server
     hostname: immich-server
     restart: always   
