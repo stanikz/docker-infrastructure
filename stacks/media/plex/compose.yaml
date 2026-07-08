@@ -70,7 +70,7 @@ services:
       ALLOWED_NETWORKS: '192.168.10.0/24,17.22.0.0/16' # Add
     volumes:
       - ${DOCKER_DATA}/plex-test:/config  # Specific Config
-      - /mnt/media:/mnt/media:ro             # Shared
+      - /mnt/media:/mnt/media:rslave         # Shared
       - type: tmpfs                          # Shared
         target: /tmp
         tmpfs:
