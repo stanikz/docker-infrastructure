@@ -57,7 +57,7 @@ services:
 
   # paperless-gpt service
   paperless-gpt:
-    image: icereed/paperless-gpt:v0.25.1
+    image: icereed/paperless-gpt:v0.26.1
     container_name: paperless-gpt
     hostname: paperless-gpt
     restart: unless-stopped
