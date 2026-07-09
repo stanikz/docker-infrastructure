@@ -44,7 +44,7 @@ services:
       <<: *env-common
     volumes:
       - ${DOCKER_DATA}/plex:/config
-      - /mnt/media:/mnt/media
+      - /mnt/media:/mnt/media:rslave
       - /mnt/nas:/mnt/private
       - type: tmpfs
         target: /tmp
