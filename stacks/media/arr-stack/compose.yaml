@@ -286,7 +286,7 @@ services:
  
   tracearr:
     <<: *service-base
-    image: ghcr.io/connorgallopo/tracearr:1.4.30
+    image: ghcr.io/connorgallopo/tracearr:1.4.31
     container_name: tracearr
     hostname: tracearr
     ports:
