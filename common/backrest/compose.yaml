@@ -1,7 +1,7 @@
 services:
   # --- BASE TEMPLATE (never runs directly) ---
   backrest-base:
-    image: garethgeorge/backrest:v1.13.0
+    image: garethgeorge/backrest:v1.14.1
     profiles:
       - donotrun
     restart: unless-stopped
