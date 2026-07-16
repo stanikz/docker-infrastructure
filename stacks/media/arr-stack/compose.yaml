@@ -139,7 +139,7 @@ services:
       <<: *labels-backrest
   
   dispatcharr:
-    # <<: *service-base
+    # <<: *service-base #interferring with internal env variables
     image: ghcr.io/dispatcharr/dispatcharr:0.27.2
     container_name: dispatcharr
     hostname: dispatcharr
@@ -150,12 +150,12 @@ services:
     ports:
       - 9191:9191
     environment:
-      # <<: *env-common
+      # <<: *env-common #interferring with internal env variables
       TZ: ${TZ}
       DISPATCHARR_ENV: ${DISPATCHARR_ENV}
       REDIS_HOST: ${DISPATCHARR_REDIS_HOST}
       CELERY_BROKER_URL: redis://${DISPATCHARR_REDIS_HOST}:6379/0
-      DISPATCHARR_LOG_LEVEL: debug
+      DISPATCHARR_LOG_LEVEL: info
     volumes:
       - ${DOCKER_DATA}/arr-stack/dispatcharr/data:/data
     logging: *logging-json
