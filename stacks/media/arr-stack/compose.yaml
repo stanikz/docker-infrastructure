@@ -108,7 +108,7 @@ services:
   
   dispatcharr:
     <<: *service-base
-    image: ghcr.io/dispatcharr/dispatcharr:v0.27.2
+    image: ghcr.io/dispatcharr/dispatcharr:0.27.2
     container_name: dispatcharr
     hostname: dispatcharr
     ports:
