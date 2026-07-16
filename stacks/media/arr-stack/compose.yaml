@@ -106,98 +106,6 @@ services:
     labels:
       <<: *labels-backrest
   
-  dispatcharr:
-    <<: *service-base
-    image: ghcr.io/dispatcharr/dispatcharr:0.27.2
-    container_name: dispatcharr
-    hostname: dispatcharr
-    ports:
-      - 9191:9191
-    environment:
-      <<: *env-common
-      DISPATCHARR_ENV: ${DISPATCHARR_ENV}
-      REDIS_HOST: ${DISPATCHARR_REDIS_HOST}
-      CELERY_BROKER_URL: redis://${DISPATCHARR_REDIS_HOST}:6379/0
-      DISPATCHARR_LOG_LEVEL: info
-    volumes:
-      - ${DOCKER_DATA}/arr-stack/dispatcharr/data:/data
-    logging: *logging-json
-    healthcheck:
-      <<: *healthcheck-curl
-      test: ["CMD", "curl", "-f", "http://localhost:9191"]
-      start_period: 40s
-    labels:
-      <<: *labels-backrest
-
-  flaresolverr:
-    <<: *service-base
-    image: ghcr.io/flaresolverr/flaresolverr:v3.5.0
-    container_name: flaresolverr
-    hostname: flaresolverr
-    ports:
-      - 8192:8191
-    environment:
-      LOG_LEVEL: ${LOG_LEVEL:-info}
-      LOG_HTML: ${LOG_HTML:-false}
-      CAPTCHA_SOLVER: ${CAPTCHA_SOLVER:-none}
-      TZ: ${TZ}
-    logging: *logging-json
-    healthcheck:
-      <<: *healthcheck-curl
-      test: ["CMD", "curl", "-f", "http://localhost:8191"]
-    labels:
-      backrest.backup: "true"
-      backrest.priority: "low"
-      backrest.action: "none"
-
-
-  seerr:
-    <<: *service-base
-    image: ghcr.io/seerr-team/seerr:v3.3.0
-    init: true
-    container_name: seerr
-    hostname: seerr
-    ports:
-      - 7777:5055
-    environment:
-    
-      LOG_LEVEL: debug
-      <<: *env-common
-    volumes:
-      - ${DOCKER_DATA}/arr-stack/seerr/config:/app/config
-    depends_on: *depends-on-arr
-    healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
-      start_period: 20s
-      timeout: 3s
-      interval: 15s
-      retries: 3
-    labels:
-      <<: *labels-backrest
-
-  prowlarr:
-    <<: *service-base
-    image: ghcr.io/realzombee/prowlarr:2.10.1.2011
-    container_name: prowlarr
-    hostname: prowlarr
-    ports:
-      - 7676:9696
-    environment:
-      <<: *env-common
-      CACHE_TTL_MINS: 15 #How long a particular query response should be cached for. Should be <15 mins to ensure RSS queries get fresh data.
-      CACHE_MAX_SIZE_MB: 150 #Maximum size of cache in memory before old records are cleaned up. Higher values will use more memory.
-    volumes:
-      - ${DOCKER_DATA}/arr-stack/prowlarr/config:/config
-      - ${DOCKER_DATA}/arr-stack/prowlarr/Custom:/config/Definitions/Custom
-    logging: *logging-json
-    depends_on:
-      - flaresolverr
-    healthcheck:
-      <<: *healthcheck-curl
-      test: ["CMD", "curl", "-f", "http://localhost:9696"]
-    labels:
-      <<: *labels-backrest
-
   decypharr:
     <<: *service-base
     image: cy01/blackhole:v2.3
@@ -230,6 +138,51 @@ services:
     labels:
       <<: *labels-backrest
   
+  dispatcharr:
+    <<: *service-base
+    image: ghcr.io/dispatcharr/dispatcharr:0.27.2
+    container_name: dispatcharr
+    hostname: dispatcharr
+    ports:
+      - 9191:9191
+    environment:
+      # <<: *env-common
+      TZ: ${TZ}
+      DISPATCHARR_ENV: ${DISPATCHARR_ENV}
+      REDIS_HOST: ${DISPATCHARR_REDIS_HOST}
+      CELERY_BROKER_URL: redis://${DISPATCHARR_REDIS_HOST}:6379/0
+      DISPATCHARR_LOG_LEVEL: debug
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/dispatcharr/data:/data
+    logging: *logging-json
+    healthcheck:
+      <<: *healthcheck-curl
+      test: ["CMD", "curl", "-f", "http://localhost:9191"]
+      start_period: 40s
+    labels:
+      <<: *labels-backrest
+
+  flaresolverr:
+    <<: *service-base
+    image: ghcr.io/flaresolverr/flaresolverr:v3.5.0
+    container_name: flaresolverr
+    hostname: flaresolverr
+    ports:
+      - 8192:8191
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      LOG_HTML: ${LOG_HTML:-false}
+      CAPTCHA_SOLVER: ${CAPTCHA_SOLVER:-none}
+      TZ: ${TZ}
+    logging: *logging-json
+    healthcheck:
+      <<: *healthcheck-curl
+      test: ["CMD", "curl", "-f", "http://localhost:8191"]
+    labels:
+      backrest.backup: "true"
+      backrest.priority: "low"
+      backrest.action: "none"
+
   profilarr:
     <<: *service-base
     image: ghcr.io/dictionarry-hub/profilarr:2.0.9
@@ -254,6 +207,29 @@ services:
     labels:
       <<: *labels-backrest
 
+  prowlarr:
+    <<: *service-base
+    image: ghcr.io/realzombee/prowlarr:2.10.1.2011
+    container_name: prowlarr
+    hostname: prowlarr
+    ports:
+      - 7676:9696
+    environment:
+      <<: *env-common
+      CACHE_TTL_MINS: 15 #How long a particular query response should be cached for. Should be <15 mins to ensure RSS queries get fresh data.
+      CACHE_MAX_SIZE_MB: 150 #Maximum size of cache in memory before old records are cleaned up. Higher values will use more memory.
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/prowlarr/config:/config
+      - ${DOCKER_DATA}/arr-stack/prowlarr/Custom:/config/Definitions/Custom
+    logging: *logging-json
+    depends_on:
+      - flaresolverr
+    healthcheck:
+      <<: *healthcheck-curl
+      test: ["CMD", "curl", "-f", "http://localhost:9696"]
+    labels:
+      <<: *labels-backrest
+
   radarr:
     <<: *arr-service
     image: ghcr.io/realzombee/radarr:6.5.1.2032 #lscr.io/linuxserver/radarr:6.1.1.10360-ls302
@@ -270,7 +246,30 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:7878"]
     labels:
       <<: *labels-backrest
+  
+  seerr:
+    <<: *service-base
+    image: ghcr.io/seerr-team/seerr:v3.3.0
+    init: true
+    container_name: seerr
+    hostname: seerr
+    ports:
+      - 7777:5055
+    environment:
     
+      LOG_LEVEL: debug
+      <<: *env-common
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/seerr/config:/app/config
+    depends_on: *depends-on-arr
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+    labels:
+      <<: *labels-backrest
 
   sonarr:
     <<: *arr-service
