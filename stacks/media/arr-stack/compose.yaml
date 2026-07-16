@@ -139,7 +139,7 @@ services:
       <<: *labels-backrest
   
   dispatcharr:
-    <<: *service-base
+    # <<: *service-base
     image: ghcr.io/dispatcharr/dispatcharr:0.27.2
     container_name: dispatcharr
     hostname: dispatcharr
