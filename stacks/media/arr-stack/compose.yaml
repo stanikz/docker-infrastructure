@@ -105,6 +105,29 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:6767"]
     labels:
       <<: *labels-backrest
+  
+  dispatcharr:
+    <<: *service-base
+    image: ghcr.io/dispatcharr/dispatcharr:v0.27.2
+    container_name: dispatcharr
+    hostname: dispatcharr
+    ports:
+      - 9191:9191
+    environment:
+      <<: *env-common
+      DISPATCHARR_ENV: ${DISPATCHARR_ENV}
+      REDIS_HOST: ${DISPATCHARR_REDIS_HOST}
+      CELERY_BROKER_URL: redis://${DISPATCHARR_REDIS_HOST}:6379/0
+      DISPATCHARR_LOG_LEVEL: info
+    volumes:
+      - ${DOCKER_DATA}/arr-stack/dispatcharr/data:/data
+    logging: *logging-json
+    healthcheck:
+      <<: *healthcheck-curl
+      test: ["CMD", "curl", "-f", "http://localhost:9191"]
+      start_period: 40s
+    labels:
+      <<: *labels-backrest
 
   flaresolverr:
     <<: *service-base
