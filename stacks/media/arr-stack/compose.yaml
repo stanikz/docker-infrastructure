@@ -108,7 +108,7 @@ services:
   
   decypharr:
     <<: *service-base
-    image: cy01/blackhole:v2.3
+    image: cy01/blackhole:v2.4
     container_name: decypharr
     hostname: decypharr
     ports:
