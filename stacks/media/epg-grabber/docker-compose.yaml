@@ -1,0 +1,26 @@
+services:
+  epg-grabber:
+    image: ghcr.io/iptv-org/epg:master
+    container_name: epg-grabber
+    hostname: epg-grabber
+    restart: unless-stopped
+    environment:
+      - CRON_SCHEDULE=0 4 * * *
+      - DAYS=2
+      - MAX_CONNECTIONS=1
+      - DELAY=15000
+      - GZIP=true
+      - RUN_AT_STARTUP=false
+      - TZ=${TZ}
+    networks:
+      - proxy-network
+    ports:
+      - 3300:3000
+    volumes:
+      - ${DOCKER_DATA}/iptv-org/epg-grabber/channels.xml:/epg/public/channels.xml
+      - ${DOCKER_DATA}/iptv-org/epg-grabber/sites/tv.nu:/epg/sites/tv.nu/
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
