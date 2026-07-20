@@ -140,7 +140,7 @@ services:
   
   dispatcharr:
     # <<: *service-base #interferring with internal env variables
-    image: ghcr.io/dispatcharr/dispatcharr:0.28.0
+    image: ghcr.io/dispatcharr/dispatcharr:0.28.1
     container_name: dispatcharr
     hostname: dispatcharr
     restart: unless-stopped
