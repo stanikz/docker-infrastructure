@@ -296,7 +296,7 @@ services:
   
   warrden:
     <<: *service-base
-    image: registry.neureka.dev/warrden/warrden:4.2.0
+    image: registry.neureka.dev/warrden/warrden:4.3.1
     container_name: warrden
     hostname: warrden
     environment:
