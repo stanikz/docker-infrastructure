@@ -15,6 +15,9 @@ services:
       - proxy-network
       - internal-net
     environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      GUID: ${GUID}
       PORT: "8080"
       GUACD_HOST: "guacd"
     depends_on:
