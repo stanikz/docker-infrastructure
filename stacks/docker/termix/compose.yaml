@@ -1,0 +1,42 @@
+x-backrest-labels: &backrest-labels
+  backrest.backup: "true"
+  backrest.priority: "critical"
+  backrest.action: "stop"
+
+services:
+  termix:
+    image: ghcr.io/lukegus/termix:2.5.1
+    container_name: termix
+    hostname: termix
+    restart: unless-stopped
+    ports:
+      - 8084:8080
+    networks:
+      - proxy-network
+      - internal-net
+    environment:
+      PORT: "8080"
+      GUACD_HOST: "guacd"
+    depends_on:
+      - guacd
+    volumes:
+      - ${DOCKER_DATA}/termix/data:/app/data
+    labels:
+      <<: *backrest-labels
+      backrest.wait-time: "30"
+
+  guacd:
+    image: guacamole/guacd:1.6.0
+    container_name: guacd
+    hostname: guacd
+    restart: unless-stopped
+    networks:
+      - internal-net
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  internal-net:
+    name: termix-net
+    driver: bridge
