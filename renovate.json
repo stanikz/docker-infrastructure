@@ -10,7 +10,8 @@
   "gitAuthor": "Renovate Bot <renovate@example.com>",
   "ignorePaths": [
     "services/**",
-    "bootstrap/**"
+    "bootstrap/**",
+    "old-compose/**"
   ],
   "baseBranchPatterns": [
     "main"
