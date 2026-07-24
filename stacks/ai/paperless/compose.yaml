@@ -6,7 +6,7 @@ x-backrest-labels: &backrest-labels
 services:
   # paperless-ngx main service
   paperless:
-    image: ghcr.io/paperless-ngx/paperless-ngx:3.0.0
+    image: ghcr.io/paperless-ngx/paperless-ngx:3.0.2
     container_name: paperless-ngx
     hostname: paperless-ngx
     restart: unless-stopped
