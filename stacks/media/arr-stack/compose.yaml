@@ -140,7 +140,7 @@ services:
   
   dispatcharr:
     # <<: *service-base #interferring with internal env variables
-    image: ghcr.io/dispatcharr/dispatcharr:0.28.1
+    image: ghcr.io/dispatcharr/dispatcharr:0.28.2
     container_name: dispatcharr
     hostname: dispatcharr
     restart: unless-stopped
@@ -296,7 +296,7 @@ services:
   
   warrden:
     <<: *service-base
-    image: registry.neureka.dev/warrden/warrden:4.3.1
+    image: registry.neureka.dev/warrden/warrden:4.4.0
     container_name: warrden
     hostname: warrden
     environment:
