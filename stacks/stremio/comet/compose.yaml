@@ -5,7 +5,7 @@ x-labels-backrest: &labels-backrest
   backrest.wait-time: "30"
 services:  
   comet:
-    image: ghcr.io/g0ldyy/comet@sha256:c57f9922ae4d7064816f26eb91296e55f93090b3072d9976e3e468dcb58361f8
+    image: ghcr.io/g0ldyy/comet@sha256:0d274f6695a068251ab64092c1f6416b69b8843e017e4747eefff71d79d993e6
     container_name: comet
     hostname: comet-app
     restart: unless-stopped
