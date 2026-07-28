@@ -5,7 +5,7 @@ x-backrest-labels: &backrest-labels
 
 services:
   termix:
-    image: ghcr.io/lukegus/termix:2.5.1
+    image: ghcr.io/lukegus/termix:2.6.0
     container_name: termix
     hostname: termix
     restart: unless-stopped
