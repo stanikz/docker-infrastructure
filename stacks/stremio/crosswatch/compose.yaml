@@ -1,0 +1,27 @@
+x-labels-backrest: &labels-backrest
+  backrest.backup: "true"
+  backrest.priority: "medium"
+  backrest.action: "stop"
+  backrest.wait-time: "30"
+
+services:
+  crosswatch:
+    image: ghcr.io/cenodude/crosswatch:0.10.7
+    container_name: crosswatch
+    hostname: crosswatch
+    restart: unless-stopped
+    ports:
+      - 8787:8787
+    networks:
+      - proxy-network
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/crosswatch/data:/config
+    labels:
+      <<: *labels-backrest
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
