@@ -30,7 +30,7 @@ services:
 
 
   api:
-    image: ghcr.io/duartesantos8/opengym-api:v1.2.5
+    image: ghcr.io/duartesantos8/opengym-api:1.2.5
     container_name: opengym_api
     hostname: opengym-api
     restart: unless-stopped
