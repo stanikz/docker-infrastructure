@@ -1,0 +1,85 @@
+x-backrest-labels: &backrest-labels
+  backrest.backup: "true"
+  backrest.priority: "high"
+  backrest.action: "stop"
+
+services:
+
+  media:
+    image: alpine/git:v2.54.0
+    container_name: opengym_media
+    hostname: opengym-media
+    restart: "no"
+    networks:
+      - internal-net
+    volumes:
+      - ${DOCKER_DATA}/opengym/media/img:/out/img
+      - ${DOCKER_DATA}/opengym/media/gif:/out/gif
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        if [ -z "$$(ls -A /out/img 2>/dev/null)" ]; then
+          echo "Downloading exercise media..."
+          git clone --depth 1 https://github.com/hasaneyldrm/exercises-dataset /tmp/ds
+          cp /tmp/ds/images/*.jpg /out/img/
+          cp /tmp/ds/videos/*.gif /out/gif/
+          echo "Exercise media ready ($$(ls /out/img | wc -l) images)."
+        else
+          echo "Exercise media already present - skipping download."
+        fi
+
+
+  api:
+    image: ghcr.io/duartesantos8/opengym-api:v1.25
+    container_name: opengym_api
+    hostname: opengym-api
+    restart: unless-stopped
+    networks:
+      - internal-net
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ}
+      PORT: 3000
+      DATA_DIR: /data
+    volumes:
+      - ${DOCKER_DATA}/opengym/app/data:/data
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      <<: *backrest-labels
+      backrest.priority: "critical"
+      backrest.wait-time: "30"
+
+
+  web:
+    image: ghcr.io/duartesantos8/opengym-web:latest
+    container_name: opengym
+    hostname: opengym
+    restart: unless-stopped
+    ports:
+      - ${WEB_PORT:-8080}:80
+    networks:
+      - internal-net
+      - proxy-network
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKER_DATA}/opengym/media/img:/usr/share/nginx/html/img:ro
+      - ${DOCKER_DATA}/opengym/media/gif:/usr/share/nginx/html/gif:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      media:
+        condition: service_completed_successfully
+      api:
+        condition: service_started
+
+
+networks:
+  proxy-network:
+    name: ${EXTERNAL_NETWORK_NAME:-proxy-network}
+    external: true
+  internal-net:
+    name: opengym-net
+    driver: bridge
