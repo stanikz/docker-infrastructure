@@ -189,7 +189,7 @@ services:
 
   profilarr:
     <<: *service-base
-    image: ghcr.io/dictionarry-hub/profilarr:2.0.9
+    image: ghcr.io/dictionarry-hub/profilarr:2.1.0
     container_name: profilarr
     hostname: profilarr
     ports:
