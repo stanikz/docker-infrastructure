@@ -140,7 +140,7 @@ services:
   
   dispatcharr:
     # <<: *service-base #interferring with internal env variables
-    image: ghcr.io/dispatcharr/dispatcharr:0.28.2
+    image: ghcr.io/dispatcharr/dispatcharr:0.29.0
     container_name: dispatcharr
     hostname: dispatcharr
     restart: unless-stopped
@@ -189,7 +189,7 @@ services:
 
   profilarr:
     <<: *service-base
-    image: ghcr.io/dictionarry-hub/profilarr:2.0.9
+    image: ghcr.io/dictionarry-hub/profilarr:2.1.0
     container_name: profilarr
     hostname: profilarr
     ports:
