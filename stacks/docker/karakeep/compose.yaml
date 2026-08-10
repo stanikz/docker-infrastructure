@@ -68,7 +68,7 @@ services:
     ports:
       - 7700:7700  #--> THIS PART IS ONLY NEEDED WHEN UPGRADING AND IMPORTING THE DB DUMP <---
     command: >     #--> FOLLOW the Instruction in Bookstack on migration process#
-      meilisearch --import-dump /meili_data/dumps/20260807-165203712.dump
+      meilisearch --import-dump /meili_data/dumps/20260810-204536568.dump
     labels:
       <<: *backrest-labels
       backrest.wait-time: "40"
