@@ -37,7 +37,7 @@ services:
       backrest.wait-time: "20"
       
   chrome:
-    image: gcr.io/zenika-hub/alpine-chrome:124
+    image: zenika/alpine-chrome:124
     container_name: karakeep-chrome
     hostname: karakeep-chrome
     restart: unless-stopped
