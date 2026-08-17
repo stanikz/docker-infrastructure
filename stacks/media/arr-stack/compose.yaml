@@ -189,7 +189,7 @@ services:
 
   profilarr:
     <<: *service-base
-    image: ghcr.io/dictionarry-hub/profilarr:2.1.0
+    image: ghcr.io/dictionarry-hub/profilarr:2.2.0
     container_name: profilarr
     hostname: profilarr
     ports:
@@ -312,7 +312,7 @@ services:
  
   tracearr:
     <<: *service-base
-    image: ghcr.io/connorgallopo/tracearr:2.0.1
+    image: ghcr.io/connorgallopo/tracearr:2.1.0
     container_name: tracearr
     hostname: tracearr
     ports:
