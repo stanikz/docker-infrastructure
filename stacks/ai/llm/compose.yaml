@@ -2,6 +2,12 @@ x-backrest-labels: &backrest-labels
     backrest.backup: "true"
     backrest.action: "stop"
 
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "100m"
+    max-file: "3"
+
 services:
   # --------------------------------------------------------
   # REDIS / VALKEY
@@ -23,10 +29,7 @@ services:
       - SETUID
       - DAC_OVERRIDE
     logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "1"
+      <<: *default-logging
     labels:
       <<: *backrest-labels
       backrest.priority: "high"
@@ -115,6 +118,8 @@ services:
       - ${DOCKER_DATA}/llm/openwebui/logs:/opt/open-webui/logs  
     extra_hosts:
         - 'host.docker.internal:host-gateway'
+    logging:
+      <<: *default-logging
     labels:
       <<: *backrest-labels
       backrest.priority: "high"
@@ -149,6 +154,8 @@ services:
       - ${DOCKER_DATA}/llm/ollama/data:/root/.ollama
     depends_on:
      - redis
+    logging:
+      <<: *default-logging
     labels:
       <<: *backrest-labels
       backrest.priority: "high"
