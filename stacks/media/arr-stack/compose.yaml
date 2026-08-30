@@ -140,7 +140,7 @@ services:
   
   dispatcharr:
     # <<: *service-base #interferring with internal env variables
-    image: ghcr.io/dispatcharr/dispatcharr:0.29.0
+    image: ghcr.io/dispatcharr/dispatcharr:0.30.0
     container_name: dispatcharr
     hostname: dispatcharr
     restart: unless-stopped
@@ -312,7 +312,7 @@ services:
  
   tracearr:
     <<: *service-base
-    image: ghcr.io/connorgallopo/tracearr:2.2.2
+    image: ghcr.io/connorgallopo/tracearr:2.2.3
     container_name: tracearr
     hostname: tracearr
     ports:
