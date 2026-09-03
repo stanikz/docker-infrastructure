@@ -213,7 +213,7 @@ services:
 
   prowlarr:
     <<: *service-base
-    image: ghcr.io/realzombee/prowlarr:2.10.1.2011
+    image: ghcr.io/realzombee/prowlarr:2.10.1.2019
     container_name: prowlarr
     hostname: prowlarr
     ports:
