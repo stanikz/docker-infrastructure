@@ -277,7 +277,7 @@ services:
 
   sonarr:
     <<: *arr-service
-    image: ghcr.io/realzombee/sonarr:4.1.1.824 #lscr.io/linuxserver/sonarr:4.0.17.2952-ls311
+    image: ghcr.io/realzombee/sonarr:4.1.1.827 #lscr.io/linuxserver/sonarr:4.0.17.2952-ls311
     container_name: sonarr
     hostname: sonarr
     ports:
