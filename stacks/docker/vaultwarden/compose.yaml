@@ -4,7 +4,7 @@ x-backrest-labels: &backrest-labels
     backrest.action: "stop"
 services:
   vaultwarden:
-    image: vaultwarden/server:1.37.2
+    image: vaultwarden/server:1.37.3
     container_name: vaultwarden
     hostname: vaultwarden
     restart: unless-stopped
