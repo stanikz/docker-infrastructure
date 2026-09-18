@@ -4,7 +4,7 @@ x-backrest-labels: &backrest-labels
     backrest.action: "stop"
 services:
   databasus:
-    image: databasus/databasus:v3.57.1
+    image: databasus/databasus:v3.57.2
     container_name: db-backups
     hostname: databasus
     restart: unless-stopped
