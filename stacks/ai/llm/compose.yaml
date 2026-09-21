@@ -84,7 +84,7 @@ services:
   # OPEN WEBUI (CLIENT ONLY, TALKS TO MODEL-RUNNER)
   # --------------------------------------------------------
   open-webui:
-    image: ghcr.io/open-webui/open-webui:v0.11.3
+    image: ghcr.io/open-webui/open-webui:v0.11.4
     container_name: llm-open-webui
     hostname: openwebui
     restart: unless-stopped
