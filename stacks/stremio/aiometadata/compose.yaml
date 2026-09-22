@@ -6,7 +6,7 @@ x-labels-backrest: &labels-backrest
 
 services:
   aiometadata:
-    image: ghcr.io/cedya77/aiometadata@sha256:89f61077d895ffc12055e65435c5dd98dc680724fcb95cf1b0566afc455cbd31
+    image: ghcr.io/cedya77/aiometadata@sha256:28c23a346baa363a05c7827a4e15644119cdbe5209cb032806621d3a1c056ab8
     container_name: aiometadata
     hostname: aiometadata
     restart: unless-stopped
