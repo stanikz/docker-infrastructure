@@ -125,7 +125,7 @@ services:
 
   # ---------------- HIGH AVAILABILITY ----------------
   keepalived:
-    image: osixia/keepalived:2.3.4
+    image: osixia/keepalived:2.4.3
     container_name: keepalived
     hostname: keepalived
     <<: *restart
