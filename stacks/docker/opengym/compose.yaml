@@ -5,7 +5,7 @@ x-backrest-labels: &backrest-labels
 
 services:
   api:
-    image: ghcr.io/duartesantos8/opengym-api:1.4.0
+    image: ghcr.io/duartesantos8/opengym-api:1.4.1
     container_name: opengym_api
     hostname: opengym-api
     restart: unless-stopped
@@ -28,7 +28,7 @@ services:
       backrest.wait-time: "30"
 
   web:
-    image: ghcr.io/duartesantos8/opengym-web:1.4.0
+    image: ghcr.io/duartesantos8/opengym-web:1.4.1
     container_name: opengym
     hostname: opengym
     restart: unless-stopped
