@@ -6,7 +6,7 @@ x-backrest-labels: &backrest-labels
 services:
   # paperless-ngx main service
   paperless:
-    image: ghcr.io/paperless-ngx/paperless-ngx:3.3.1
+    image: ghcr.io/paperless-ngx/paperless-ngx:3.3.4
     container_name: paperless-ngx
     hostname: paperless-ngx
     restart: unless-stopped
@@ -57,7 +57,7 @@ services:
 
   # paperless-gpt service
   paperless-gpt:
-    image: icereed/paperless-gpt:v0.30.0
+    image: icereed/paperless-gpt:v0.31.0
     container_name: paperless-gpt
     hostname: paperless-gpt
     restart: unless-stopped
@@ -115,7 +115,7 @@ services:
   
   # gotenberg service that paperless uses for document conversion
   gotenberg:
-    image: docker.io/gotenberg/gotenberg:8.37.0
+    image: docker.io/gotenberg/gotenberg:8.38.1
     container_name: paperless-gotenberg
     hostname: paperless-gotenberg
     restart: unless-stopped
