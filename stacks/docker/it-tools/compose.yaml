@@ -17,7 +17,7 @@ services:
     
 
   it-tools-main:
-    image: sharevb/it-tools:2026.9.27
+    image: sharevb/it-tools:2026.10.25
     container_name: it-tools-maintained
     hostname: ittools-main
     restart: unless-stopped
