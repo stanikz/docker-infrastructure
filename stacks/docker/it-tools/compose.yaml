@@ -51,7 +51,7 @@ services:
       <<: *backrest-labels
 
   chartdb:
-     image: ghcr.io/chartdb/chartdb:1.20.1
+     image: ghcr.io/chartdb/chartdb:1.21.0
      container_name: chartdb-server
      hostname: chartdb-server
      restart: unless-stopped
