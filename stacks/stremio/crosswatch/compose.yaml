@@ -6,7 +6,7 @@ x-labels-backrest: &labels-backrest
 
 services:
   crosswatch:
-    image: ghcr.io/cenodude/crosswatch:0.14.1
+    image: ghcr.io/cenodude/crosswatch:0.14.2
     container_name: crosswatch
     hostname: crosswatch
     restart: unless-stopped
