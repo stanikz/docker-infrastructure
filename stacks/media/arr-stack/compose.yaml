@@ -312,7 +312,7 @@ services:
  
   tracearr:
     <<: *service-base
-    image: ghcr.io/connorgallopo/tracearr:3.1.6
+    image: ghcr.io/connorgallopo/tracearr:3.1.7
     container_name: tracearr
     hostname: tracearr
     ports:
