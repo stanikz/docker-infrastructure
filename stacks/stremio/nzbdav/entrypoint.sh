@@ -22,6 +22,4 @@ rclone mount nzb-dav: /data \
   --log-level=INFO \
   --rc \
   --rc-addr=0.0.0.0:9990 \
-  --rc-no-auth \
-  --rc-web-gui \
-  --rc-web-gui-no-open-browser
+  --rc-no-auth
