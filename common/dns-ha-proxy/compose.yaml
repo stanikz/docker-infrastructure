@@ -95,7 +95,7 @@ services:
       - "${DOCKER_DATA}/dns-ha-proxy/unbound/unbound.log:/opt/unbound/etc/unbound/unbound.log:rw"
     healthcheck:
       disable: true
-    profiles: ["dns","unbound"]
+    profiles: ["unbound"]
     labels:
       <<: *backrest-labels
 
