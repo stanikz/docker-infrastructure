@@ -1,5 +1,5 @@
 #########################################################################
-### CURRENTLY IN USE ON FOLLOWING SERVERS: RMC-1, RMC-2, DIETPI, STREMIO
+### CURRENTLY IN USE ON FOLLOWING SERVERS: RMC-1, RMC-2
 ######################################################################### 
 services:
   newt:
