@@ -16,22 +16,6 @@ x-labels-backrest: &labels-backrest
   backrest.action: "none"
 
 services:
-  cloudflare-ddns:
-    <<: *base-service
-    image: oznu/cloudflare-ddns@sha256:19bd73d8aea9641dc329ec18ae693b2b9c33ff7cdc007f368266ce584446f995
-    container_name: cloudflare
-    hostname: cloudflare
-    profiles:
-      - cloudflare
-    environment:
-      <<: *common-env
-      API_KEY: ${encryption}
-      PROXIED: ${PROXIED}
-      SUBDOMAIN: ${SUBDOMAIN}
-      ZONE: ${ZONE}
-    labels:
-      <<: *labels-backrest
-
   duckdns:
     <<: *base-service
     image: lscr.io/linuxserver/duckdns:arm64v8-version-112a5cbb
