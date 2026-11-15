@@ -20,7 +20,7 @@ x-aiostreams-base: &aiostreams-base
 services:
   aiostreams:
     <<: *aiostreams-base
-    image: ghcr.io/viren070/aiostreams:2026.11.12.1826-nightly
+    image: ghcr.io/viren070/aiostreams:2026.11.14.1509-nightly
     container_name: aiostreams-nightly
     hostname: aiostreams-nightly
     ports:
