@@ -75,7 +75,7 @@ x-labels-backrest: &labels-backrest
 services:
   agregarr:
     <<: *arr-service
-    image: agregarr/agregarr:v2.4.2
+    image: bitr8/agregarr:v2.14.0
     container_name: agregarr
     hostname: agregarr
     ports:
