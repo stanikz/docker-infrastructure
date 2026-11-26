@@ -80,7 +80,7 @@ services:
     hostname: agregarr
     ports:
       - 7474:7171
-    user: "${PUID}:${PGID}"
+    #user: "${PUID}:${PGID}"
     volumes:
       - ${DOCKER_DATA}/arr-stack/agregarr/config:/app/config
       - /mnt/media/arrs/agregarr/movie-placeholder:/data/movies
